@@ -1,6 +1,8 @@
 # Temasys SkylinkSDK iOS SampleApp Swift4
 
-==========================
+================================================================================
+This sample app is writtern in Xcode 9, compiling with Xcode 8 may get errors
+================================================================================
 
 **WebRTC** powered App
 -------
