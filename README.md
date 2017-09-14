@@ -37,6 +37,7 @@ Check out the documentation and our sample app to get usage instructions and exa
 ----------
 
 **Usage**
+
 This sample app is writtern in Xcode 9, compiling with Xcode 8 may get errors
 ==========================
 Installation
