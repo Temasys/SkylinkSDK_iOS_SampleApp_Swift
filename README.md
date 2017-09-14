@@ -1,6 +1,5 @@
 # SkylinkSDK_iOS_SampleApp_Swift4
 
-**Temasys iOS SDK** Sample App
 ==========================
 
 **WebRTC** powered App
