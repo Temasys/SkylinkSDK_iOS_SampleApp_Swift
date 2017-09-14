@@ -1,4 +1,4 @@
-# SkylinkSDK_iOS_SampleApp_Swift4
+# Temasys SkylinkSDK iOS SampleApp Swift4
 
 ==========================
 
