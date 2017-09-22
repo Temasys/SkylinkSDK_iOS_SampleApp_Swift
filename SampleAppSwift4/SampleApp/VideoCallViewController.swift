@@ -122,6 +122,15 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     }
     
     func connection(_ connection: SKYLINKConnection!, didRenderUserVideo userVideoView: UIView!) {
+        addRenderedVideo(videoView: userVideoView, insideContainer: localVideoContainerView, mirror: true)
+    }
+    
+    func connection(_ connection: SKYLINKConnection!, didJoinPeer userInfo: Any!, mediaProperties pmProperties: SKYLINKPeerMediaProperties!, peerId: String!) {
+        activityIndicator.stopAnimating()
+        remotePeerId = peerId
+    }
+    
+    func connection(_ connection: SKYLINKConnection!, didRenderPeerVideo peerVideoView: UIView!, peerId: String!) {
         addRenderedVideo(videoView: peerVideoView, insideContainer: remotePeerVideoContainerView, mirror: false)
     }
     
