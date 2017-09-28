@@ -47,7 +47,6 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupUI()
         setupInfo()
     }

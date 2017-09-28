@@ -202,6 +202,11 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         startFileTransfer(userId: peerId, url: mediaItemCollection.representativeItem?.value(forProperty: MPMediaItemPropertyAssetURL) as? URL, type: SKYLINKAssetTypeMusic)
     }
     
+    func mediaPickerDidCancel(_ mediaPicker: MPMediaPickerController) {
+        mediaPicker.dismiss(animated: true) {
+        }
+    }
+    
     // SKYLINK Delegate methods implementations
     // MARK: - SKYLINKConnectionLifeCycleDelegate
     func connection(_ connection: SKYLINKConnection!, didConnectWithMessage errorMessage: String!, success isSuccess: Bool) {
@@ -228,9 +233,13 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
     
     func connection(_ connection: SKYLINKConnection!, didJoinPeer userInfo: Any!, mediaProperties pmProperties: SKYLINKPeerMediaProperties!, peerId: String!) {
         skylinkLog("Peer with id %@ joigned the room.\(peerId)")
-        if remotePeerArray.index(of: peerId) != nil {
-            remotePeerArray.remove(at: remotePeerArray.index(of: peerId)!)
-        }
+        remotePeerArray.append(peerId)
+        peersTableView.reloadData()
+    }
+    
+    func connection(_ connection: SKYLINKConnection!, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
+        skylinkLog("Peer with id " + peerId + " left the room with message: " + errorMessage)
+        remotePeerArray.remove(peerId)
         peersTableView.reloadData()
     }
     
@@ -258,8 +267,6 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
             let alert = UIAlertController(title: "File refused", message: "The peer ID: \(peerId) has refused your '\(filename)' file sending request", preferredStyle: .alert)
             alerts.append(alert)
             showAlert()
-        } else if filename != "" && peerId != "" {
-            
         }
     }
     
@@ -343,7 +350,10 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
             }
         }
         
-        if indexOfTransfer != NSNotFound {
+        if indexOfTransfer == NSNotFound {
+            let object: [String : Any] = ["filename" : (filename != nil) ? filename! : "none", "peerId" : (peerId != nil) ? peerId! : "No peer Id", "isOutgoing" : (isOutgoing != nil) ? isOutgoing as! Bool : false, "percentage" : (percentage != nil) ? percentage as! Double : 0, "state" : (state != nil) ? state! : "Undefined"]
+            transfersArray.insert(object, at: 0)
+        } else { // updated transfer
             var transferInfos = transfersArray[indexOfTransfer]
             if filename != nil { transferInfos["filename"] = filename! }
             if peerId != nil { transferInfos["peerId"] = peerId! }
@@ -351,9 +361,6 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
             if percentage != nil { transferInfos["percentage"] = percentage! }
             if state != nil { transferInfos["state"] = state! }
             (transfersArray as! NSMutableArray).replaceObject(at: indexOfTransfer, with: transferInfos)
-        } else {
-            let object: [String : Any] = ["filename" : (filename != nil) ? filename! : "none", "peerId" : (peerId != nil) ? peerId! : "No peer Id", "isOutgoing" : (isOutgoing != nil) ? isOutgoing as! Bool : false, "percentage" : (percentage != nil) ? percentage as! Double : 0, "state" : (state != nil) ? state! : "Undefined"]
-            transfersArray.insert(object, at: 0)
         }
         fileTransferTableView.reloadData()
     }

@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionMediaDelegate, SKYLINKConnectionRemotePeerDelegate {
+class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionMediaDelegate, SKYLINKConnectionRemotePeerDelegate, SKYLINKConnectionRecordingDelegate {
     
     @IBOutlet weak var localVideoContainerView: UIView!
     @IBOutlet weak var firstPeerVideoContainerView: UIView!
@@ -35,6 +35,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
             skylinkConnection.lifeCycleDelegate = self
             skylinkConnection.mediaDelegate = self
             skylinkConnection.remotePeerDelegate = self
+            skylinkConnection.recordingDelegate = self
             SKYLINKConnection.setVerbose(true)
             return skylinkConnection
         } else {
@@ -77,13 +78,14 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
     
     fileprivate func setupInfo() {
         // Connecting to a room
-        skylinkConnection.connectToRoom(withSecret: skylinkApiSecret, roomName: ROOM_NAME, userInfo: nil)
+        skylinkConnection.connectToRoom(withSecret: skylinkApiSecret, roomName: ROOM_NAME, userInfo: ["sampleUserDataKey":"sampleUserDataStringValue"])
     }
     
     @objc fileprivate func disconnect() {
         skylinkLog("imat_disConnect")
         activityIndicator.startAnimating()
         skylinkConnection.disconnect { [weak weakSelf = self] in
+            weakSelf?.activityIndicator.stopAnimating()
             weakSelf?.navigationController?.popViewController(animated: true)
         }
     }
@@ -106,7 +108,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
     // MARK: Utils
     fileprivate func updatePeersVideosFrames() {
         for i in 0..<min(peerIds.count, 3) {
-            guard let dict = peersInfos[peerIds[i]] as? [String : AnyObject], let pvView = dict["videoView"] as? UIView, let pvSize = dict["videoSize"] as? CGSize else { return }
+            guard let dict = peersInfos[peerIds[i]] as? [String : Any], let pvView = dict["videoView"] as? UIView, let pvSize = dict["videoSize"] as? CGSize else { return }
             pvView.frame = (videoAspectSegmentControl.selectedSegmentIndex == 0) ? aspectFillRectForSize(insideSize: pvSize, containedInRect: containerViewForVideoView(videoView: pvView).frame) : AVMakeRect(aspectRatio: pvSize, insideRect: containerViewForVideoView(videoView: pvView).bounds)
         }
     }
@@ -120,20 +122,32 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
     fileprivate func containerViewForVideoView(videoView: UIView) -> UIView {
         var correspondingContainerView: UIView!
         if videoView.isDescendant(of: localVideoContainerView) {
-            correspondingContainerView = localVideoContainerView
+            correspondingContainerView = localVideoContainerView ?? UIView()
         } else if videoView.isDescendant(of: firstPeerVideoContainerView) {
-            correspondingContainerView = firstPeerVideoContainerView
+            correspondingContainerView = firstPeerVideoContainerView ?? UIView()
         } else if videoView.isDescendant(of: secondPeerVideoContainerView) {
-            correspondingContainerView = secondPeerVideoContainerView
+            correspondingContainerView = secondPeerVideoContainerView ?? UIView()
         } else if videoView.isDescendant(of: thirdPeerVideoContainerView) {
-            correspondingContainerView = thirdPeerVideoContainerView
+            correspondingContainerView = thirdPeerVideoContainerView ?? UIView()
         }
-        return correspondingContainerView
+        return correspondingContainerView!
     }
     
     fileprivate func aspectFillRectForSize(insideSize: CGSize, containedInRect containerRect: CGRect) -> CGRect {
-        let maxFloat = max(containerRect.size.height, containerRect.size.width)
-        let aspectRatio = insideSize.width / insideSize.height
+        var maxFloat: CGFloat = 0
+        if containerRect.size.height > containerRect.size.width {
+            maxFloat = containerRect.size.height
+        } else if containerRect.size.height < containerRect.size.width {
+            maxFloat = containerRect.size.width
+        } else {
+            maxFloat = 0
+        }
+        var aspectRatio: CGFloat = 0
+        if insideSize.height != 0 {
+            aspectRatio = insideSize.width / insideSize.height
+        } else {
+            aspectRatio = 1
+        }
         var frame = CGRect(x: 0, y: 0, width: containerRect.size.width, height: containerRect.size.height)
         if insideSize.width < insideSize.height {
             frame.size.width = maxFloat
@@ -163,11 +177,11 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
     
     fileprivate func refreshPeerViews() {
         let peerContainerViews = [firstPeerVideoContainerView ?? UIView(), secondPeerVideoContainerView ?? UIView(), thirdPeerVideoContainerView ?? UIView()]
-        var peerLabels = [firstPeerLabel ?? UILabel(), secondPeerLabel ?? UILabel(), thirdPeerLabel ?? UILabel()]
         _ = peerContainerViews.map { $0.subviews.map { $0.removeFromSuperview() } }
-
+        
+        var peerLabels = [firstPeerLabel ?? UILabel(), secondPeerLabel ?? UILabel(), thirdPeerLabel ?? UILabel()]
         for i in 0..<peersInfos.count  {
-            guard let index = peerIds.index(of: peerIds[i]), let dict = peersInfos[peerIds[i]] as? [String : AnyObject] else { return }
+            guard let index = peerIds.index(of: peerIds[i]), let dict = peersInfos[peerIds[i]] as? [String : Any] else { return }
             let videoView = dict["videoView"] as? UIView
             if (index < peerContainerViews.count) {
                 if videoView == nil {
@@ -177,13 +191,13 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
                 }
             }
             // refresh the label
-            guard let audioMuted = dict["isAudioMuted"], let videoMuted = dict["isVideoMuted"] else { return }
+            guard let audioMuted = dict["isAudioMuted"] as? Bool, let videoMuted = dict["isVideoMuted"] as? Bool else { return }
             
             var mutedInfos = ""
-            if audioMuted is NSNumber && CBool(truncating: audioMuted as! NSNumber) {
+            if audioMuted {
                 mutedInfos = "Audio muted"
             }
-            if videoMuted is NSNumber && CBool(truncating: videoMuted as! NSNumber) {
+            if videoMuted {
                 mutedInfos = mutedInfos.count != 0 ? "Video & ".appending(mutedInfos) : "Video muted"
             }
             if index < peerLabels.count {
@@ -207,7 +221,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
             let correspondingContainerView = containerViewForVideoView(videoView: videoView)
             if correspondingContainerView != localVideoContainerView {
                 let i = indexForContainerView(v: correspondingContainerView)
-                guard let dict = peersInfos[peerIds[i]] as? [String : AnyObject], let videoSize = dict["videoSize"] as? CGSize, let videoView = dict["videoView"], let isAudioMuted = dict["isAudioMuted"], let isVideoMuted = dict["isVideoMuted"] else { return }
+                guard let dict = peersInfos[peerIds[i]] as? [String : Any], let videoSize = dict["videoSize"] as? CGSize, let videoView = dict["videoView"] as? UIView, let isAudioMuted = dict["isAudioMuted"] as? Bool, let isVideoMuted = dict["isVideoMuted"] as? Bool else { return }
                 if i != NSNotFound {
                     peersInfos[peerIds[i]] = ["videoView" : videoView, "videoSize" : videoSize, "isAudioMuted" : isAudioMuted, "isVideoMuted" : isVideoMuted]
                 }
@@ -215,13 +229,13 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
             
             videoView.frame = (videoAspectSegmentControl.selectedSegmentIndex == 0 || correspondingContainerView.isEqual(localVideoContainerView)) ? aspectFillRectForSize(insideSize: videoSize, containedInRect: correspondingContainerView.frame): AVMakeRect(aspectRatio: videoSize, insideRect: correspondingContainerView.bounds)
         }
-        updatePeersVideosFrames()
+//        updatePeersVideosFrames()
     }
     
     func connection(_ connection: SKYLINKConnection!, didToggleAudio isMuted: Bool, peerId: String!) {
-        let bool = peersInfos.keys.contains { _ in return true }
+        let bool = peersInfos.keys.contains(peerId)
         if bool {
-            guard let dict = peersInfos[peerId] as? [String : AnyObject], let videoSize = dict["videoSize"], let videoView = dict["videoView"], let isVideoMuted = dict["isVideoMuted"] else { return }
+            guard let dict = peersInfos[peerId] as? [String : Any], let videoSize = dict["videoSize"] as? CGSize, let videoView = dict["videoView"] as? UIView, let isVideoMuted = dict["isVideoMuted"] as? Bool else { return }
             let isAudioMuted = isMuted
             peersInfos[peerId] = ["videoView" : videoView, "videoSize" : videoSize, "isAudioMuted" : isAudioMuted, "isVideoMuted" : isVideoMuted]
         }
@@ -232,7 +246,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
         skylinkLog("imat_didToggleVideo")
         let bool = peersInfos.keys.contains { _ in return true }
         if bool {
-            guard let dict = peersInfos[peerId] as? [String : AnyObject], let videoSize = dict["videoSize"], let videoView = dict["videoView"], let isAudioMuted = dict["isAudioMuted"] else { return }
+            guard let dict = peersInfos[peerId] as? [String : Any], let videoSize = dict["videoSize"] as? CGSize, let videoView = dict["videoView"] as? UIView, let isAudioMuted = dict["isAudioMuted"] as? Bool else { return }
             let isVideoMuted = isMuted
             peersInfos[peerId] = ["videoView" : videoView, "videoSize" : videoSize, "isAudioMuted" : isAudioMuted, "isVideoMuted" : isVideoMuted]
         }
@@ -243,6 +257,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
     func connection(_ connection: SKYLINKConnection!, didConnectWithMessage errorMessage: String!, success isSuccess: Bool) {
         if isSuccess {
             skylinkLog("Inside \(#function)")
+            localVideoContainerView.alpha = 1
         } else {
             let msgTitle = "Connection failed"
             let msg = errorMessage
@@ -290,14 +305,14 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
             if $0 == peerId { bool = true }
         }
         if !bool {
-            (peersInfos as! NSMutableDictionary).addEntries(from: [peerId: ["videoView": NSNull(), "videoSize": NSNull(), "isAudioMuted": NSNull(), "isVideoMuted": NSNull()]])
+//            (peersInfos as! NSMutableDictionary).addEntries(from: [peerId: ["videoView": NSNull(), "videoSize": NSNull(), "isAudioMuted": NSNull(), "isVideoMuted": NSNull()]])
+            peersInfos[peerId] = ["videoView": NSNull(), "videoSize": CGSize.zero, "isAudioMuted": false, "isVideoMuted": false]
         }
-        guard let dict = peersInfos[peerId] as? [String : AnyObject], let videoView = dict["videoView"] else { return }
+        guard let dict = peersInfos[peerId] as? [String : Any], let videoView = dict["videoView"] as? UIView else { return }
         let size = CGSize(width: pmProperties.videoWidth, height: pmProperties.videoHeight)
-        let videoSize = NSValue(cgSize: size)
-        let isAudioMuted = NSNumber(value: pmProperties.isAudioMuted)
-        let isVideoMuted = NSNumber(value: pmProperties.isVideoMuted)
-        peersInfos[peerId] = ["videoView" : videoView, "videoSize" : videoSize, "isAudioMuted" : isAudioMuted, "isVideoMuted" : isVideoMuted]
+        let isAudioMuted = pmProperties.isAudioMuted
+        let isVideoMuted = pmProperties.isVideoMuted
+        peersInfos[peerId] = ["videoView" : videoView, "videoSize" : size, "isAudioMuted" : isAudioMuted, "isVideoMuted" : isVideoMuted]
         refreshPeerViews()
     }
     
@@ -320,9 +335,10 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
             if $0 == peerId { bool = true }
         }
         if !bool {
-            (peersInfos as! NSMutableDictionary).addEntries(from: [peerId: ["videoView": NSNull(), "videoSize": NSNull(), "isAudioMuted": NSNull(), "isVideoMuted": NSNull()]])
+//            (peersInfos as! NSMutableDictionary).addEntries(from: [peerId: ["videoView": NSNull(), "videoSize": NSNull(), "isAudioMuted": NSNull(), "isVideoMuted": NSNull()]])
+            peersInfos[peerId] = ["videoView": NSNull(), "videoSize": CGSize.zero, "isAudioMuted": false, "isVideoMuted": false]
         }
-        guard let dict = peersInfos[peerId] as? [String : AnyObject], let videoSize = dict["videoSize"], let isAudioMuted = dict["isAudioMuted"], let isVideoMuted = dict["isVideoMuted"] else { return }
+        guard let dict = peersInfos[peerId] as? [String : Any], let videoSize = dict["videoSize"] as? CGSize, let isAudioMuted = dict["isAudioMuted"] as? Bool, let isVideoMuted = dict["isVideoMuted"] as? Bool else { return }
         
         peersInfos[peerId] = ["videoView" : peerVideoView, "videoSize" : videoSize, "isAudioMuted" : isAudioMuted, "isVideoMuted" : isVideoMuted]
         refreshPeerViews()
