@@ -8,7 +8,7 @@
 
 import UIKit
 
-class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionMediaDelegate, SKYLINKConnectionRemotePeerDelegate {
+class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionMediaDelegate, SKYLINKConnectionRemotePeerDelegate, SKYLINKConnectionStatsDelegate {
 
     @IBOutlet weak var localVideoContainerView: UIView!
     @IBOutlet weak var remotePeerVideoContainerView: UIView!
@@ -50,6 +50,13 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         setupInfo()
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        if peerVideoView != nil {
+            peerVideoView.frame = aspectFillRectForSize(insideSize: peerVideoSize, containedInRect: remotePeerVideoContainerView.frame)
+        }
+    }
+    
     fileprivate func setupUI() {
         skylinkLog("SKYLINKConnection version = \(SKYLINKConnection.getSkylinkVersion())")
         title = "1-1 Video Call"
@@ -68,6 +75,15 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         // Connecting to a room
         DispatchQueue.global().async { [weak weakSelf = self] in
             weakSelf?.skylinkConnection.connectToRoom(withSecret: weakSelf?.skylinkApiSecret, roomName: weakSelf?.ROOM_NAME, userInfo: nil)
+            weakSelf?.skylinkConnection.statsDelegate = self
+            weakSelf?.continuousStats()
+        }
+    }
+    
+    fileprivate func continuousStats() {
+        skylinkConnection.getWebRTCStats(forPeerId: nil, mediaDirection: 0)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak weakSelf = self] in
+            weakSelf?.continuousStats()
         }
     }
 
@@ -167,8 +183,20 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     }
     
     func aspectFillRectForSize(insideSize: CGSize, containedInRect containerRect: CGRect) -> CGRect {
-        let maxFloat = max(containerRect.size.height, containerRect.size.width)
-        let aspectRatio = insideSize.width / insideSize.height
+        var maxFloat: CGFloat = 0
+        if containerRect.size.height > containerRect.size.width {
+            maxFloat = containerRect.size.height
+        } else if containerRect.size.height < containerRect.size.width {
+            maxFloat = containerRect.size.width
+        } else {
+            maxFloat = 0
+        }
+        var aspectRatio: CGFloat = 0
+        if insideSize.height != 0 {
+            aspectRatio = insideSize.width / insideSize.height
+        } else {
+            aspectRatio = 1
+        }
         var frame = CGRect(x: 0, y: 0, width: containerRect.size.width, height: containerRect.size.height)
         if insideSize.width < insideSize.height {
             frame.size.width = maxFloat
@@ -208,5 +236,9 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
             let msg = "Tap this button to refresh the peer connexion if needed."
             alertMessage(msg_title: msgTitle, msg:msg)
         }
+    }
+    
+    func connection(_ connection: SKYLINKConnection!, didGetWebRTCStats stats: [AnyHashable : Any]!, forPeerId peerId: String!, mediaDirection: Int32) {
+        skylinkLog("#Stats\nmd=\(mediaDirection) pid=\(peerId)\n\(stats.description)")
     }
 }
