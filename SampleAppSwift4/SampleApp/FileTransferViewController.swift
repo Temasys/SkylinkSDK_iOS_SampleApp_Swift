@@ -280,61 +280,63 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
     
     func connection(_ connection: SKYLINKConnection!, didCompleteTransfer filename: String!, fileData: Data!, peerId: String!) {
         updateFileTranferInfosForFilename(filename: filename, peerId: (peerId != nil) ? peerId : "all", withState: "Completed ✓", progress: 1, isOutgoing: nil)
-        if fileData.count != 0 {
-            guard let fileExtension = filename.components(separatedBy: ".").last else { return }
-            let filename1 = filename.replacingOccurrences(of: " ", with: "_")
-            if isImage(exten: fileExtension) == true && UIImage(data: fileData) != nil {
-                UIImageWriteToSavedPhotosAlbum(UIImage(data:fileData)!, self, nil, nil)
-            } else if fileExtension == "mp3" || fileExtension == "m4a" {
-                let showMusicAlert: () throws -> Void = { [weak weakSelf = self] in
-                    weakSelf?.musicPlayer = try fileExtension == "mp3" ? AVAudioPlayer(data: fileData, fileTypeHint: AVFileType.mp3.rawValue) : AVAudioPlayer(data: fileData)
-                    weakSelf?.musicPlayer?.play()
-                    let alert = UIAlertController(title: "Music transfer completed", message: "File transfer success.\nPEER: \(peerId)\n\nPlaying the received music file:\n'\(filename)'", preferredStyle: .alert)
-                    let cancelBtn: UIAlertAction = UIAlertAction(title: "Stop playing", style: .default) { [weak weakSelf = self] _ in
-                        weakSelf?.musicPlayer?.stop()
-                        weakSelf?.musicPlayer = nil
+        if fileData != nil {
+            if fileData.count != 0 {
+                guard let fileExtension = filename.components(separatedBy: ".").last else { return }
+                let filename1 = filename.replacingOccurrences(of: " ", with: "_")
+                if isImage(exten: fileExtension) == true && UIImage(data: fileData) != nil {
+                    UIImageWriteToSavedPhotosAlbum(UIImage(data:fileData)!, self, nil, nil)
+                } else if fileExtension == "mp3" || fileExtension == "m4a" {
+                    let showMusicAlert: () throws -> Void = { [weak weakSelf = self] in
+                        weakSelf?.musicPlayer = try fileExtension == "mp3" ? AVAudioPlayer(data: fileData, fileTypeHint: AVFileType.mp3.rawValue) : AVAudioPlayer(data: fileData)
+                        weakSelf?.musicPlayer?.play()
+                        let alert = UIAlertController(title: "Music transfer completed", message: "File transfer success.\nPEER: \(peerId)\n\nPlaying the received music file:\n'\(filename)'", preferredStyle: .alert)
+                        let cancelBtn: UIAlertAction = UIAlertAction(title: "Stop playing", style: .default) { [weak weakSelf = self] _ in
+                            weakSelf?.musicPlayer?.stop()
+                            weakSelf?.musicPlayer = nil
+                        }
+                        alert.addAction(cancelBtn)
+                        weakSelf?.present(alert, animated: true, completion: nil)
                     }
-                    alert.addAction(cancelBtn)
-                    weakSelf?.present(alert, animated: true, completion: nil)
-                }
-                do {
-                    try showMusicAlert()
-                } catch {
-                    skylinkLog("ERROR IN Music => \(error.localizedDescription)")
-                }
-            } else {
-                let pathArray = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-                guard let filePath = (pathArray.first as NSString?)?.appendingPathComponent(filename1) else { return }
-                do {
-                    let b = try removeFileAtPath(filePath: filePath)
-                    if FileManager.default.fileExists(atPath: filePath) && !b { return }
-                } catch {
-                    skylinkLog("ERROR IN remove file => \(error.localizedDescription)")
-                }
-                var wError: Error?
-                do {
-                    try fileData.write(to: URL(fileURLWithPath: filePath), options: .atomicWrite)
-                } catch let exception {
-                    wError = exception as Error
-                    skylinkLog(exception)
-                }
-                if wError != nil {
-                    skylinkLog("\(#function) • Error while writing '\(filePath)'->\(wError!.localizedDescription)")
+                    do {
+                        try showMusicAlert()
+                    } catch {
+                        skylinkLog("ERROR IN Music => \(error.localizedDescription)")
+                    }
                 } else {
-                    if isMovie(exten: fileExtension) && UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(filePath) {
-                        ALAssetsLibrary().writeVideoAtPath(toSavedPhotosAlbum: URL(fileURLWithPath: filePath), completionBlock: { [weak weakSelf = self] (filePathUrl, error) in
-                            if error != nil {
-                                skylinkLog("\(#function) • Error while saving '\(filename1)'->\(error!.localizedDescription)")
-                            } else {
-                                do {
-                                    if let filePath = filePathUrl?.absoluteString {
-                                        _ = try weakSelf?.removeFileAtPath(filePath: filePath)
+                    let pathArray = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+                    guard let filePath = (pathArray.first as NSString?)?.appendingPathComponent(filename1) else { return }
+                    do {
+                        let b = try removeFileAtPath(filePath: filePath)
+                        if FileManager.default.fileExists(atPath: filePath) && !b { return }
+                    } catch {
+                        skylinkLog("ERROR IN remove file => \(error.localizedDescription)")
+                    }
+                    var wError: Error?
+                    do {
+                        try fileData.write(to: URL(fileURLWithPath: filePath), options: .atomicWrite)
+                    } catch let exception {
+                        wError = exception as Error
+                        skylinkLog(exception)
+                    }
+                    if wError != nil {
+                        skylinkLog("\(#function) • Error while writing '\(filePath)'->\(wError!.localizedDescription)")
+                    } else {
+                        if isMovie(exten: fileExtension) && UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(filePath) {
+                            ALAssetsLibrary().writeVideoAtPath(toSavedPhotosAlbum: URL(fileURLWithPath: filePath), completionBlock: { [weak weakSelf = self] (filePathUrl, error) in
+                                if error != nil {
+                                    skylinkLog("\(#function) • Error while saving '\(filename1)'->\(error!.localizedDescription)")
+                                } else {
+                                    do {
+                                        if let filePath = filePathUrl?.absoluteString {
+                                            _ = try weakSelf?.removeFileAtPath(filePath: filePath)
+                                        }
+                                    } catch {
+                                        skylinkLog("Some error => \(error.localizedDescription)")
                                     }
-                                } catch {
-                                    skylinkLog("Some error => \(error.localizedDescription)")
                                 }
-                            }
-                        })
+                            })
+                        }
                     }
                 }
             }
@@ -342,6 +344,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
     }
     
     func updateFileTranferInfosForFilename(filename: String?, peerId: String?, withState state: String?, progress percentage: NSNumber?, isOutgoing: NSNumber?) {
+        /**
         let indexOfTransfer = (transfersArray as NSArray).indexOfObject { (obj, idx, stop) -> Bool in
             if let dict = obj as? [String : Any], let filename2 = dict["filename"] as? String, let peerId2 = dict["peerId"] as? String {
                 return (filename2 == filename) && (peerId2 == peerId)
@@ -349,18 +352,27 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
                 return false
             }
         }
+         */
+        let indexOfTransfer = transfersArray.index { (dict) -> Bool in
+            if let filename = dict["filename"] as? String, let peerId = dict["peerId"] as? String {
+                return filename == peerId
+            } else {
+                return false
+            }
+        }
         
-        if indexOfTransfer == NSNotFound {
+        if indexOfTransfer == NSNotFound || indexOfTransfer == nil {
             let object: [String : Any] = ["filename" : (filename != nil) ? filename! : "none", "peerId" : (peerId != nil) ? peerId! : "No peer Id", "isOutgoing" : (isOutgoing != nil) ? isOutgoing as! Bool : false, "percentage" : (percentage != nil) ? percentage as! Double : 0, "state" : (state != nil) ? state! : "Undefined"]
             transfersArray.insert(object, at: 0)
         } else { // updated transfer
-            var transferInfos = transfersArray[indexOfTransfer]
+            var transferInfos = transfersArray[indexOfTransfer!]
             if filename != nil { transferInfos["filename"] = filename! }
             if peerId != nil { transferInfos["peerId"] = peerId! }
             if isOutgoing != nil { transferInfos["isOutgoing"] = isOutgoing! }
             if percentage != nil { transferInfos["percentage"] = percentage! }
             if state != nil { transferInfos["state"] = state! }
-            (transfersArray as! NSMutableArray).replaceObject(at: indexOfTransfer, with: transferInfos)
+//            (transfersArray as! NSMutableArray).replaceObject(at: indexOfTransfer, with: transferInfos)
+            transfersArray[indexOfTransfer!] = transferInfos
         }
         fileTransferTableView.reloadData()
     }
