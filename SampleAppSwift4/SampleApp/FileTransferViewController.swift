@@ -163,7 +163,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
                     skylinkLog("\(weakSelf?.transfersArray[indexPath.row]["state"] ?? "")")
                     if let state = weakSelf?.transfersArray[indexPath.row]["state"] as? String, state == "In progress" {
                         weakSelf?.skylinkConnection.cancelFileTransfer(transferInfos["filename"] as? String ?? "", peerId: transferInfos["peerId"] as? String ?? "")
-                        weakSelf?.updateFileTranferInfosForFilename(filename: transferInfos["filename"] as? String ?? "", peerId: transferInfos["peerId"] as? String ?? "", withState: "Cancelled", progress: transferInfos["progress"] as? NSNumber ?? NSNumber(value: 0), isOutgoing: transferInfos["isOutgoing"] as? NSNumber ?? NSNumber(value: 0))
+                        weakSelf?.updateFileTranferInfosForFilename(filename: transferInfos["filename"] as? String ?? "", peerId: transferInfos["peerId"] as? String ?? "", withState: "Cancelled", progress: transferInfos["progress"] as? Float ?? 0, isOutgoing: transferInfos["isOutgoing"] as? Bool ?? false)
                     } else {
                         let canNotCancelAlert = UIAlertController(title: "Can not cancel", message: "Transfer already completed", preferredStyle: .alert)
                         weakSelf?.alerts.append(canNotCancelAlert)
@@ -271,7 +271,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
     }
     
     func connection(_ connection: SKYLINKConnection!, didUpdateProgress percentage: CGFloat, isOutgoing: Bool, filename: String!, peerId: String!) {
-        updateFileTranferInfosForFilename(filename: filename, peerId: (peerId != nil) ? peerId : "all", withState: "In progress", progress: NSNumber(value: Float(percentage)), isOutgoing: NSNumber(value: isOutgoing))
+        updateFileTranferInfosForFilename(filename: filename, peerId: (peerId != nil) ? peerId : "all", withState: "In progress", progress: Float(percentage), isOutgoing: isOutgoing)
     }
     
     func connection(_ connection: SKYLINKConnection!, didDropTransfer filename: String!, reason message: String!, isExplicit: Bool, peerId: String!) {
@@ -343,7 +343,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         }
     }
     
-    func updateFileTranferInfosForFilename(filename: String?, peerId: String?, withState state: String?, progress percentage: NSNumber?, isOutgoing: NSNumber?) {
+    func updateFileTranferInfosForFilename(filename: String?, peerId: String?, withState state: String?, progress percentage: Float?, isOutgoing: Bool?) {
         /**
         let indexOfTransfer = (transfersArray as NSArray).indexOfObject { (obj, idx, stop) -> Bool in
             if let dict = obj as? [String : Any], let filename2 = dict["filename"] as? String, let peerId2 = dict["peerId"] as? String {
@@ -362,14 +362,14 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         }
         
         if indexOfTransfer == NSNotFound || indexOfTransfer == nil {
-            let object: [String : Any] = ["filename" : (filename != nil) ? filename! : "none", "peerId" : (peerId != nil) ? peerId! : "No peer Id", "isOutgoing" : (isOutgoing != nil) ? isOutgoing as! Bool : false, "percentage" : (percentage != nil) ? percentage as! Double : 0, "state" : (state != nil) ? state! : "Undefined"]
+            let object: [String : Any] = ["filename" : (filename != nil) ? filename! : "none", "peerId" : (peerId != nil) ? peerId! : "No peer Id", "isOutgoing" : isOutgoing ?? false, "percentage" : percentage ?? 0, "state" : (state != nil) ? state! : "Undefined"]
             transfersArray.insert(object, at: 0)
         } else { // updated transfer
             var transferInfos = transfersArray[indexOfTransfer!]
             if filename != nil { transferInfos["filename"] = filename! }
             if peerId != nil { transferInfos["peerId"] = peerId! }
-            if isOutgoing != nil { transferInfos["isOutgoing"] = isOutgoing! }
-            if percentage != nil { transferInfos["percentage"] = percentage! }
+            if isOutgoing != nil { transferInfos["isOutgoing"] = isOutgoing }
+            if percentage != nil { transferInfos["percentage"] = percentage }
             if state != nil { transferInfos["state"] = state! }
 //            (transfersArray as! NSMutableArray).replaceObject(at: indexOfTransfer, with: transferInfos)
             transfersArray[indexOfTransfer!] = transferInfos

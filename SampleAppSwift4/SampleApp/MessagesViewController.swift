@@ -270,7 +270,7 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
         }
         if showSentMessage {
             messageTextField.text = ""
-            messages.insert(["message": message, "isPublic": NSNumber(value: (peerId == nil)), "peerId": skylinkConnection.myPeerId], at: 0)
+            messages.insert(["message": message, "isPublic": peerId == nil, "peerId": skylinkConnection.myPeerId], at: 0)
             tableView.reloadSections(IndexSet(integer: 0), with: .fade)
         } else {
             hideKeyboardIfNeeded()
