@@ -344,15 +344,6 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
     }
     
     func updateFileTranferInfosForFilename(filename: String?, peerId: String?, withState state: String?, progress percentage: Float?, isOutgoing: Bool?) {
-        /**
-        let indexOfTransfer = (transfersArray as NSArray).indexOfObject { (obj, idx, stop) -> Bool in
-            if let dict = obj as? [String : Any], let filename2 = dict["filename"] as? String, let peerId2 = dict["peerId"] as? String {
-                return (filename2 == filename) && (peerId2 == peerId)
-            } else {
-                return false
-            }
-        }
-         */
         let indexOfTransfer = transfersArray.index { (dict) -> Bool in
             if let filename = dict["filename"] as? String, let peerId = dict["peerId"] as? String {
                 return filename == peerId
@@ -371,7 +362,6 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
             if isOutgoing != nil { transferInfos["isOutgoing"] = isOutgoing }
             if percentage != nil { transferInfos["percentage"] = percentage }
             if state != nil { transferInfos["state"] = state! }
-//            (transfersArray as! NSMutableArray).replaceObject(at: indexOfTransfer, with: transferInfos)
             transfersArray[indexOfTransfer!] = transferInfos
         }
         fileTransferTableView.reloadData()

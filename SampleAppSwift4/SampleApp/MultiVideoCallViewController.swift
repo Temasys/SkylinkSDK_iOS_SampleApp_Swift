@@ -229,7 +229,6 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
             
             videoView.frame = (videoAspectSegmentControl.selectedSegmentIndex == 0 || correspondingContainerView.isEqual(localVideoContainerView)) ? aspectFillRectForSize(insideSize: videoSize, containedInRect: correspondingContainerView.frame): AVMakeRect(aspectRatio: videoSize, insideRect: correspondingContainerView.bounds)
         }
-//        updatePeersVideosFrames()
     }
     
     func connection(_ connection: SKYLINKConnection!, didToggleAudio isMuted: Bool, peerId: String!) {
@@ -305,7 +304,6 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
             if $0 == peerId { bool = true }
         }
         if !bool {
-//            (peersInfos as! NSMutableDictionary).addEntries(from: [peerId: ["videoView": NSNull(), "videoSize": NSNull(), "isAudioMuted": NSNull(), "isVideoMuted": NSNull()]])
             peersInfos[peerId] = ["videoView": NSNull(), "videoSize": CGSize.zero, "isAudioMuted": false, "isVideoMuted": false]
         }
         guard let dict = peersInfos[peerId] as? [String : Any], let videoView = dict["videoView"] as? UIView else { return }
@@ -335,7 +333,6 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
             if $0 == peerId { bool = true }
         }
         if !bool {
-//            (peersInfos as! NSMutableDictionary).addEntries(from: [peerId: ["videoView": NSNull(), "videoSize": NSNull(), "isAudioMuted": NSNull(), "isVideoMuted": NSNull()]])
             peersInfos[peerId] = ["videoView": NSNull(), "videoSize": CGSize.zero, "isAudioMuted": false, "isVideoMuted": false]
         }
         guard let dict = peersInfos[peerId] as? [String : Any], let videoSize = dict["videoSize"] as? CGSize, let isAudioMuted = dict["isAudioMuted"] as? Bool, let isVideoMuted = dict["isVideoMuted"] as? Bool else { return }

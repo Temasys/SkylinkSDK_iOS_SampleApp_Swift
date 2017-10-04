@@ -168,7 +168,6 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
                 peerVideoSize = videoSize
             }
             videoView.frame = aspectFillRectForSize(insideSize: videoSize, containedInRect: correspondingContainerView.frame)
-            // viewWillLayoutSubviews()
             // for aspect fit, use AVMakeRectWithAspectRatioInsideRect(videoSize, correspondingContainerView.bounds);
         }
     }

@@ -28,7 +28,7 @@ func UIRGBColor(r:CGFloat, g:CGFloat, b:CGFloat) -> UIColor {
     return UIColor(red: r/255.0, green: g/255.0, blue: b/255.0, alpha: 1.0)
 }
 
-/// 封装的日志输出功能(T表示不指定日志信息参数类型)
+/// 封装的日志输出功能
 ///
 /// - Parameters:
 ///   - message: <#message description#>
@@ -39,7 +39,7 @@ func skylinkLog<T>(_ message: T, file: String = #file, function: String = #funct
             line: Int = #line) {
     #if DEBUG
         let fileName = (file as NSString).lastPathComponent
-        let consoleStr = "\(fileName) : line\(line) \(function) | \(message)" // 打印日志内容
+        let consoleStr = "\(fileName) : line\(line) \(function) | \(message)" 
         print(consoleStr)
         let dformatter = DateFormatter()
         dformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"

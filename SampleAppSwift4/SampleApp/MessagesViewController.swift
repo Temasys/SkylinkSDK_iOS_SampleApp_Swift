@@ -248,23 +248,6 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
                     showSentMessage = false
                 }
             }
-            /**
-            do {
-                if peerId != nil {
-                    let data = message.data(using: .utf8)
-                    try skylinkConnection.sendBinaryData(data, peerId: peerId)
-                }
-            } catch {
-                var message = "\(error)"
-                if error.localizedDescription == "Sending binary data in a MCU connection is not supported" {
-                    message = message.appending("MCU can be enabled/disabled in Key configuration on the developer portal: http://developer.temasys.com.sg/")
-                }
-                let msgTitle = "Exeption when sending binary data"
-                let msg = message
-                alertMessage(msg_title: msgTitle, msg: msg)
-                showSentMessage = false
-            }
-            */
         default:
             break
         }
