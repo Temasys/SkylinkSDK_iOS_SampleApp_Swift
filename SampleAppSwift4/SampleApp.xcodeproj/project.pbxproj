@@ -20,6 +20,7 @@
 		C2307D731F286BDC003DE8B1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2307D711F286BDC003DE8B1 /* Main.storyboard */; };
 		C2307D751F286BDC003DE8B1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2307D741F286BDC003DE8B1 /* Assets.xcassets */; };
 		C2307D781F286BDC003DE8B1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2307D761F286BDC003DE8B1 /* LaunchScreen.storyboard */; };
+		C28DFDB61F84A32600BF67D7 /* DataTransferViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28DFDB51F84A32600BF67D7 /* DataTransferViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		C2307D9E1F286CD4003DE8B1 /* sampleImage_groupTransfer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sampleImage_groupTransfer.png; sourceTree = "<group>"; };
 		C2307D9F1F286CD4003DE8B1 /* sampleImage_transfer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sampleImage_transfer.png; sourceTree = "<group>"; };
 		C2307DA01F286D35003DE8B1 /* SampleApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SampleApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		C28DFDB51F84A32600BF67D7 /* DataTransferViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataTransferViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +99,7 @@
 			children = (
 				C2307D9D1F286CD4003DE8B1 /* TransferFileSamples */,
 				C2307D6D1F286BDC003DE8B1 /* AppDelegate.swift */,
+				C28DFDB51F84A32600BF67D7 /* DataTransferViewController.swift */,
 				C20A893C1F28767A0033076D /* AudioCallViewController.swift */,
 				C20A893E1F28768C0033076D /* FileTransferViewController.swift */,
 				C20A89401F28769C0033076D /* MessagesViewController.swift */,
@@ -248,6 +251,7 @@
 			files = (
 				C2307D6E1F286BDC003DE8B1 /* AppDelegate.swift in Sources */,
 				C20A89431F2876AA0033076D /* MultiVideoCallViewController.swift in Sources */,
+				C28DFDB61F84A32600BF67D7 /* DataTransferViewController.swift in Sources */,
 				C20A89451F2876BE0033076D /* VideoCallViewController.swift in Sources */,
 				C20A893D1F28767A0033076D /* AudioCallViewController.swift in Sources */,
 				C20A89411F28769C0033076D /* MessagesViewController.swift in Sources */,
