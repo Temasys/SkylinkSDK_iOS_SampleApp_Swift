@@ -127,7 +127,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         } else if tableView == fileTransferTableView {
             let cell = tableView.dequeueReusableCell(withIdentifier: "fileTransferCell", for: indexPath)
             let trInfos = transfersArray[indexPath.row]
-            cell.textLabel?.text = String(format: "%@ %.0f%% • %@", (trInfos["isOutgoing"] as? Bool != false) ? "⬆️" : "⬇️", (trInfos["percentage"] as? Double ?? 0) * 100, trInfos["state"] as? String ?? "")
+            cell.textLabel?.text = String(format: "%@ %.0f%% • %@", (trInfos["isOutgoing"] as? Bool != false) ? "⬆️" : "⬇️", (trInfos["percentage"] as? Float ?? 0) * 100, trInfos["state"] as? String ?? "")
             cell.detailTextLabel?.text = String(format: "File: %@ • Peer: %@", trInfos["filename"] as? String ?? "", trInfos["peerId"] as? String ?? "")
         }
         return UITableViewCell()
@@ -362,7 +362,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         }
         
         if indexOfTransfer == NSNotFound || indexOfTransfer == nil {
-            let object: [String : Any] = ["filename" : (filename != nil) ? filename! : "none", "peerId" : (peerId != nil) ? peerId! : "No peer Id", "isOutgoing" : isOutgoing ?? false, "percentage" : percentage ?? 0, "state" : (state != nil) ? state! : "Undefined"]
+            let object: [String : Any] = ["filename" : (filename != nil) ? filename! : "none", "peerId" : (peerId != nil) ? peerId! : "No peer Id", "isOutgoing" : isOutgoing ?? false, "percentage" : percentage ?? 0.0, "state" : (state != nil) ? state! : "Undefined"]
             transfersArray.insert(object, at: 0)
         } else { // updated transfer
             var transferInfos = transfersArray[indexOfTransfer!]
