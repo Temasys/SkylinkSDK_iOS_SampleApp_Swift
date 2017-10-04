@@ -77,7 +77,7 @@ You will then be able to communicate with other peer joining the same room.
             return skylinkConnection
         }
     // Connecting to a room
-    skylinkConnection.connectToRoom(withSecret: @"MY-SECRET", roomName: @"A-ROOM-NAME", userInfo: nil)
+    skylinkConnection.connectToRoom(withSecret: "MY-SECRET", roomName: "A-ROOM-NAME", userInfo: nil)
 
 You can then control what happens in to room by **sending messages to the `SKYLINKConnection` instance** (like triggering a file transfer request for example), and **respond to events by implementing the delegate methods** from the 5 protocols.
 Always set at least the `lifeCycleDelegate`.
