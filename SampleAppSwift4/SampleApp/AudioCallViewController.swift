@@ -141,7 +141,7 @@ class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         let cell = tableView.dequeueReusableCell(withIdentifier: "ACpeerCell", for: indexPath)
         let peerDic = remotePeerArray[indexPath.row]
         skylinkLog("PeerDic,id: \(peerDic["id"] as? String ?? "" )")
-        cell.textLabel?.text = peerDic["nickname"] != nil ? peerDic["nickname"] as! String : "Peer \(indexPath.row + 1)"
+        cell.textLabel?.text = peerDic["nickname"] != nil ? peerDic["nickname"] as! String : "Peer \(indexPath.row)"
         cell.detailTextLabel?.text = "ID: \(peerDic["id"] ?? "") \((peerDic["isAudioMuted"] as? Bool) == true ? " - Audio muted" : "")"
         cell.backgroundColor = UIRGBColor(r: 0.35, g: 0.35, b: 0.35)
         return cell
