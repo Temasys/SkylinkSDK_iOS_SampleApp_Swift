@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(didSessionRouteChange(notification:)), name: Notification.Name.AVAudioSessionRouteChange, object: nil)
         signal(SIGPIPE, SIG_IGN)
         skylinkLog(NSHomeDirectory())
+        registerDefaultsFromSettingsBundle()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -56,6 +57,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             default:
                 break
             }
+        }
+    }
+    
+    fileprivate func registerDefaultsFromSettingsBundle() {
+        UserDefaults.standard.synchronize()
+        guard let settingsBundle = Bundle.main.path(forResource: "Settings", ofType: "bundle") else {
+            skylinkLog("Could not find Settings.bundle")
+            return
+        }
+        
+        if let settings = NSDictionary(contentsOfFile: (settingsBundle as NSString).appendingPathComponent("Root.plist")) as? [String : AnyObject], let preferences = settings["PreferenceSpecifiers"] as? [[String : String]] {
+            var defaultsToRegister: [String : Any] = Dictionary(minimumCapacity: preferences.count)
+            for prefSpecification in preferences {
+                if let key = prefSpecification["Key"] {
+                    // check if value readable in userDefaults
+                    let currentObject = UserDefaults.standard.object(forKey: "Key")
+                    if currentObject == nil {
+                        // not readable: set value from Settings.bundle
+                        let objectToSet = prefSpecification["DefaultValue"]
+                        defaultsToRegister[key] = objectToSet
+                    } else {
+                        // already readable
+                        skylinkLog("Key \(key) is readable (value: \(String(describing: currentObject)), nothing written to defaults.")
+                    }
+                }
+            }
+            UserDefaults.standard.register(defaults: defaultsToRegister)
+            UserDefaults.standard.synchronize()
         }
     }
 }

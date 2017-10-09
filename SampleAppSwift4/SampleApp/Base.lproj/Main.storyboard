@@ -21,7 +21,7 @@
         <!--Skylink Examples-->
         <scene sceneID="gsg-oP-kUU">
             <objects>
-                <viewController id="4aO-7M-Jih" customClass="HomeViewController" customModule="SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="4aO-7M-Jih" customClass="HomeViewController" customModule="SampleApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="gM9-7b-plH"/>
                         <viewControllerLayoutGuide type="bottom" id="RR5-ZO-AC6"/>
@@ -312,8 +312,8 @@ Get it at developer.temasys.com.sg/register</string>
                                 </variation>
                                 <variation key="heightClass=compact">
                                     <mask key="constraints">
-                                        <include reference="StM-gk-cty"/>
                                         <exclude reference="ArT-w5-fts"/>
+                                        <include reference="StM-gk-cty"/>
                                     </mask>
                                 </variation>
                                 <connections>
@@ -490,6 +490,11 @@ Get it at developer.temasys.com.sg/register</string>
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" title="Skylink Examples" id="5b1-ep-DiU">
+                        <barButtonItem key="leftBarButtonItem" systemItem="edit" id="G2o-Xo-5YD">
+                            <connections>
+                                <segue destination="fCI-RD-qAb" kind="show" id="ubO-G4-ENN"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="CA6-pA-fp5">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" id="0T5-ab-ufS">
                                 <rect key="frame" x="337" y="11" width="22" height="22"/>
@@ -512,7 +517,7 @@ Get it at developer.temasys.com.sg/register</string>
         <!--Audio Call View Controller-->
         <scene sceneID="0Uw-6M-Et1">
             <objects>
-                <viewController id="g3I-iG-8nt" customClass="AudioCallViewController" customModule="SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="g3I-iG-8nt" customClass="AudioCallViewController" customModule="SampleApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="w6B-tF-ouC"/>
                         <viewControllerLayoutGuide type="bottom" id="0pL-16-w9E"/>
@@ -627,7 +632,7 @@ Get it at developer.temasys.com.sg/register</string>
         <!--Video Call View Controller-->
         <scene sceneID="SCf-KV-oZ5">
             <objects>
-                <viewController id="tQH-eD-EB2" customClass="VideoCallViewController" customModule="SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="tQH-eD-EB2" customClass="VideoCallViewController" customModule="SampleApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="sbn-F4-pOV"/>
                         <viewControllerLayoutGuide type="bottom" id="a0c-67-moj"/>
@@ -830,7 +835,7 @@ Get it at developer.temasys.com.sg/register</string>
         <!--File Transfer View Controller-->
         <scene sceneID="vmM-hu-V8n">
             <objects>
-                <viewController id="edT-qj-2dJ" customClass="FileTransferViewController" customModule="SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="edT-qj-2dJ" customClass="FileTransferViewController" customModule="SampleApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Aod-el-xMW"/>
                         <viewControllerLayoutGuide type="bottom" id="Qfd-nm-Kkl"/>
@@ -1030,7 +1035,7 @@ Get it at developer.temasys.com.sg/register</string>
         <!--Multi Video Call View Controller-->
         <scene sceneID="cvs-de-OTX">
             <objects>
-                <viewController id="ieC-jP-Wwi" customClass="MultiVideoCallViewController" customModule="SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ieC-jP-Wwi" customClass="MultiVideoCallViewController" customModule="SampleApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="L9S-iu-LuH"/>
                         <viewControllerLayoutGuide type="bottom" id="kih-3D-CBb"/>
@@ -1391,7 +1396,7 @@ Get it at developer.temasys.com.sg/register</string>
         <!--Messages View Controller-->
         <scene sceneID="fxB-gX-MQn">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="FMd-vz-5Pu" customClass="MessagesViewController" customModule="SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="FMd-vz-5Pu" customClass="MessagesViewController" customModule="SampleApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jc8-6l-Lud"/>
                         <viewControllerLayoutGuide type="bottom" id="3l5-WZ-vdv"/>
@@ -1726,7 +1731,7 @@ Get it at developer.temasys.com.sg/register</string>
         <!--Data Transfer View Controller-->
         <scene sceneID="Atx-2f-7Nq">
             <objects>
-                <viewController id="Cs3-SK-meF" customClass="DataTransferViewController" customModule="SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Cs3-SK-meF" customClass="DataTransferViewController" customModule="SampleApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="q86-l1-ErH"/>
                         <viewControllerLayoutGuide type="bottom" id="y5j-qs-Cb2"/>
@@ -1971,6 +1976,50 @@ Get it at developer.temasys.com.sg/register</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eRv-i8-HqB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1790" y="2575"/>
+        </scene>
+        <!--Settings View Controller-->
+        <scene sceneID="5Zy-GF-gkU">
+            <objects>
+                <tableViewController id="fCI-RD-qAb" customClass="SettingsViewController" customModule="SampleApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="9iL-PZ-hGQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="rOe-1F-5Vw" detailTextLabel="UHy-P6-3xT" style="IBUITableViewCellStyleSubtitle" id="4wl-oV-xTn">
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4wl-oV-xTn" id="AgT-iH-2NE">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="rOe-1F-5Vw">
+                                            <rect key="frame" x="16" y="6" width="31.5" height="19.5"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UHy-P6-3xT">
+                                            <rect key="frame" x="16" y="25.5" width="40.5" height="13.5"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="fCI-RD-qAb" id="UEP-L2-gFc"/>
+                            <outlet property="delegate" destination="fCI-RD-qAb" id="1j1-Da-k3S"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="43V-gy-Gss" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="752" y="1115"/>
         </scene>
     </scenes>
     <resources>
