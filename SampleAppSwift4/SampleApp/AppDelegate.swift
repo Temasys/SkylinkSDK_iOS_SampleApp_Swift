@@ -14,7 +14,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func applicationDidFinishLaunching(_ application: UIApplication) {
         NotificationCenter.default.addObserver(self, selector: #selector(didSessionRouteChange(notification:)), name: Notification.Name.AVAudioSessionRouteChange, object: nil)
         signal(SIGPIPE, SIG_IGN)
@@ -30,8 +29,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        skylinkLog("applicationDidEnterBackground ~~~ started")
+        backgroundStarted()
     }
-
+    
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
     }
@@ -85,6 +86,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             UserDefaults.standard.register(defaults: defaultsToRegister)
             UserDefaults.standard.synchronize()
+        }
+    }
+    
+    func backgroundStarted() {
+        var bgtask: UIBackgroundTaskIdentifier = 0
+        bgtask = UIApplication.shared.beginBackgroundTask(expirationHandler: {
+            DispatchQueue.main.async {
+                if bgtask != UIBackgroundTaskInvalid {
+                    bgtask = UIBackgroundTaskInvalid
+                }
+            }
+        })
+        DispatchQueue.global(qos: .default).async {
+            DispatchQueue.main.async {
+                if bgtask != UIBackgroundTaskInvalid {
+                    bgtask = UIBackgroundTaskInvalid
+                }
+            }
         }
     }
 }
