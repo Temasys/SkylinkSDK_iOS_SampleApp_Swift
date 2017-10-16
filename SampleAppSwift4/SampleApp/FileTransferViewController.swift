@@ -24,7 +24,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
     let skylinkApiSecret = SKYLINK_SECRET
     var alerts : [UIAlertController] = []
     lazy var remotePeerArray = [String]() // array holding the ids (strings) of the peers connected to the room
-    var transfersArray = [[String : Any]]() // array of dictionnaries holding infos about started (and finished) file transfers
+    lazy var transfersArray = [[String : Any]]() // array of dictionnaries holding infos about started (and finished) file transfers
     var musicPlayer: AVAudioPlayer?
     var selectedRow = -1
     lazy var skylinkConnection: SKYLINKConnection = {
@@ -127,10 +127,14 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         } else if tableView == fileTransferTableView {
             let cell = tableView.dequeueReusableCell(withIdentifier: "fileTransferCell", for: indexPath)
             let trInfos = transfersArray[indexPath.row]
-            cell.textLabel?.text = String(format: "%@ %.0f%% • %@", (trInfos["isOutgoing"] as? Bool != false) ? "⬆️" : "⬇️", (trInfos["percentage"] as? Float ?? 0) * 100, trInfos["state"] as? String ?? "")
-            cell.detailTextLabel?.text = String(format: "File: %@ • Peer: %@", trInfos["filename"] as? String ?? "", trInfos["peerId"] as? String ?? "")
+            if let isoutgoing = trInfos["isOutgoing"] as? Bool, let percentage = trInfos["percentage"] as? Float, let state = trInfos["state"] as? String, let filename = trInfos["filename"] as? String, let peerid = trInfos["peerId"] as? String {
+                cell.textLabel?.text = String(format: "%@ %.0f%% • %@", (isoutgoing != false) ? "⬆️" : "⬇️", percentage * 100, state)
+                cell.detailTextLabel?.text = String(format: "File: %@ • Peer: %@", filename, peerid)
+            }
+            return cell
+        } else {
+            return UITableViewCell()
         }
-        return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -144,7 +148,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         return ""
     }
     
-    func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if tableView == peersTableView && view.isKind(of: UITableViewHeaderFooterView.self) {
             (view as! UITableViewHeaderFooterView).textLabel?.textColor = .lightGray
         }
@@ -275,6 +279,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
     }
     
     func connection(_ connection: SKYLINKConnection!, didDropTransfer filename: String!, reason message: String!, isExplicit: Bool, peerId: String!) {
+        skylinkLog("connection didDropTransfer")
         updateFileTranferInfosForFilename(filename: filename, peerId: (peerId != nil) ? peerId : "all", withState: (message != nil) ? message : "Dropped my sender", progress: nil, isOutgoing: nil)
     }
     
@@ -336,6 +341,25 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
                                     }
                                 }
                             })
+                            /**
+                            var placeholder: PHObjectPlaceholder?
+                            PHPhotoLibrary.shared().performChanges({
+                                if let createAssetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: URL(fileURLWithPath: filePath)) {
+                                    placeholder = createAssetRequest.placeholderForCreatedAsset
+                                }
+                            }, completionHandler: { [weak weakSelf = self] (isSuccess, error) in
+                                if isSuccess {
+                                    skylinkLog("\(#function) • Error while saving '\(filename1)'->\(error!.localizedDescription)")
+                                } else {
+                                    do {
+                                        _ = try weakSelf?.removeFileAtPath(filePath: filePath)
+                                    } catch {
+                                        skylinkLog("Some error => \(error.localizedDescription)")
+                                    }
+                                }
+                            })
+                            skylinkLog("placeholder ---> \(placeholder?.description ?? "")")
+                             */
                         }
                     }
                 }
@@ -344,25 +368,25 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
     }
     
     func updateFileTranferInfosForFilename(filename: String?, peerId: String?, withState state: String?, progress percentage: Float?, isOutgoing: Bool?) {
-        let indexOfTransfer = transfersArray.index { (dict) -> Bool in
-            if let filename = dict["filename"] as? String, let peerId = dict["peerId"] as? String {
-                return filename == peerId
+        let indexOfTransfer = (transfersArray as NSArray).indexOfObject { (obj, idx, stop) -> Bool in
+            if let dict = obj as? [String : Any], let filename2 = dict["filename"] as? String, let peerId2 = dict["peerId"] as? String {
+                return (filename2 == filename) && (peerId2 == peerId)
             } else {
                 return false
             }
         }
-        
-        if indexOfTransfer == NSNotFound || indexOfTransfer == nil {
+        if indexOfTransfer == NSNotFound {
             let object: [String : Any] = ["filename" : (filename != nil) ? filename! : "none", "peerId" : (peerId != nil) ? peerId! : "No peer Id", "isOutgoing" : isOutgoing ?? false, "percentage" : percentage ?? 0.0, "state" : (state != nil) ? state! : "Undefined"]
             transfersArray.insert(object, at: 0)
         } else { // updated transfer
-            var transferInfos = transfersArray[indexOfTransfer!]
+            var transferInfos = transfersArray[indexOfTransfer]
             if filename != nil { transferInfos["filename"] = filename! }
             if peerId != nil { transferInfos["peerId"] = peerId! }
             if isOutgoing != nil { transferInfos["isOutgoing"] = isOutgoing }
             if percentage != nil { transferInfos["percentage"] = percentage }
             if state != nil { transferInfos["state"] = state! }
-            transfersArray[indexOfTransfer!] = transferInfos
+            transfersArray.remove(at: indexOfTransfer)
+            transfersArray.insert(transferInfos, at: indexOfTransfer)
         }
         fileTransferTableView.reloadData()
     }
