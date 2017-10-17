@@ -22,11 +22,11 @@ class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         let config = SKYLINKConnectionConfig()
         config.video = false
         config.audio = true
+        SKYLINKConnection.setVerbose(true)
         if let skylinkConnection = SKYLINKConnection(config: config, appKey: skylinkApiKey) {
             skylinkConnection.lifeCycleDelegate = self
             skylinkConnection.mediaDelegate = self
             skylinkConnection.remotePeerDelegate = self
-            SKYLINKConnection.setVerbose(true)
             return skylinkConnection
         } else {
             return SKYLINKConnection()

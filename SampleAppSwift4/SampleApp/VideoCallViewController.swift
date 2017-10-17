@@ -32,12 +32,12 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         let config = SKYLINKConnectionConfig()
         config.video = true
         config.audio = true
+        SKYLINKConnection.setVerbose(true)
         // Creating SKYLINKConnection
         if let skylinkConnection = SKYLINKConnection(config: config, appKey: skylinkApiKey) {
             skylinkConnection.lifeCycleDelegate = self
             skylinkConnection.mediaDelegate = self
             skylinkConnection.remotePeerDelegate = self
-            SKYLINKConnection.setVerbose(true)
             return skylinkConnection
         } else {
             return SKYLINKConnection()

@@ -31,12 +31,12 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
         config.video = true
         config.audio = true
         // Creating SKYLINKConnection
+        SKYLINKConnection.setVerbose(true)
         if let skylinkConnection = SKYLINKConnection(config: config, appKey: skylinkApiKey) {
             skylinkConnection.lifeCycleDelegate = self
             skylinkConnection.mediaDelegate = self
             skylinkConnection.remotePeerDelegate = self
             skylinkConnection.recordingDelegate = self
-            SKYLINKConnection.setVerbose(true)
             return skylinkConnection
         } else {
             return SKYLINKConnection()

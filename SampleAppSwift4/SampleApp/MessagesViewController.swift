@@ -24,11 +24,11 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
         config.audio = false
         config.fileTransfer = false
         config.dataChannel = true // for data chanel messages
+        SKYLINKConnection.setVerbose(true)
         if let skylinkConnection = SKYLINKConnection(config: config, appKey: skylinkApiKey) {
             skylinkConnection.lifeCycleDelegate = self
             skylinkConnection.messagesDelegate = self
             skylinkConnection.remotePeerDelegate = self
-            SKYLINKConnection.setVerbose(true)
             return skylinkConnection
         } else {
             return SKYLINKConnection()

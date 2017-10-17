@@ -30,11 +30,11 @@ class DataTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         config.dataChannel = true
         config.receiveAudio = true
         // Creating SKYLINKConnection
+        SKYLINKConnection.setVerbose(true)
         if let skylinkConnection = SKYLINKConnection(config: config, appKey: skylinkApiKey) {
             skylinkConnection.lifeCycleDelegate = self
             skylinkConnection.remotePeerDelegate = self
             skylinkConnection.messagesDelegate = self
-            SKYLINKConnection.setVerbose(true)
             return skylinkConnection
         } else {
             return SKYLINKConnection()

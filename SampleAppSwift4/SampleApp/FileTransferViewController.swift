@@ -35,11 +35,11 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         config.timeout = 30
         config.dataChannel = true
         skylinkLog(config.description)
+        SKYLINKConnection.setVerbose(true)
         if let skylinkConnection = SKYLINKConnection(config: config, appKey: skylinkApiKey) {
             skylinkConnection.lifeCycleDelegate = self
             skylinkConnection.fileTransferDelegate = self
             skylinkConnection.remotePeerDelegate = self
-            SKYLINKConnection.setVerbose(true)
             return skylinkConnection
         } else {
             return SKYLINKConnection()
