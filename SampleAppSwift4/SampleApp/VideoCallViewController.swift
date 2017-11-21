@@ -48,6 +48,7 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         super.viewDidLoad()
         setupUI()
         setupInfo()
+        UIApplication.shared.isIdleTimerDisabled = true
     }
     
     override func viewWillLayoutSubviews() {
@@ -55,6 +56,11 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         if peerVideoView != nil {
             peerVideoView.frame = aspectFillRectForSize(insideSize: peerVideoSize, containedInRect: remotePeerVideoContainerView.frame)
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        UIApplication.shared.isIdleTimerDisabled = false
     }
     
     fileprivate func setupUI() {
@@ -151,7 +157,6 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     }
     
     func connection(_ connection: SKYLINKConnection!, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
-        remotePeerId = nil
         skylinkConnection.unlockTheRoom()
         alertMessage(msg_title: "Peer Left", msg: "\nPeer ID:\(peerId)\n has been left")
     }
@@ -217,7 +222,7 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     }
     
     @IBAction func toogleSoundTap(sender: AnyObject) {
-        self.skylinkConnection.muteAudio(!skylinkConnection.isAudioMuted())
+        skylinkConnection.muteAudio(!skylinkConnection.isAudioMuted())
         sender.setImage(UIImage(named: ((skylinkConnection.isAudioMuted()) ? "NoMicrophoneFilled.png" : "Microphone.png")), for: .normal)
     }
     
