@@ -8,7 +8,7 @@
 
 import UIKit
 
-class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionMediaDelegate, SKYLINKConnectionRemotePeerDelegate, SKYLINKConnectionStatsDelegate {
+class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionMediaDelegate, SKYLINKConnectionRemotePeerDelegate {
 
     @IBOutlet weak var localVideoContainerView: UIView!
     @IBOutlet weak var remotePeerVideoContainerView: UIView!
@@ -81,15 +81,6 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         // Connecting to a room
         DispatchQueue.global().async { [weak weakSelf = self] in
             weakSelf?.skylinkConnection.connectToRoom(withSecret: weakSelf?.skylinkApiSecret, roomName: weakSelf?.ROOM_NAME, userInfo: nil)
-            weakSelf?.skylinkConnection.statsDelegate = self
-            weakSelf?.continuousStats()
-        }
-    }
-    
-    fileprivate func continuousStats() {
-        skylinkConnection.getWebRTCStats(forPeerId: nil, mediaDirection: 0)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak weakSelf = self] in
-            weakSelf?.continuousStats()
         }
     }
 
