@@ -54,7 +54,8 @@ class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     fileprivate func setupInfo() {
         let credInfos: [String : Any] = ["startTime": Date(), "duration": 24.0]
         skylinkLog("This is credInfos \(credInfos.description)")
-        if let durationString = credInfos["duration"] as? Double, let credential = SKYLINKConnection.calculateCredentials(ROOM_NAME, duration: NSNumber(value: durationString), startTime: credInfos["startTime"] as? Date ?? Date(), secret: skylinkApiSecret) {
+        if let durationString = credInfos["duration"] as? Double {
+            let credential = SKYLINKConnection.calculateCredentials(ROOM_NAME, duration: NSNumber(value: durationString), startTime: credInfos["startTime"] as? Date ?? Date(), secret: skylinkApiSecret)
             skylinkLog("This is Credential \(durationString)")
             skylinkConnection.connectToRoom(withCredentials: ["credential": credential, "startTime": credInfos["startTime"] ?? Date(), "duration": credInfos["duration"] ?? 0.0], roomName: ROOM_NAME, userInfo: "Audio call user #\(arc4random() % 1000) - iOS \(UIDevice.current.systemVersion)")
         }
