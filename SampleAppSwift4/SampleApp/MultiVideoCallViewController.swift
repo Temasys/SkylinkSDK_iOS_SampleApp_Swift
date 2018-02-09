@@ -216,7 +216,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
     // SKYLINK SDK Delegates methods
     
     // MARK: SKYLINKConnectionMediaDelegate
-    func connection(_ connection: SKYLINKConnection!, didChangeVideoSize videoSize: CGSize, videoView: UIView!) {
+    func connection(_ connection: SKYLINKConnection, didChangeVideoSize videoSize: CGSize, videoView: UIView!) {
         if videoSize.height > 0 && videoSize.width > 0 {
             let correspondingContainerView = containerViewForVideoView(videoView: videoView)
             if correspondingContainerView != localVideoContainerView {
@@ -231,7 +231,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
         }
     }
     
-    func connection(_ connection: SKYLINKConnection!, didToggleAudio isMuted: Bool, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didToggleAudio isMuted: Bool, peerId: String!) {
         let bool = peersInfos.keys.contains(peerId)
         if bool {
             guard let dict = peersInfos[peerId] as? [String : Any], let videoSize = dict["videoSize"] as? CGSize, let videoView = dict["videoView"] as? UIView, let isVideoMuted = dict["isVideoMuted"] as? Bool else { return }
@@ -241,7 +241,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
         refreshPeerViews()
     }
     
-    func connection(_ connection: SKYLINKConnection!, didToggleVideo isMuted: Bool, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didToggleVideo isMuted: Bool, peerId: String!) {
         skylinkLog("imat_didToggleVideo")
         let bool = peersInfos.keys.contains { _ in return true }
         if bool {
@@ -253,7 +253,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
     }
     
     // MARK: SKYLINKConnectionLifeCycleDelegate
-    func connection(_ connection: SKYLINKConnection!, didConnectWithMessage errorMessage: String!, success isSuccess: Bool) {
+    func connection(_ connection: SKYLINKConnection, didConnectWithMessage errorMessage: String!, success isSuccess: Bool) {
         if isSuccess {
             skylinkLog("Inside \(#function)")
             localVideoContainerView.alpha = 1
@@ -273,16 +273,16 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
         }
     }
     
-    func connection(_ connection: SKYLINKConnection!, didLockTheRoom lockStatus: Bool, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didLockTheRoom lockStatus: Bool, peerId: String!) {
         isRoomLocked = lockStatus
         lockButton.setImage(UIImage(named: (isRoomLocked ? "LockFilled" : "Unlock.png")), for: .normal)
     }
     
-    func connection(_ connection: SKYLINKConnection!, didRenderUserVideo userVideoView: UIView!) {
+    func connection(_ connection: SKYLINKConnection, didRenderUserVideo userVideoView: UIView!) {
         addRenderedVideo(videoView: userVideoView, insideContainer: localVideoContainerView, mirror: true)
     }
     
-    func connection(_ connection: SKYLINKConnection!, didDisconnectWithMessage errorMessage: String!) {
+    func connection(_ connection: SKYLINKConnection, didDisconnectWithMessage errorMessage: String!) {
         let alert = UIAlertController(title: "Disconnected", message: errorMessage, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(cancelAction)
@@ -292,7 +292,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
     }
     
     // MARK: SKYLINKConnectionRemotePeerDelegate
-    func connection(_ connection: SKYLINKConnection!, didJoinPeer userInfo: Any!, mediaProperties pmProperties: SKYLINKPeerMediaProperties!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didJoinPeer userInfo: Any!, mediaProperties pmProperties: SKYLINKPeerMediaProperties!, peerId: String!) {
         if !peerIds.contains(peerId) {
             peerIds.append(peerId)
         }
@@ -314,7 +314,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
         refreshPeerViews()
     }
     
-    func connection(_ connection: SKYLINKConnection!, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
         skylinkLog("Peer with id \(peerId) left the room with message: \(errorMessage)")
         if peerIds.count != 0 {
             peerIds.remove(at: peerIds.index(of: peerId)!)
@@ -324,7 +324,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
         refreshPeerViews()
     }
     
-    func connection(_ connection: SKYLINKConnection!, didRenderPeerVideo peerVideoView: UIView!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didRenderPeerVideo peerVideoView: UIView!, peerId: String!) {
         if !peerIds.contains(peerId) {
             peerIds.append(peerId)
         }

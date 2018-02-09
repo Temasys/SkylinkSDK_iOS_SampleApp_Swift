@@ -77,7 +77,7 @@ class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     }
     
     // MARK: - SKYLINKConnectionLifeCycleDelegate
-    func connection(_ connection: SKYLINKConnection!, didConnectWithMessage errorMessage: String!, success isSuccess: Bool) {
+    func connection(_ connection: SKYLINKConnection, didConnectWithMessage errorMessage: String!, success isSuccess: Bool) {
         if isSuccess {
             skylinkLog("Inside \(#function)")
         } else {
@@ -92,7 +92,7 @@ class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         }
     }
     
-    func connection(_ connection: SKYLINKConnection!, didDisconnectWithMessage errorMessage: String!) {
+    func connection(_ connection: SKYLINKConnection, didDisconnectWithMessage errorMessage: String!) {
         let alert = UIAlertController(title: "Disconnected", message: errorMessage, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(cancelAction)
@@ -102,7 +102,7 @@ class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     }
     
     // MARK: - SKYLINKConnectionMediaDelegate
-    func connection(_ connection: SKYLINKConnection!, didToggleAudio isMuted: Bool, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didToggleAudio isMuted: Bool, peerId: String!) {
         for (index, peerDic) in remotePeerArray.enumerated() {
             if let id = peerDic["id"] as? String, id == peerId {
                 remotePeerArray.remove(at: index)
@@ -113,13 +113,13 @@ class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     }
     
     // MARK: - SKYLINKConnectionRemotePeerDelegate
-    func connection(_ connection: SKYLINKConnection!, didJoinPeer userInfo: Any!, mediaProperties pmProperties: SKYLINKPeerMediaProperties!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didJoinPeer userInfo: Any!, mediaProperties pmProperties: SKYLINKPeerMediaProperties!, peerId: String!) {
         skylinkLog("Peer with id %@ joigned the room.peerId")
         remotePeerArray.append(["id" : peerId, "isAudioMuted" : pmProperties.isAudioMuted, "nickname" : userInfo is String ? userInfo : ""])
         tableView.reloadData()
     }
     
-    func connection(_ connection: SKYLINKConnection!, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
         skylinkLog("Peer with id \(peerId) left the room with message: \(errorMessage)")
         var dicToRemove = [String : Any]()
         var idx = 0

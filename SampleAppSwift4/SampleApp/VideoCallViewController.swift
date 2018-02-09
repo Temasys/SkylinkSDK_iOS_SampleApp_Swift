@@ -106,7 +106,7 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     }
     
     // MARK: - SKYLINKConnectionLifeCycleDelegate
-    func connection(_ connection: SKYLINKConnection!, didConnectWithMessage errorMessage: String!, success isSuccess: Bool) {
+    func connection(_ connection: SKYLINKConnection, didConnectWithMessage errorMessage: String!, success isSuccess: Bool) {
         if isSuccess {
             skylinkLog("Inside \(#function)")
         } else {
@@ -125,7 +125,7 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         activityIndicator.stopAnimating()
     }
     
-    func connection(_ connection: SKYLINKConnection!, didDisconnectWithMessage errorMessage: String!) {
+    func connection(_ connection: SKYLINKConnection, didDisconnectWithMessage errorMessage: String!) {
         let alert = UIAlertController(title: "Disconnected", message: errorMessage, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(cancelAction)
@@ -134,26 +134,26 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         }
     }
     
-    func connection(_ connection: SKYLINKConnection!, didRenderUserVideo userVideoView: UIView!) {
+    func connection(_ connection: SKYLINKConnection, didRenderUserVideo userVideoView: UIView!) {
         addRenderedVideo(videoView: userVideoView, insideContainer: localVideoContainerView, mirror: true)
     }
     
-    func connection(_ connection: SKYLINKConnection!, didJoinPeer userInfo: Any!, mediaProperties pmProperties: SKYLINKPeerMediaProperties!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didJoinPeer userInfo: Any!, mediaProperties pmProperties: SKYLINKPeerMediaProperties!, peerId: String!) {
         activityIndicator.stopAnimating()
         remotePeerId = peerId
     }
     
-    func connection(_ connection: SKYLINKConnection!, didRenderPeerVideo peerVideoView: UIView!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didRenderPeerVideo peerVideoView: UIView!, peerId: String!) {
         addRenderedVideo(videoView: peerVideoView, insideContainer: remotePeerVideoContainerView, mirror: false)
     }
     
-    func connection(_ connection: SKYLINKConnection!, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
         skylinkConnection.unlockTheRoom()
         alertMessage(msg_title: "Peer Left", msg: "\nPeer ID:\(peerId)\n has been left")
     }
     
     // MARK: - SKYLINKConnectionMediaDelegate
-    func connection(_ connection: SKYLINKConnection!, didChangeVideoSize videoSize: CGSize, videoView: UIView!) {
+    func connection(_ connection: SKYLINKConnection, didChangeVideoSize videoSize: CGSize, videoView: UIView!) {
         if videoSize.height > 0 && videoSize.width > 0 {
             var correspondingContainerView: UIView
             if videoView.isDescendant(of: localVideoContainerView) {
@@ -233,7 +233,7 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         }
     }
     
-    func connection(_ connection: SKYLINKConnection!, didGetWebRTCStats stats: [AnyHashable : Any]!, forPeerId peerId: String!, mediaDirection: Int32) {
+    func connection(_ connection: SKYLINKConnection, didGetWebRTCStats stats: [AnyHashable : Any]!, forPeerId peerId: String!, mediaDirection: Int32) {
         skylinkLog("#Stats\nmd=\(mediaDirection) pid=\(peerId)\n\(stats.description)")
     }
 }

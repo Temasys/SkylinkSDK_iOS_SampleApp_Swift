@@ -115,21 +115,21 @@ class DataTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
     }
     
     // MARK: - SKYLINKConnectionLifeCycleDelegate
-    func connection(_ connection: SKYLINKConnection!, didConnectWithMessage errorMessage: String!, success isSuccess: Bool) {
+    func connection(_ connection: SKYLINKConnection, didConnectWithMessage errorMessage: String!, success isSuccess: Bool) {
         showUIInfo(infoMessage: (isSuccess ? "🔵" : "🔴") + " DID CONNECT • success = " + (isSuccess ? "YES" : "NO"))
     }
     
     // MARK: - SKYLINKConnectionRemotePeerDelegate
-    func connection(_ connection: SKYLINKConnection!, didJoinPeer userInfo: Any!, mediaProperties pmProperties: SKYLINKPeerMediaProperties!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didJoinPeer userInfo: Any!, mediaProperties pmProperties: SKYLINKPeerMediaProperties!, peerId: String!) {
         showUIInfo(infoMessage: "👤 DID JOIN PEER •\npeerID = " + peerId + ", properties = " + pmProperties.description)
     }
     
-    func connection(_ connection: SKYLINKConnection!, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
         showUIInfo(infoMessage: "✋🏼 DID LEAVE PEER • peerID = " + peerId + ", properties = " + errorMessage)
     }
     
     // MARK: - SKYLINKConnectionMessagesDelegate
-    func connection(_ connection: SKYLINKConnection!, didReceiveBinaryData data: Data!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didReceiveBinaryData data: Data!, peerId: String!) {
         if data != nil {
             var dataByte = ""
             if let unarchivedData = NSKeyedUnarchiver.unarchiveObject(with: data) as? UIColor {

@@ -213,7 +213,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
     
     // SKYLINK Delegate methods implementations
     // MARK: - SKYLINKConnectionLifeCycleDelegate
-    func connection(_ connection: SKYLINKConnection!, didConnectWithMessage errorMessage: String!, success isSuccess: Bool) {
+    func connection(_ connection: SKYLINKConnection, didConnectWithMessage errorMessage: String!, success isSuccess: Bool) {
         if isSuccess {
             skylinkLog("Inside \(#function)")
         } else {
@@ -226,7 +226,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         activityIndicator.stopAnimating()
     }
     
-    func connection(_ connection: SKYLINKConnection!, didDisconnectWithMessage errorMessage: String!) {
+    func connection(_ connection: SKYLINKConnection, didDisconnectWithMessage errorMessage: String!) {
         let alert = UIAlertController(title: "Disconnected", message: errorMessage, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(cancelAction)
@@ -235,20 +235,20 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         }
     }
     
-    func connection(_ connection: SKYLINKConnection!, didJoinPeer userInfo: Any!, mediaProperties pmProperties: SKYLINKPeerMediaProperties!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didJoinPeer userInfo: Any!, mediaProperties pmProperties: SKYLINKPeerMediaProperties!, peerId: String!) {
         skylinkLog("Peer with id %@ joigned the room.\(peerId)")
         remotePeerArray.append(peerId)
         peersTableView.reloadData()
     }
     
-    func connection(_ connection: SKYLINKConnection!, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
         skylinkLog("Peer with id " + peerId + " left the room with message: " + errorMessage)
         remotePeerArray.remove(peerId)
         peersTableView.reloadData()
     }
     
     // MARK: - SKYLINKConnectionFileTransferDelegate
-    func connection(_ connection: SKYLINKConnection!, didReceiveRequest filename: String!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didReceiveRequest filename: String!, peerId: String!) {
         let alert = UIAlertController(title: "Accept file transfer ?", message: "\nA user wants to send you a file named:\n'\(filename)'", preferredStyle: .alert)
         let rejectAction=UIAlertAction(title: "Decline", style: .default) { [weak weakSelf = self] _ in
             weakSelf?.skylinkConnection.acceptFileTransfer(false, filename: filename, peerId: peerId)
@@ -266,7 +266,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         showAlert()
     }
     
-    func connection(_ connection: SKYLINKConnection!, didReceivePermission isPermitted: Bool, filename: String!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didReceivePermission isPermitted: Bool, filename: String!, peerId: String!) {
         if !isPermitted {
             let alert = UIAlertController(title: "File refused", message: "The peer ID: \(peerId) has refused your '\(filename)' file sending request", preferredStyle: .alert)
             alerts.append(alert)
@@ -274,16 +274,16 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         }
     }
     
-    func connection(_ connection: SKYLINKConnection!, didUpdateProgress percentage: CGFloat, isOutgoing: Bool, filename: String!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didUpdateProgress percentage: CGFloat, isOutgoing: Bool, filename: String!, peerId: String!) {
         updateFileTranferInfosForFilename(filename: filename, peerId: (peerId != nil) ? peerId : "all", withState: "In progress", progress: Float(percentage), isOutgoing: isOutgoing)
     }
     
-    func connection(_ connection: SKYLINKConnection!, didDropTransfer filename: String!, reason message: String!, isExplicit: Bool, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didDropTransfer filename: String!, reason message: String!, isExplicit: Bool, peerId: String!) {
         skylinkLog("connection didDropTransfer")
         updateFileTranferInfosForFilename(filename: filename, peerId: (peerId != nil) ? peerId : "all", withState: (message != nil) ? message : "Dropped my sender", progress: nil, isOutgoing: nil)
     }
     
-    func connection(_ connection: SKYLINKConnection!, didCompleteTransfer filename: String!, fileData: Data!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didCompleteTransfer filename: String!, fileData: Data!, peerId: String!) {
         updateFileTranferInfosForFilename(filename: filename, peerId: (peerId != nil) ? peerId : "all", withState: "Completed ✓", progress: 1, isOutgoing: nil)
         if fileData != nil {
             if fileData.count != 0 {

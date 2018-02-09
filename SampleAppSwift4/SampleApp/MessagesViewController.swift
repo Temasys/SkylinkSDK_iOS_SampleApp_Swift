@@ -87,7 +87,7 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
     }
     
     // MARK: SKYLINKConnectionLifeCycleDelegate
-    func connection(_ connection: SKYLINKConnection!, didConnectWithMessage errorMessage: String!, success isSuccess: Bool) {
+    func connection(_ connection: SKYLINKConnection, didConnectWithMessage errorMessage: String!, success isSuccess: Bool) {
         if isSuccess {
             skylinkLog("Inside \(#function)")
             DispatchQueue.main.async { [weak weakSelf = self] in
@@ -108,7 +108,7 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
         activityIndicator.stopAnimating()
     }
     
-    func connection(_ connection: SKYLINKConnection!, didDisconnectWithMessage errorMessage: String!) {
+    func connection(_ connection: SKYLINKConnection, didDisconnectWithMessage errorMessage: String!) {
         let alert = UIAlertController(title: "Disconnected", message: errorMessage, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(cancelAction)
@@ -118,7 +118,7 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
     }
     
     // MARK: SKYLINKConnectionRemotePeerDelegate
-    func connection(_ connection: SKYLINKConnection!, didJoinPeer userInfo: Any!, mediaProperties pmProperties: SKYLINKPeerMediaProperties!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didJoinPeer userInfo: Any!, mediaProperties pmProperties: SKYLINKPeerMediaProperties!, peerId: String!) {
         if let dict = userInfo as? [String : Any] {
             var displayNickName = dict["nickname"] as? String
             if displayNickName == nil {
@@ -129,12 +129,12 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
         }
     }
     
-    func connection(_ connection: SKYLINKConnection!, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
         peers.removeValue(forKey: peerId)
         updatePeersButtonTitle()
     }
     
-    func connection(_ connection: SKYLINKConnection!, didReceiveUserInfo userInfo: Any!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didReceiveUserInfo userInfo: Any!, peerId: String!) {
         peers.removeValue(forKey: peerId)
         if let dict = userInfo as? [String : Any] {
             var displayNickName = dict["nickname"] as? String
@@ -148,17 +148,17 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
     }
     
     // MARK: SKYLINKConnectionMessagesDelegate
-    func connection(_ connection: SKYLINKConnection!, didReceiveCustomMessage message: Any!, public isPublic: Bool, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didReceiveCustomMessage message: Any!, public isPublic: Bool, peerId: String!) {
         messages.insert(["message" : message, "isPublic" : isPublic, "peerId" : peerId, "type" : "signaling server"], at: 0)
         tableView.reloadSections(IndexSet(integer: 0), with: .fade)
     }
     
-    func connection(_ connection: SKYLINKConnection!, didReceiveDCMessage message: Any!, public isPublic: Bool, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didReceiveDCMessage message: Any!, public isPublic: Bool, peerId: String!) {
         messages.insert(["message" : message, "isPublic" : isPublic, "peerId" : peerId, "type" : "P2P"], at: 0)
         tableView.reloadSections(IndexSet(integer: 0), with: .fade)
     }
     
-    func connection(_ connection: SKYLINKConnection!, didReceiveBinaryData data: Data!, peerId: String!) {
+    func connection(_ connection: SKYLINKConnection, didReceiveBinaryData data: Data!, peerId: String!) {
         let maybeString = String(data: data, encoding: .utf8)
         messages.insert(["message" : maybeString ?? "Binary data of length \(UInt(data.count))", "isPublic" : false, "peerId" : peerId, "type" : "binary data"], at: 0)
         tableView.reloadSections(IndexSet(integer: 0), with: .fade)
