@@ -125,8 +125,16 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
                 displayNickName = "ID: \(peerId)"
             }
             peers[peerId] = displayNickName!
-            updatePeersButtonTitle()
+        } else if let arr = userInfo as? [Any] {
+            print("arr ---> ", arr)
+            peers[peerId] = peerId
+        } else if let str = userInfo as? String {
+            print("str ---> ", str)
+            peers[peerId] = peerId
+        } else {
+            print("Cannot resolve userinfo")
         }
+        updatePeersButtonTitle()
     }
     
     func connection(_ connection: SKYLINKConnection, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
@@ -142,9 +150,17 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
                 displayNickName = "ID: \(peerId)"
             }
             peers[peerId] = displayNickName!
-            updatePeersButtonTitle()
-            tableView.reloadData()
+        } else if let arr = userInfo as? [Any] {
+            print("arr ---> ", arr)
+            peers[peerId] = peerId
+        } else if let str = userInfo as? String {
+            print("str ---> ", str)
+            peers[peerId] = peerId
+        } else {
+            print("Cannot resolve userinfo")
         }
+        updatePeersButtonTitle()
+        tableView.reloadData()
     }
     
     // MARK: SKYLINKConnectionMessagesDelegate
@@ -170,14 +186,14 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath)
-        let message = messages[indexPath.row]
-        cell.textLabel?.text = message["message"] as? String
+        let aMessage = messages[indexPath.row]
+        cell.textLabel?.text = aMessage["message"] as? String ?? ""
         let equalStr = skylinkConnection.myPeerId
-        if message["peerId"] as? String == equalStr {
-            cell.detailTextLabel?.text = (message["isPublic"] as? Bool ?? false) ? "Sent to all" : "Sent privately"
-            cell.backgroundColor = UIRGBColor(r: 0.71, g: 1, b: 0.5)
+        if aMessage["peerId"] as? String == equalStr {
+            cell.backgroundColor = .yellow
+            cell.detailTextLabel?.text = (aMessage["isPublic"] as? Bool ?? false) ? "Sent to all" : "Sent privately"
         } else {
-            cell.detailTextLabel?.text = "From \(peers[message["peerId"] as? String ?? ""] ?? "") via \(message["type"] as? String ?? "") • \(message["isPublic"] as? Bool ?? false ? "Public" : "Private")"
+            cell.detailTextLabel?.text = "From \(peers[aMessage["peerId"] as? String ?? ""] ?? "") via \(aMessage["type"] as? String ?? "") • \(aMessage["isPublic"] as? Bool ?? false ? "Public" : "Private")"
             cell.backgroundColor = .white
         }
         return cell
