@@ -54,7 +54,7 @@ class DataTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         sendColorButton.isHidden = isContinuousSwitch.isOn
     }
     
-    fileprivate func onTick(timer: Timer) {
+    @objc fileprivate func onTick(timer: Timer) {
         let increment: Float = 0.004
         redSlider.value = (redSlider.value + increment > 1) ? 0 : redSlider.value + increment
         greenSlider.value = (greenSlider.value + 1.9 * increment > 1) ? 0 : greenSlider.value + 1.9 * increment
@@ -180,7 +180,7 @@ class DataTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
     @IBAction func autoChangeColorSwitchChanged(sender: UISwitch) {
         if sender.isOn {
             let d = Date(timeIntervalSinceNow: 0)
-            timer = Timer(fireAt: d, interval: 0.04, target: self, selector: Selector(("onTick:")), userInfo: nil, repeats: true)
+            timer = Timer(fireAt: d, interval: 0.04, target: self, selector: #selector(onTick(timer:)), userInfo: nil, repeats: true)
             RunLoop.current.add(timer!, forMode: .defaultRunLoopMode)
         } else {
             timer?.invalidate()
