@@ -120,7 +120,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
     }
     
     fileprivate func containerViewForVideoView(videoView: UIView) -> UIView {
-        var correspondingContainerView: UIView!
+        var correspondingContainerView = UIView()
         if videoView.isDescendant(of: localVideoContainerView) {
             correspondingContainerView = localVideoContainerView ?? UIView()
         } else if videoView.isDescendant(of: firstPeerVideoContainerView) {
@@ -130,7 +130,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
         } else if videoView.isDescendant(of: thirdPeerVideoContainerView) {
             correspondingContainerView = thirdPeerVideoContainerView ?? UIView()
         }
-        return correspondingContainerView!
+        return correspondingContainerView
     }
     
     fileprivate func aspectFillRectForSize(insideSize: CGSize, containedInRect containerRect: CGRect) -> CGRect {
