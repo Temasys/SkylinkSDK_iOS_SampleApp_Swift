@@ -150,7 +150,7 @@ class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     
     // MARK: - Table view delegate
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "\(CUnsignedLong(remotePeerArray.count)) peer(s) connected"
+        return "\(remotePeerArray.count) peer(s) connected"
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
