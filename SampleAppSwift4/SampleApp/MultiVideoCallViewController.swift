@@ -172,7 +172,13 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
     }
     
     fileprivate func indexForContainerView(v: UIView) -> Int {
-        return ([firstPeerVideoContainerView, secondPeerVideoContainerView, thirdPeerVideoContainerView] as NSArray).index(of: v)
+        let viewArr = [firstPeerVideoContainerView, secondPeerVideoContainerView, thirdPeerVideoContainerView]
+        var idx = 0
+        _ = viewArr.enumerated().map { (index,view) in
+            if v == view { idx = index }
+        }
+        if idx > viewArr.count { idx = 0 }
+        return idx
     }
     
     fileprivate func refreshPeerViews() {
