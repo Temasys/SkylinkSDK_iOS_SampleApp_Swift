@@ -227,12 +227,16 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
             let correspondingContainerView = containerViewForVideoView(videoView: videoView)
             if correspondingContainerView != localVideoContainerView {
                 let i = indexForContainerView(v: correspondingContainerView)
-                guard let dict = peersInfos[peerIds[i]] as? [String : Any], let videoSize = dict["videoSize"] as? CGSize, let videoView = dict["videoView"] as? UIView, let isAudioMuted = dict["isAudioMuted"] as? Bool, let isVideoMuted = dict["isVideoMuted"] as? Bool else { return }
+                guard peerIds.count > 0,
+                    let dict = peersInfos[peerIds[i]] as? [String : Any],
+                    let videoSize = dict["videoSize"] as? CGSize,
+                    let videoView = dict["videoView"] as? UIView,
+                    let isAudioMuted = dict["isAudioMuted"] as? Bool,
+                    let isVideoMuted = dict["isVideoMuted"] as? Bool else { return }
                 if i != NSNotFound {
                     peersInfos[peerIds[i]] = ["videoView" : videoView, "videoSize" : videoSize, "isAudioMuted" : isAudioMuted, "isVideoMuted" : isVideoMuted]
                 }
             }
-            
             videoView.frame = (videoAspectSegmentControl.selectedSegmentIndex == 0 || correspondingContainerView.isEqual(localVideoContainerView)) ? aspectFillRectForSize(insideSize: videoSize, containedInRect: correspondingContainerView.frame): AVMakeRect(aspectRatio: videoSize, insideRect: correspondingContainerView.bounds)
         }
     }
