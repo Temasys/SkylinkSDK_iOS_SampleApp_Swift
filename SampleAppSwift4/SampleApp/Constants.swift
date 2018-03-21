@@ -17,6 +17,15 @@ let iPhone5 = UIScreen.main.bounds.height == 568
 let iPhone6 = UIScreen.main.bounds.height == 667
 let iPhone6Plus = UIScreen.main.bounds.height == 736
 
+var APP_KEY = ""
+var APP_SECRET = ""
+var ROOM_ONE_TO_ONE_VIDEO = "VIDEO-CALL-ROOM"
+var ROOM_MULTI_VIDEO = "MULTI-VIDEO-CALL-ROOM"
+var ROOM_AUDIO = "AUDIO-CALL-ROOM"
+var ROOM_MESSAGES = "MESSAGES-ROOM"
+var ROOM_FILE_TRANSFER = "FILE-TRANSFER-ROOM"
+var ROOM_DATA_TRANSFER = "ROOMNAME_DATATRANSFER"
+
 /// <#Description#>
 ///
 /// - Parameters:

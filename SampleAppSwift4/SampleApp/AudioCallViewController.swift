@@ -10,8 +10,8 @@ import UIKit
 
 class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionMediaDelegate, SKYLINKConnectionRemotePeerDelegate, UITableViewDataSource, UITableViewDelegate {
 
-    let ROOM_NAME = "AUDIO-CALL-ROOM"
-    
+    let ROOM_NAME = ROOM_AUDIO
+
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var muteMicrophone: UIButton!

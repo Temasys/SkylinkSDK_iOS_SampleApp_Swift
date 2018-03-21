@@ -19,7 +19,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
     @IBOutlet weak var peersTableView: UITableView!
     @IBOutlet weak var fileTransferTableView: UITableView!
     
-    let ROOM_NAME = "FILE-TRANSFER-ROOM"
+    let ROOM_NAME = ROOM_FILE_TRANSFER
     let skylinkApiKey = SKYLINK_APP_KEY
     let skylinkApiSecret = SKYLINK_SECRET
     var alerts : [UIAlertController] = []

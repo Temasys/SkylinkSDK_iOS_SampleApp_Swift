@@ -11,8 +11,8 @@ import UIKit
 //
 // ====== SET YOUR SKYLINK API KEY & SECRET HERE ======
 //
-let SKYLINK_APP_KEY = ""
-let SKYLINK_SECRET = ""
+let SKYLINK_APP_KEY = APP_KEY
+let SKYLINK_SECRET = APP_SECRET
 // Enroll at developer.temasys.com.sg if needed
 
 

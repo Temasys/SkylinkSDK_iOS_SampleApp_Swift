@@ -13,8 +13,8 @@ class DataTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
     let skylinkApiKey = SKYLINK_APP_KEY
     let skylinkApiSecret = SKYLINK_SECRET
     
-    let ROOM_NAME = "ROOMNAME_DATATRANSFER"
-    
+    let ROOM_NAME = ROOM_DATA_TRANSFER
+
     @IBOutlet weak var localColorView: UIView!
     @IBOutlet weak var redSlider: UISlider!
     @IBOutlet weak var greenSlider: UISlider!

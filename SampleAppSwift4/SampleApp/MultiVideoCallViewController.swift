@@ -47,7 +47,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
     let skylinkApiKey = SKYLINK_APP_KEY
     let skylinkApiSecret = SKYLINK_SECRET
     
-    let ROOM_NAME = "MULTI-VIDEO-CALL-ROOM"
+    let ROOM_NAME = ROOM_MULTI_VIDEO
     var isRoomLocked = false
 
     override func viewDidLoad() {

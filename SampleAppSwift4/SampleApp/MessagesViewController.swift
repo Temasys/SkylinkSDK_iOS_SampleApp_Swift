@@ -12,7 +12,7 @@ import AVFoundation
 class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionMessagesDelegate, SKYLINKConnectionRemotePeerDelegate, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
 
     
-    let ROOM_NAME = "MESSAGES-ROOM"
+    let ROOM_NAME = ROOM_MESSAGES
     lazy var messages = [[String : Any]]()
     lazy var peers = [String : Any]()
     let skylinkApiKey = SKYLINK_APP_KEY

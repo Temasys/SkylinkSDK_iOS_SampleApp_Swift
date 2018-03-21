@@ -22,8 +22,8 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     var peerVideoSize: CGSize!
     var peerVideoView: UIView!
     weak var topView: UIView!
-    let ROOM_NAME = "VIDEO-CALL-ROOM"
-    
+    let ROOM_NAME = ROOM_ONE_TO_ONE_VIDEO
+
     var remotePeerId: String?
     let skylinkApiKey = SKYLINK_APP_KEY
     let skylinkApiSecret = SKYLINK_SECRET

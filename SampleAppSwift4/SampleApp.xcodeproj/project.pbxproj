@@ -16,6 +16,8 @@
 		C20A89471F2876CE0033076D /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20A89461F2876CE0033076D /* HomeViewController.swift */; };
 		C20A89491F2876EA0033076D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20A89481F2876EA0033076D /* Constants.swift */; };
 		C20A894D1F29AC490033076D /* UIAspectFitButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20A894C1F29AC490033076D /* UIAspectFitButton.swift */; };
+		C21939E520621EBB0075D0A2 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21939E320621EBB0075D0A2 /* SettingCell.swift */; };
+		C21939E620621EBB0075D0A2 /* SettingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C21939E420621EBB0075D0A2 /* SettingCell.xib */; };
 		C2307D6E1F286BDC003DE8B1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2307D6D1F286BDC003DE8B1 /* AppDelegate.swift */; };
 		C2307D731F286BDC003DE8B1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2307D711F286BDC003DE8B1 /* Main.storyboard */; };
 		C2307D751F286BDC003DE8B1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2307D741F286BDC003DE8B1 /* Assets.xcassets */; };
@@ -54,6 +56,8 @@
 		C20A89461F2876CE0033076D /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C20A89481F2876EA0033076D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C20A894C1F29AC490033076D /* UIAspectFitButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAspectFitButton.swift; sourceTree = "<group>"; };
+		C21939E320621EBB0075D0A2 /* SettingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
+		C21939E420621EBB0075D0A2 /* SettingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingCell.xib; sourceTree = "<group>"; };
 		C2307D6A1F286BDC003DE8B1 /* SampleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2307D6D1F286BDC003DE8B1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C2307D721F286BDC003DE8B1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -179,6 +183,8 @@
 				C20A89481F2876EA0033076D /* Constants.swift */,
 				C20A894C1F29AC490033076D /* UIAspectFitButton.swift */,
 				C2307D711F286BDC003DE8B1 /* Main.storyboard */,
+				C21939E320621EBB0075D0A2 /* SettingCell.swift */,
+				C21939E420621EBB0075D0A2 /* SettingCell.xib */,
 				C2307D741F286BDC003DE8B1 /* Assets.xcassets */,
 				C2307D761F286BDC003DE8B1 /* LaunchScreen.storyboard */,
 				C2307D791F286BDC003DE8B1 /* Info.plist */,
@@ -350,6 +356,7 @@
 				C28D2D341F8774CE00FEFF70 /* IASKLocalizable.strings in Resources */,
 				C28D2D461F8774D300FEFF70 /* Settings.bundle in Resources */,
 				C2307D751F286BDC003DE8B1 /* Assets.xcassets in Resources */,
+				C21939E620621EBB0075D0A2 /* SettingCell.xib in Resources */,
 				C2307D731F286BDC003DE8B1 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -427,6 +434,7 @@
 				C28D2D351F8774CE00FEFF70 /* IASKSpecifier.m in Sources */,
 				C28D2D441F8774CE00FEFF70 /* IASKSlider.m in Sources */,
 				C28D2D391F8774CE00FEFF70 /* IASKSettingsStore.m in Sources */,
+				C21939E520621EBB0075D0A2 /* SettingCell.swift in Sources */,
 				C28D2D3D1F8774CE00FEFF70 /* IASKSpecifierValuesViewController.m in Sources */,
 				C20A89471F2876CE0033076D /* HomeViewController.swift in Sources */,
 				C28D2D401F8774CE00FEFF70 /* IASKSwitch.m in Sources */,
