@@ -24,10 +24,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.register(UINib(nibName: "SettingCell", bundle: nil), forCellReuseIdentifier: CELL_IDENTIFIER)
     }
     
-    deinit {
-        print(ROOM_ONE_TO_ONE_VIDEO, ROOM_MULTI_VIDEO, ROOM_AUDIO, ROOM_MESSAGES, ROOM_FILE_TRANSFER, ROOM_DATA_TRANSFER)
-    }
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
