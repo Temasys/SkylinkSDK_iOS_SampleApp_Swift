@@ -16,6 +16,7 @@ let iPhone4 = UIScreen.main.bounds.height == 480
 let iPhone5 = UIScreen.main.bounds.height == 568
 let iPhone6 = UIScreen.main.bounds.height == 667
 let iPhone6Plus = UIScreen.main.bounds.height == 736
+let iPhoneX = UIScreen.main.bounds.height == 812
 
 var APP_KEY = ""
 var APP_SECRET = ""
