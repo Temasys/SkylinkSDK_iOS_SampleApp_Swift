@@ -52,5 +52,7 @@
 	<string>App access camera?</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>App access Photos?</string>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 </dict>
 </plist>
