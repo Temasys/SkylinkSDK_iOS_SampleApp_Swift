@@ -442,7 +442,8 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
             if weakSelf!.selectedRow != -1 && weakSelf!.selectedRow < weakSelf!.remotePeerArray.count {
                 peerId = weakSelf?.remotePeerArray[weakSelf!.selectedRow] ?? ""
             }
-            if let filePath = Bundle.main.path(forResource: ((peerId != "") ? "sampleImage_transfer" : "sampleImage_groupTransfer"), ofType: "png", inDirectory: "TransferFileSamples") {
+            let imageStr = (peerId != nil) ? "sampleImage_transfer" : "sampleImage_groupTransfer"
+            if let filePath = Bundle.main.path(forResource: imageStr, ofType: "png") {
                 weakSelf?.startFileTransfer(userId: peerId, url: URL(string: filePath), type: SKYLINKAssetTypeFile)
             } else {
                 weakSelf?.startFileTransfer(userId: nil, url: nil, type: SKYLINKAssetTypeFile)
