@@ -20,6 +20,7 @@
 		C21939E620621EBB0075D0A2 /* SettingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C21939E420621EBB0075D0A2 /* SettingCell.xib */; };
 		C22ED305208ED8FA00FADE82 /* sampleImage_groupTransfer.png in Resources */ = {isa = PBXBuildFile; fileRef = C2307D9E1F286CD4003DE8B1 /* sampleImage_groupTransfer.png */; };
 		C22ED306208ED8FD00FADE82 /* sampleImage_transfer.png in Resources */ = {isa = PBXBuildFile; fileRef = C2307D9F1F286CD4003DE8B1 /* sampleImage_transfer.png */; };
+		C22ED308208EDC5200FADE82 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C2307D791F286BDC003DE8B1 /* Info.plist */; };
 		C2307D6E1F286BDC003DE8B1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2307D6D1F286BDC003DE8B1 /* AppDelegate.swift */; };
 		C2307D731F286BDC003DE8B1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2307D711F286BDC003DE8B1 /* Main.storyboard */; };
 		C2307D751F286BDC003DE8B1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2307D741F286BDC003DE8B1 /* Assets.xcassets */; };
@@ -356,6 +357,7 @@
 			files = (
 				C2307D781F286BDC003DE8B1 /* LaunchScreen.storyboard in Resources */,
 				C28D2D341F8774CE00FEFF70 /* IASKLocalizable.strings in Resources */,
+				C22ED308208EDC5200FADE82 /* Info.plist in Resources */,
 				C28D2D461F8774D300FEFF70 /* Settings.bundle in Resources */,
 				C2307D751F286BDC003DE8B1 /* Assets.xcassets in Resources */,
 				C22ED306208ED8FD00FADE82 /* sampleImage_transfer.png in Resources */,
