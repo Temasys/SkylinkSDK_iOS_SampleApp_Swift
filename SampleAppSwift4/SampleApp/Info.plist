@@ -20,6 +20,21 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>App access camera?</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>App access microphone?</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>App will add the photo to photo library</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>App access Photos?</string>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -41,20 +56,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>App access microphone?</string>
-	<key>NSCameraUsageDescription</key>
-	<string>App access camera?</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>App access Photos?</string>
-	<key>UIFileSharingEnabled</key>
-	<true/>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>App will add the photo to photo library</string>
 </dict>
 </plist>
