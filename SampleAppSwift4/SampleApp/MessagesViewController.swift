@@ -223,7 +223,7 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
                     let noAction = UIAlertAction(title: "Cancel", style: .default)
                     for peerDicKey in peers.keys {
                         let yesAction = UIAlertAction(title: peers[peerDicKey] as? String, style: .default) { [weak weakSelf = self] _ in
-                            weakSelf?.alertMessage(msg_title: message ?? "", msg: peerDicKey)
+                            weakSelf?.sendMessage(message: message ?? "", forPeerId: peerDicKey)
                         }
                         alert.addAction(yesAction)
                     }
