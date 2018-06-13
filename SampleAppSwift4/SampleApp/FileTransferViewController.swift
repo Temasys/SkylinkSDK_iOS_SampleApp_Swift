@@ -396,7 +396,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         if userId != nil && fileURL != nil {
             do {
                 let triggerFileTransfer: () throws -> Void = { [weak weakSelf = self] in
-                    weakSelf?.skylinkConnection.sendFileTransferRequest(fileURL as URL!, assetType: transferType, peerId: userId)
+                    weakSelf?.skylinkConnection.sendFileTransferRequest(fileURL!, assetType: transferType, peerId: userId)
                 }
                 try triggerFileTransfer()
             } catch {

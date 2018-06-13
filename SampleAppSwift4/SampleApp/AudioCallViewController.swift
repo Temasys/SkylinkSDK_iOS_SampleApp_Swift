@@ -129,6 +129,7 @@ class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
                 idx = index
             }
         }
+        skylinkLog(dicToRemove)
         if !remotePeerArray.isEmpty {
             remotePeerArray.remove(at: idx)
             tableView.reloadData()
