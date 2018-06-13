@@ -31,7 +31,7 @@ class SettingCell: UITableViewCell {
     
     @objc func textChanged() {
         if valueField.text == nil || valueField.text!.contains(" ") {
-            print("Room name not valid")
+            skylinkLog("Room name not valid")
             return
         } else {
             switch keyLabel.text! {

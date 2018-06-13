@@ -132,7 +132,7 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
             print("str ---> ", str)
             peers[peerId] = peerId
         } else {
-            print("Cannot resolve userinfo")
+            skylinkLog("Cannot resolve userinfo")
         }
         updatePeersButtonTitle()
     }
@@ -157,7 +157,7 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
             print("str ---> ", str)
             peers[peerId] = peerId
         } else {
-            print("Cannot resolve userinfo")
+            skylinkLog("Cannot resolve userinfo")
         }
         updatePeersButtonTitle()
         tableView.reloadData()
