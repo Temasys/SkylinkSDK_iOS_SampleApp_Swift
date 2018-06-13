@@ -237,7 +237,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
     }
     
     func connection(_ connection: SKYLINKConnection, didJoinPeer userInfo: Any!, mediaProperties pmProperties: SKYLINKPeerMediaProperties!, peerId: String!) {
-        skylinkLog("Peer with id %@ joigned the room.\(peerId)")
+        skylinkLog("Peer with id %@ joigned the room.\(String(describing: peerId))")
         remotePeerArray.append(peerId)
         peersTableView.reloadData()
     }
@@ -250,7 +250,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
     
     // MARK: - SKYLINKConnectionFileTransferDelegate
     func connection(_ connection: SKYLINKConnection, didReceiveRequest filename: String!, peerId: String!) {
-        let alert = UIAlertController(title: "Accept file transfer ?", message: "\nA user wants to send you a file named:\n'\(filename)'", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Accept file transfer ?", message: "\nA user wants to send you a file named:\n'\(String(describing: filename))'", preferredStyle: .alert)
         let rejectAction=UIAlertAction(title: "Decline", style: .default) { [weak weakSelf = self] _ in
             weakSelf?.skylinkConnection.acceptFileTransfer(false, filename: filename, peerId: peerId)
             weakSelf?.alerts.remove(at: weakSelf!.alerts.count - 1)
@@ -269,7 +269,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
     
     func connection(_ connection: SKYLINKConnection, didReceivePermission isPermitted: Bool, filename: String!, peerId: String!) {
         if !isPermitted {
-            let alert = UIAlertController(title: "File refused", message: "The peer ID: \(peerId) has refused your '\(filename)' file sending request", preferredStyle: .alert)
+            let alert = UIAlertController(title: "File refused", message: "The peer ID: \(String(describing: peerId)) has refused your '\(String(describing: filename))' file sending request", preferredStyle: .alert)
             alerts.append(alert)
             showAlert()
         }
@@ -296,7 +296,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
                     let showMusicAlert: () throws -> Void = { [weak weakSelf = self] in
                         weakSelf?.musicPlayer = try fileExtension == "mp3" ? AVAudioPlayer(data: fileData, fileTypeHint: AVFileType.mp3.rawValue) : AVAudioPlayer(data: fileData)
                         weakSelf?.musicPlayer?.play()
-                        let alert = UIAlertController(title: "Music transfer completed", message: "File transfer success.\nPEER: \(peerId)\n\nPlaying the received music file:\n'\(filename)'", preferredStyle: .alert)
+                        let alert = UIAlertController(title: "Music transfer completed", message: "File transfer success.\nPEER: \(String(describing: peerId))\n\nPlaying the received music file:\n'\(String(describing: filename))'", preferredStyle: .alert)
                         let cancelBtn: UIAlertAction = UIAlertAction(title: "Stop playing", style: .default) { [weak weakSelf = self] _ in
                             weakSelf?.musicPlayer?.stop()
                             weakSelf?.musicPlayer = nil
@@ -329,6 +329,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
                         skylinkLog("\(#function) • Error while writing '\(filePath)'->\(wError!.localizedDescription)")
                     } else {
                         if isMovie(exten: fileExtension) && UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(filePath) {
+                            /**
                             ALAssetsLibrary().writeVideoAtPath(toSavedPhotosAlbum: URL(fileURLWithPath: filePath), completionBlock: { [weak weakSelf = self] (filePathUrl, error) in
                                 if error != nil {
                                     skylinkLog("\(#function) • Error while saving '\(filename1)'->\(error!.localizedDescription)")
@@ -342,7 +343,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
                                     }
                                 }
                             })
-                            /**
+                             */
                             var placeholder: PHObjectPlaceholder?
                             PHPhotoLibrary.shared().performChanges({
                                 if let createAssetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: URL(fileURLWithPath: filePath)) {
@@ -360,7 +361,6 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
                                 }
                             })
                             skylinkLog("placeholder ---> \(placeholder?.description ?? "")")
-                             */
                         }
                     }
                 }
@@ -397,7 +397,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         if userId != nil && fileURL != nil {
             do {
                 let triggerFileTransfer: () throws -> Void = { [weak weakSelf = self] in
-                    weakSelf?.skylinkConnection.sendFileTransferRequest(fileURL as URL!, assetType: transferType, peerId: userId)
+                    weakSelf?.skylinkConnection.sendFileTransferRequest(fileURL!, assetType: transferType, peerId: userId)
                 }
                 try triggerFileTransfer()
             } catch {

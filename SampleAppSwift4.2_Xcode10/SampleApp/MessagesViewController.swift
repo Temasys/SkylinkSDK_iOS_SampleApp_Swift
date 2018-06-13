@@ -122,7 +122,7 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
         if let dict = userInfo as? [String : Any] {
             var displayNickName = dict["nickname"] as? String
             if displayNickName == nil {
-                displayNickName = "ID: \(peerId)"
+                displayNickName = "ID: \(String(describing: peerId))"
             }
             peers[peerId] = displayNickName!
         } else if let arr = userInfo as? [Any] {
@@ -147,7 +147,7 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
         if let dict = userInfo as? [String : Any] {
             var displayNickName = dict["nickname"] as? String
             if displayNickName == nil {
-                displayNickName = "ID: \(peerId)"
+                displayNickName = "ID: \(String(describing: peerId))"
             }
             peers[peerId] = displayNickName!
         } else if let arr = userInfo as? [Any] {

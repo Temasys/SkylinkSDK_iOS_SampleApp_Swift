@@ -325,7 +325,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
     }
     
     func connection(_ connection: SKYLINKConnection, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
-        skylinkLog("Peer with id \(peerId) left the room with message: \(errorMessage)")
+        skylinkLog("Peer with id \(String(describing: peerId)) left the room with message: \(String(describing: errorMessage))")
         if peerIds.count != 0 {
             peerIds.remove(at: peerIds.index(of: peerId)!)
             peersInfos.removeValue(forKey: peerId)

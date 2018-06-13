@@ -149,7 +149,7 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     
     func connection(_ connection: SKYLINKConnection, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
         skylinkConnection.unlockTheRoom()
-        alertMessage(msg_title: "Peer Left", msg: "\nPeer ID:\(peerId)\n has been left")
+        alertMessage(msg_title: "Peer Left", msg: "\nPeer ID:\(String(describing: peerId))\n has been left")
     }
     
     // MARK: - SKYLINKConnectionMediaDelegate
@@ -234,6 +234,6 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     }
     
     func connection(_ connection: SKYLINKConnection, didGetWebRTCStats stats: [AnyHashable : Any]!, forPeerId peerId: String!, mediaDirection: Int32) {
-        skylinkLog("#Stats\nmd=\(mediaDirection) pid=\(peerId)\n\(stats.description)")
+        skylinkLog("#Stats\nmd=\(mediaDirection) pid=\(String(describing: peerId))\n\(stats.description)")
     }
 }

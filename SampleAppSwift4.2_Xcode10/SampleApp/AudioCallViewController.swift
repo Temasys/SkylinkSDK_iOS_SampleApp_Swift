@@ -120,7 +120,7 @@ class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     }
     
     func connection(_ connection: SKYLINKConnection, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
-        skylinkLog("Peer with id \(peerId) left the room with message: \(errorMessage)")
+        skylinkLog("Peer with id \(String(describing: peerId)) left the room with message: \(String(describing: errorMessage))")
         var dicToRemove = [String : Any]()
         var idx = 0
         for (index, peerDic) in remotePeerArray.enumerated() {
@@ -129,6 +129,7 @@ class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
                 idx = index
             }
         }
+        print(dicToRemove)
         if !remotePeerArray.isEmpty {
             remotePeerArray.remove(at: idx)
             tableView.reloadData()
