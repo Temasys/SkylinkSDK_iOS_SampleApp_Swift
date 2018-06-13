@@ -27,24 +27,10 @@ var ROOM_MESSAGES = "MESSAGES-ROOM"
 var ROOM_FILE_TRANSFER = "FILE-TRANSFER-ROOM"
 var ROOM_DATA_TRANSFER = "ROOMNAME_DATATRANSFER"
 
-/// <#Description#>
-///
-/// - Parameters:
-///   - r: <#r description#>
-///   - g: <#g description#>
-///   - b: <#b description#>
-/// - Returns: <#return value description#>
 func UIRGBColor(r:CGFloat, g:CGFloat, b:CGFloat) -> UIColor {
     return UIColor(red: r/255.0, green: g/255.0, blue: b/255.0, alpha: 1.0)
 }
 
-/// 封装的日志输出功能
-///
-/// - Parameters:
-///   - message: <#message description#>
-///   - file: <#file description#>
-///   - function: <#function description#>
-///   - line: <#line description#>
 func skylinkLog<T>(_ message: T, file: String = #file, function: String = #function,
             line: Int = #line) {
     #if DEBUG
@@ -60,11 +46,6 @@ func skylinkLog<T>(_ message: T, file: String = #file, function: String = #funct
     #endif
 }
 
-/// 在文件末尾追加新内容
-///
-/// - Parameters:
-///   - fileURL: <#fileURL description#>
-///   - string: <#string description#>
 func appendText(fileURL: URL, string: String) {
     do {
         if !FileManager.default.fileExists(atPath: fileURL.path) {
