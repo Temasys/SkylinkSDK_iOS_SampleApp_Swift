@@ -181,7 +181,7 @@ class DataTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         if sender.isOn {
             let d = Date(timeIntervalSinceNow: 0)
             timer = Timer(fireAt: d, interval: 0.04, target: self, selector: #selector(onTick(timer:)), userInfo: nil, repeats: true)
-            RunLoop.current.add(timer!, forMode: .defaultRunLoopMode)
+            RunLoop.current.add(timer!, forMode: .default)
         } else {
             timer?.invalidate()
             timer = nil
