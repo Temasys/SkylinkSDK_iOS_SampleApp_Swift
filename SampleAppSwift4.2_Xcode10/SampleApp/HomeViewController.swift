@@ -55,7 +55,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         } else {
             UserDefaults.standard.set(keyTextField.text, forKey: USERDEFAULTS_KEY_SKYLINK_APP_KEY)
             UserDefaults.standard.set(secretTextField.text, forKey: USERDEFAULTS_KEY_SKYLINK_SECRET)
-            UserDefaults.standard.synchronize()
         }
         return shouldPerform
     }

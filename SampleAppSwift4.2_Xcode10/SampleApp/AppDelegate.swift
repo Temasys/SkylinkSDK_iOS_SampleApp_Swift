@@ -62,7 +62,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     fileprivate func registerDefaultsFromSettingsBundle() {
-        UserDefaults.standard.synchronize()
         guard let settingsBundle = Bundle.main.path(forResource: "Settings", ofType: "bundle") else {
             skylinkLog("Could not find Settings.bundle")
             return
@@ -85,7 +84,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
             UserDefaults.standard.register(defaults: defaultsToRegister)
-            UserDefaults.standard.synchronize()
         }
     }
     
