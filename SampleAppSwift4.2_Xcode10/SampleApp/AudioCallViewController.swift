@@ -41,13 +41,14 @@ class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
 
         setupUI()
         setupInfo()
+        
     }
 
     fileprivate func setupUI() {
         title = "Audio Call"
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Cancel"), style: .plain, target: self, action: #selector(disconnect))
         let infoButton = UIButton(type: .infoLight)
-        infoButton.addTarget(self, action: #selector(showInfo), for: UIControl.Event.touchUpInside)
+        infoButton.addTarget(self, action: #selector(showInfo), for: .touchUpInside)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: infoButton)
     }
     
@@ -117,6 +118,10 @@ class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         skylinkLog("Peer with id %@ joigned the room.peerId")
         remotePeerArray.append(["id" : peerId, "isAudioMuted" : pmProperties.isAudioMuted, "nickname" : userInfo is String ? userInfo : ""])
         tableView.reloadData()
+        
+        if isBluetoothConnected() {
+            switchOutput()
+        }
     }
     
     func connection(_ connection: SKYLINKConnection, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {
@@ -161,7 +166,8 @@ class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     }
     
     @IBAction func switchAudioTap(sender: AnyObject) {
-        sender.setTitle(!skylinkConnection.isAudioMuted() ? "Unmute microphone" : "Mute microphone", for: UIControl.State.normal)
+        sender.setTitle(!skylinkConnection.isAudioMuted() ? "Unmute microphone" : "Mute microphone", for: .normal)
         skylinkConnection.muteAudio(!skylinkConnection.isAudioMuted())
     }
+    
 }

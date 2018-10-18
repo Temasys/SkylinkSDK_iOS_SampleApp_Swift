@@ -68,7 +68,7 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         title = "1-1 Video Call"
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Cancel"), style: .plain, target: self, action: #selector(disconnect))
         let infoButton = UIButton(type: .infoLight)
-        infoButton.addTarget(self, action: #selector(showInfo), for: UIControl.Event.touchUpInside)
+        infoButton.addTarget(self, action: #selector(showInfo), for: .touchUpInside)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: infoButton)
         //Disable Btn
         btnAudioTap.isEnabled = false
@@ -208,13 +208,13 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     // MARK: IBAction TouchUp
     @IBAction func toogleVideoTap(sender: AnyObject) {
         skylinkConnection.muteVideo(!skylinkConnection.isVideoMuted())
-        sender.setImage(UIImage(named: ((skylinkConnection.isVideoMuted()) ? "NoVideoFilled.png" : "VideoCall.png")), for: UIControl.State.normal)
+        sender.setImage(UIImage(named: ((skylinkConnection.isVideoMuted()) ? "NoVideoFilled.png" : "VideoCall.png")), for: .normal)
         localVideoContainerView.isHidden = skylinkConnection.isVideoMuted()
     }
     
     @IBAction func toogleSoundTap(sender: AnyObject) {
         skylinkConnection.muteAudio(!skylinkConnection.isAudioMuted())
-        sender.setImage(UIImage(named: ((skylinkConnection.isAudioMuted()) ? "NoMicrophoneFilled.png" : "Microphone.png")), for: UIControl.State.normal)
+        sender.setImage(UIImage(named: ((skylinkConnection.isAudioMuted()) ? "NoMicrophoneFilled.png" : "Microphone.png")), for: .normal)
     }
     
     @IBAction func switchCameraTap() {

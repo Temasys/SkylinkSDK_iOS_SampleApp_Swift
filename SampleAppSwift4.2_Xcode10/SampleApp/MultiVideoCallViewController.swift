@@ -67,7 +67,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
         title = "Messages"
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Cancel"), style: .plain, target: self, action: #selector(disconnect))
         let infoButton = UIButton(type: .infoLight)
-        infoButton.addTarget(self, action: #selector(showInfo), for: UIControl.Event.touchUpInside)
+        infoButton.addTarget(self, action: #selector(showInfo), for: .touchUpInside)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: infoButton)
         //Disable Button
         btnFlipCamera.isEnabled = false
@@ -116,7 +116,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
     fileprivate func lockRoom(shouldLock: Bool) {
         (shouldLock) ? skylinkConnection.lockTheRoom() : skylinkConnection.unlockTheRoom()
         isRoomLocked = shouldLock
-        lockButton.setImage(UIImage(named: ((isRoomLocked) ? "LockFilled" : "Unlock.png")), for: UIControl.State.normal)
+        lockButton.setImage(UIImage(named: ((isRoomLocked) ? "LockFilled" : "Unlock.png")), for: .normal)
     }
     
     fileprivate func containerViewForVideoView(videoView: UIView) -> UIView {
@@ -285,7 +285,7 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
     
     func connection(_ connection: SKYLINKConnection, didLockTheRoom lockStatus: Bool, peerId: String!) {
         isRoomLocked = lockStatus
-        lockButton.setImage(UIImage(named: (isRoomLocked ? "LockFilled" : "Unlock.png")), for: UIControl.State.normal)
+        lockButton.setImage(UIImage(named: (isRoomLocked ? "LockFilled" : "Unlock.png")), for: .normal)
     }
     
     func connection(_ connection: SKYLINKConnection, didRenderUserVideo userVideoView: UIView!) {
@@ -354,13 +354,13 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
     // MARK: IB Action Function
     @IBAction func toogleVideoTap(sender: AnyObject) {
         skylinkConnection.muteVideo(!skylinkConnection.isVideoMuted())
-        sender.setImage(UIImage(named: ((skylinkConnection.isVideoMuted()) ? "NoVideoFilled.png" : "VideoCall.png")), for: UIControl.State.normal)
+        sender.setImage(UIImage(named: ((skylinkConnection.isVideoMuted()) ? "NoVideoFilled.png" : "VideoCall.png")), for: .normal)
         localVideoContainerView.isHidden = (skylinkConnection.isVideoMuted)()
     }
     
     @IBAction func toogleSoundTap(sender: AnyObject) {
         skylinkConnection.muteAudio(!skylinkConnection.isAudioMuted())
-        sender.setImage(UIImage(named: ((skylinkConnection.isAudioMuted()) ? "NoMicrophoneFilled.png" : "Microphone.png")), for: UIControl.State.normal)
+        sender.setImage(UIImage(named: ((skylinkConnection.isAudioMuted()) ? "NoMicrophoneFilled.png" : "Microphone.png")), for: .normal)
     }
     
     @IBAction func switchCameraTap() {

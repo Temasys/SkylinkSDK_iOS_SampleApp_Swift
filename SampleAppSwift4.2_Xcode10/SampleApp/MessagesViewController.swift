@@ -58,7 +58,7 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
         title = "Messages"
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Cancel"), style: .plain, target: self, action: #selector(disconnect))
         let infoButton = UIButton(type: .infoLight)
-        infoButton.addTarget(self, action: #selector(showInfo), for: UIControl.Event.touchUpInside)
+        infoButton.addTarget(self, action: #selector(showInfo), for: .touchUpInside)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: infoButton)
         updatePeersButtonTitle()
     }
@@ -279,9 +279,9 @@ class MessagesViewController: UIViewController, SKYLINKConnectionLifeCycleDelega
     fileprivate func updatePeersButtonTitle() {
         let peersCount = peers.count
         if peersCount == 0 {
-            peersButton.setTitle("No Peer", for: UIControl.State.normal)
+            peersButton.setTitle("No Peer", for: .normal)
         } else {
-            peersButton.setTitle("\(peersCount) peer" + (peersCount > 1 ? "s " : ""), for: UIControl.State.normal)
+            peersButton.setTitle("\(peersCount) peer" + (peersCount > 1 ? "s " : ""), for: .normal)
         }
     }
     

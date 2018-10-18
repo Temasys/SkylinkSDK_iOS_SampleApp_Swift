@@ -117,6 +117,10 @@ class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         skylinkLog("Peer with id %@ joigned the room.peerId")
         remotePeerArray.append(["id" : peerId, "isAudioMuted" : pmProperties.isAudioMuted, "nickname" : userInfo is String ? userInfo : ""])
         tableView.reloadData()
+        
+        if isBluetoothConnected() {
+            switchOutput()
+        }
     }
     
     func connection(_ connection: SKYLINKConnection, didLeavePeerWithMessage errorMessage: String!, peerId: String!) {

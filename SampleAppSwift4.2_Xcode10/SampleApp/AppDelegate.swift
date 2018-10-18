@@ -17,8 +17,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidFinishLaunching(_ application: UIApplication) {
         NotificationCenter.default.addObserver(self, selector: #selector(didSessionRouteChange(notification:)), name: AVAudioSession.routeChangeNotification, object: nil)
         signal(SIGPIPE, SIG_IGN)
+        
+        setAudioOutput()
+        
         // skylinkLog(NSHomeDirectory())
-        // registerDefaultsFromSettingsBundle()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -104,6 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+ 
 }
 
 

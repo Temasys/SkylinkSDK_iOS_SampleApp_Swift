@@ -17,6 +17,7 @@ let iPhone5 = UIScreen.main.bounds.height == 568
 let iPhone6 = UIScreen.main.bounds.height == 667
 let iPhone6Plus = UIScreen.main.bounds.height == 736
 let iPhoneX = UIScreen.main.bounds.height == 812
+let iPhoneXR_XSMAX = UIScreen.main.bounds.height == 896
 
 var APP_KEY = ""
 var APP_SECRET = ""
@@ -26,6 +27,63 @@ var ROOM_AUDIO = "AUDIO-CALL-ROOM"
 var ROOM_MESSAGES = "MESSAGES-ROOM"
 var ROOM_FILE_TRANSFER = "FILE-TRANSFER-ROOM"
 var ROOM_DATA_TRANSFER = "ROOMNAME_DATATRANSFER"
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+func setAudioOutput() {
+    if #available(iOS 10.0, *) {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: AVAudioSession.Mode.videoChat, options: [.allowBluetooth, .mixWithOthers, .defaultToSpeaker])
+            try AVAudioSession.sharedInstance().overrideOutputAudioPort(.speaker)
+            try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
+        } catch {
+            print("AVAudioSession.sharedInstance setting error ---> ", error.localizedDescription)
+        }
+    } else {
+        print("Only support iOS 10 and above")
+    }
+}
+
+func isBluetoothConnected() -> Bool {
+    if let availableInputs = AVAudioSession.sharedInstance().availableInputs {
+        for input in availableInputs {
+            if input.portType.rawValue.lowercased().contains("bluetooth") { return true }
+        }
+    }
+    return false
+}
+
+func switchOutput() {
+    var builtInPortDescription = AVAudioSessionPortDescription()
+    var bluetoothPortDescription = AVAudioSessionPortDescription()
+    var isBluetoothPortDescriptionAssigned = false
+    if let availableInputs = AVAudioSession.sharedInstance().availableInputs {
+        _ = availableInputs.map {
+            if $0.portType == .builtInMic { builtInPortDescription = $0 }
+            if $0.portType == .bluetoothHFP || $0.portType == .bluetoothLE || $0.portType == .bluetoothA2DP {
+                bluetoothPortDescription = $0
+                isBluetoothPortDescriptionAssigned = true
+            }
+        }
+        if let dataSources = builtInPortDescription.dataSources {
+            for source in dataSources {
+                if source.orientation!.rawValue == AVAudioSession.Location.orientationFront.rawValue || source.orientation!.rawValue == AVAudioSession.Location.orientationBottom.rawValue || source.orientation!.rawValue == AVAudioSession.Location.orientationBack.rawValue {
+                    do {
+                        try bluetoothPortDescription.setPreferredDataSource(source)
+                    } catch {
+                        print("bluetoothPortDescription setPreferredDataSource error --->", error.localizedDescription)
+                    }
+                    break
+                }
+            }
+        }
+        do {
+            isBluetoothPortDescriptionAssigned ? try AVAudioSession.sharedInstance().setPreferredInput(bluetoothPortDescription) : try AVAudioSession.sharedInstance().setPreferredInput(builtInPortDescription)
+        } catch {
+            print("bluetoothPortDescription setPreferredInput error --->", error.localizedDescription)
+        }
+    }
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 func UIRGBColor(r:CGFloat, g:CGFloat, b:CGFloat) -> UIColor {
     return UIColor(red: r/255.0, green: g/255.0, blue: b/255.0, alpha: 1.0)

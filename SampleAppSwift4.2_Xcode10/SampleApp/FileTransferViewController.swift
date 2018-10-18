@@ -58,7 +58,7 @@ class FileTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         title = "File transfer"
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Cancel"), style: .plain, target: self, action: #selector(disconnect))
         let infoButton = UIButton(type: .infoLight)
-        infoButton.addTarget(self, action: #selector(showInfo), for: UIControl.Event.touchUpInside)
+        infoButton.addTarget(self, action: #selector(showInfo), for: .touchUpInside)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: infoButton)
     }
     
