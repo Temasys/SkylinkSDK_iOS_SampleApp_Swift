@@ -141,6 +141,9 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     func connection(_ connection: SKYLINKConnection, didJoinPeer userInfo: Any!, mediaProperties pmProperties: SKYLINKPeerMediaProperties!, peerId: String!) {
         activityIndicator.stopAnimating()
         remotePeerId = peerId
+        if isBluetoothConnected() {
+            switchOutput()
+        }
     }
     
     func connection(_ connection: SKYLINKConnection, didRenderPeerVideo peerVideoView: UIView!, peerId: String!) {

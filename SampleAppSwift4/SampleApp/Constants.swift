@@ -32,14 +32,19 @@ var ROOM_DATA_TRANSFER = "ROOMNAME_DATATRANSFER"
 func setAudioOutput() {
     if #available(iOS 10.0, *) {
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: AVAudioSession.Mode.videoChat, options: [.allowBluetooth, .mixWithOthers, .defaultToSpeaker])
+            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: AVAudioSession.Mode.videoChat, options: [.allowBluetooth, .mixWithOthers, .defaultToSpeaker, .duckOthers, .interruptSpokenAudioAndMixWithOthers, .allowBluetoothA2DP, .allowAirPlay])
             try AVAudioSession.sharedInstance().overrideOutputAudioPort(.speaker)
             try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
         } catch {
             print("AVAudioSession.sharedInstance setting error ---> ", error.localizedDescription)
         }
     } else {
-        print("Only support iOS 10 and above")
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("AVAudioSession.sharedInstance setting error ---> ", error.localizedDescription)
+        }
     }
 }
 
