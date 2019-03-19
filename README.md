@@ -1,4 +1,4 @@
-# Temasys SkylinkSDK iOS SampleApp Swift4
+# Temasys SkylinkSDK iOS SampleApp Swift
 
 ========================
 
@@ -38,10 +38,9 @@ Check out the documentation and our sample app to get usage instructions and exa
 
 **Usage**
 
-This sample app is writtern in Xcode 9, compiling with Xcode 8 may get errors
+*NOTE* The latest released version of SKYLINK SDK does not support Swift 5 yet, this Swift 5 sample app is a pre-release, just for you to see the differences between Swift 4.2 and Swift 5 
 
-
-Add a sample app(SampleAppSwift4.2_Xcode10) with Swift 4.2, please open it with Xcode 10 
+Add a sample app(SampleAppSwift5_Xcode10.2) with Swift 5, please open it with Xcode 10.2 
 ==========================
 Installation
 -------
