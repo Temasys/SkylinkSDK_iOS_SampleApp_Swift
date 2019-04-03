@@ -43,7 +43,7 @@ func setAudioOutput() {
         }
     } else {
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playAndRecord)
+            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, options: [.allowBluetooth, .mixWithOthers, .defaultToSpeaker, .duckOthers, .interruptSpokenAudioAndMixWithOthers])
             try AVAudioSession.sharedInstance().setMode(.videoChat)
             try AVAudioSession.sharedInstance().overrideOutputAudioPort(.speaker)
             try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)

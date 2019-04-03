@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C20414022179B97C001D79B5 /* AVAudioSession+Swift.m in Sources */ = {isa = PBXBuildFile; fileRef = C20414002179B97C001D79B5 /* AVAudioSession+Swift.m */; };
 		C20A893D1F28767A0033076D /* AudioCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20A893C1F28767A0033076D /* AudioCallViewController.swift */; };
 		C20A893F1F28768C0033076D /* FileTransferViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20A893E1F28768C0033076D /* FileTransferViewController.swift */; };
 		C20A89411F28769C0033076D /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20A89401F28769C0033076D /* MessagesViewController.swift */; };
@@ -29,8 +28,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C20414002179B97C001D79B5 /* AVAudioSession+Swift.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVAudioSession+Swift.m"; sourceTree = "<group>"; };
-		C20414012179B97C001D79B5 /* AVAudioSession+Swift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVAudioSession+Swift.h"; sourceTree = "<group>"; };
 		C20A893C1F28767A0033076D /* AudioCallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioCallViewController.swift; sourceTree = "<group>"; };
 		C20A893E1F28768C0033076D /* FileTransferViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTransferViewController.swift; sourceTree = "<group>"; };
 		C20A89401F28769C0033076D /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
@@ -103,8 +100,6 @@
 				C2307D761F286BDC003DE8B1 /* LaunchScreen.storyboard */,
 				C2307D791F286BDC003DE8B1 /* Info.plist */,
 				C2307DA01F286D35003DE8B1 /* SampleApp-Bridging-Header.h */,
-				C20414012179B97C001D79B5 /* AVAudioSession+Swift.h */,
-				C20414002179B97C001D79B5 /* AVAudioSession+Swift.m */,
 			);
 			path = SampleApp;
 			sourceTree = "<group>";
@@ -213,7 +208,6 @@
 				C20A893D1F28767A0033076D /* AudioCallViewController.swift in Sources */,
 				C20A89411F28769C0033076D /* MessagesViewController.swift in Sources */,
 				C20A894D1F29AC490033076D /* UIAspectFitButton.swift in Sources */,
-				C20414022179B97C001D79B5 /* AVAudioSession+Swift.m in Sources */,
 				C21939E520621EBB0075D0A2 /* SettingCell.swift in Sources */,
 				C20A89471F2876CE0033076D /* HomeViewController.swift in Sources */,
 				C20A893F1F28768C0033076D /* FileTransferViewController.swift in Sources */,
