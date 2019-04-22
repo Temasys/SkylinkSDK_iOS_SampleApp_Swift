@@ -6,6 +6,7 @@ target 'SampleApp' do
   use_frameworks!
 
 
-pod 'SKYLINK', :git => 'https://github.com/Temasys/SKYLINK-iOS.git'
+pod 'SKYLINK', :git => 'https://github.com/Temasys/SKYLINK-iOS.git', :branch => 'test'
+pod 'WebRTC', :git => 'https://github.com/lyx501135/WebRTC.git'
 
 end
