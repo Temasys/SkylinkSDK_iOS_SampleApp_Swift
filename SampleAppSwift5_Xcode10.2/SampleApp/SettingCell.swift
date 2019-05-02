@@ -2,7 +2,7 @@
 //  SettingCell.swift
 //  SampleApp_Swift
 //
-//  Created by Yuxi Liu on 21/3/18.
+//  Created by Temasys on 21/3/18.
 //  Copyright © 2018 Temasys. All rights reserved.
 //
 

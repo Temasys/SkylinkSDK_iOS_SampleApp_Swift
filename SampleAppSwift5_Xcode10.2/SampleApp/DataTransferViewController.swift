@@ -2,7 +2,7 @@
 //  DataTransferViewController.swift
 //  SampleApp_Swift
 //
-//  Created by Yuxi Liu on 4/10/17.
+//  Created by Temasys on 4/10/17.
 //  Copyright © 2017 Temasys. All rights reserved.
 //
 

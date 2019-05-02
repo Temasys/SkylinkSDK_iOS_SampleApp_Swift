@@ -2,8 +2,8 @@
 //  FileTransferViewController.swift
 //  SampleApp
 //
-//  Created by Yuxi on 26/7/17.
-//  Copyright © 2017 Yuxi. All rights reserved.
+//  Created by Temasys on 26/7/17.
+//  Copyright © 2017 Temasys. All rights reserved.
 //
 
 import UIKit

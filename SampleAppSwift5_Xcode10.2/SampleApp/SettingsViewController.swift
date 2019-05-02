@@ -2,7 +2,7 @@
 //  SettingsViewController.swift
 //  SampleApp_Swift
 //
-//  Created by Yuxi Liu on 6/10/17.
+//  Created by Temasys on 6/10/17.
 //  Copyright © 2017 Temasys. All rights reserved.
 //
 
