@@ -38,9 +38,7 @@ Check out the documentation and our sample app to get usage instructions and exa
 
 **Usage**
 
-*NOTE* The latest released version of SKYLINK SDK does not support Swift 5 yet, this Swift 5 sample app is a pre-release, just for you to see the differences between Swift 4.2 and Swift 5 
-
-Add a sample app(SampleAppSwift5_Xcode10.2) with Swift 5, please open it with Xcode 10.2 
+Please use Xcode 10.2.1 or Xcode 11
 ==========================
 Installation
 -------
