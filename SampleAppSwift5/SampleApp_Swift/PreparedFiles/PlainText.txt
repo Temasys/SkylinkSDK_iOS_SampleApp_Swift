@@ -1,0 +1,17 @@
+Nov 27 15:22:43 Temasys-iPad-2 SpringBoard[150] <Warning>: BSXPCMessage received error for message: Connection interrupted
+Nov 27 15:22:43 Temasys-iPad-2 mediaserverd[43] <Notice>: '' sg.com.temasys.skylink.iOS.SkylinkSample(pid = 3427) setting DiscoveryMode = DiscoveryMode_None, currentDiscoveryMode = DiscoveryMode_None
+Nov 27 15:22:44 Temasys-iPad-2 SpringBoard[150] <Warning>: Application 'UIKitApplication:sg.com.temasys.skylink.iOS.SkylinkSample[0x3a59]' exited voluntarily.
+Nov 27 15:22:44 Temasys-iPad-2 UserEventAgent[23] <Warning>: 7943910070387: id=sg.com.temasys.skylink.iOS.SkylinkSample pid=3427, state=0
+Nov 27 15:22:52 Temasys-iPad-2 SpringBoard[150] <Error>:  SecTrustEvaluate  [leaf IssuerCommonName SubjectCommonName]
+Nov 27 15:22:52 Temasys-iPad-2 SpringBoard[150] <Error>:  SecTrustEvaluate  [leaf IssuerCommonName SubjectCommonName]
+Nov 27 15:22:52 Temasys-iPad-2 kernel[0] <Notice>: xpcproxy[3478] Container: /private/var/mobile/Containers/Data/Application/687F7070-A810-4D80-A1A7-4E91AEF234C0 (sandbox)
+Nov 27 15:22:52 Temasys-iPad-2 com.apple.xpc.launchd[1] <Error>: assertion failed: 13G36: launchd + 85529 [083E000D-4C31-3B98-A2C4-6FADB4D1940F]: 0x3
+Nov 27 15:22:52 Temasys-iPad-2 SkylinkSample[3478] <Warning>: - SKYLINK SampleApp launched -
+Nov 27 15:23:14 Temasys-iPad-2 SkylinkSample[3478] <Warning>: Inside -[AudioCallViewController connection:didConnectWithMessage:success:]
+Nov 27 15:23:15 Temasys-iPad-2 mediaserverd[43] <Warning>: 15:23:15.982 WARNING:  [0x1f115000] >va> 549: Unable to locate a set of sub-ports.
+Nov 27 15:23:16 Temasys-iPad-2 mediaserverd[43] <Warning>: 15:23:16.016 WARNING:  [0x1f115000] >va> 549: Unable to locate a set of sub-ports.
+Nov 27 15:23:16 Temasys-iPad-2 mediaserverd[43] <Warning>: 15:23:16.077 WARNING:  [0x1f115000] >va> 549: Unable to locate a set of sub-ports.
+Nov 27 15:23:16 Temasys-iPad-2 mediaserverd[43] <Warning>: 15:23:16.080 WARNING:  [0x1f115000] >va> 549: Unable to locate a set of sub-ports.
+Nov 27 15:23:16 Temasys-iPad-2 mediaserverd[43] <Warning>: 15:23:16.122 WARNING:  [0x1f115000] >va> 549: Unable to locate a set of sub-ports.
+Nov 27 15:23:19 Temasys-iPad-2 kernel[0] <Notice>: Sandbox: SkylinkSample(3478) deny(1) system-socket
+Nov 27 15:23:20 Temasys-iPad-2 SkylinkSample[3478] <Warning>: Peer with id MYHMMTkNv-9ljVHKADrg joigned the room.
