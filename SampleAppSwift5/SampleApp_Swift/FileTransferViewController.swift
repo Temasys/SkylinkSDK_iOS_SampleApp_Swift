@@ -12,22 +12,29 @@ import AssetsLibrary
 import MobileCoreServices
 import Photos
 import AVFoundation
-import SKYLINK
 
-class FileTransferViewController: BaseVC, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionFileTransferDelegate, SKYLINKConnectionRemotePeerDelegate, MPMediaPickerControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate {
+class FileTransferViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionFileTransferDelegate, SKYLINKConnectionRemotePeerDelegate, MPMediaPickerControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var peersTableView: UITableView!
     @IBOutlet weak var fileTransferTableView: UITableView!
     
-//    let _roomName = ROOM_FILE_TRANSFER
-    let skylinkApiKey = SKYLINK_APP_KEY
-    let skylinkApiSecret = SKYLINK_SECRET
     var alerts : [UIAlertController] = []
     lazy var remotePeerArray = [String]() // array holding the ids (strings) of the peers connected to the room
     lazy var transfersArray = [[String : Any]]() // array of dictionnaries holding infos about started (and finished) file transfers
     var musicPlayer: AVAudioPlayer?
     var selectedRow = -1
+//MARK: - INIT
+    override func initUI() {
+        super.initUI()
+        title = "File Transfer"
+    }
+    override func initData() {
+        super.initUI()
+        roomName = ROOM_FILE_TRANSFER
+        joinRoom()
+        NotificationCenter.default.addObserver(self, selector: #selector(needPermission), name: NSNotification.Name.SKYLINKRequiresPermission, object: nil)
+    }
     override func initSkylinkConnection() -> SKYLINKConnection {
         let config = SKYLINKConnectionConfig()
         config.setAudioVideoSend(AudioVideoConfig_NO_AUDIO_NO_VIDEO)
@@ -45,22 +52,10 @@ class FileTransferViewController: BaseVC, SKYLINKConnectionLifeCycleDelegate, SK
             return SKYLINKConnection()
         }
     }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupInfo()
-        NotificationCenter.default.addObserver(self, selector: #selector(needPermission), name: NSNotification.Name.SKYLINKRequiresPermission, object: nil)
-    }
-    override func initUI() {
-        super.initUI()
-        title = "File transfer"
-    }
+//MARK: -
     
     @objc fileprivate func needPermission() {
         
-    }
-    fileprivate func setupInfo() {
-         _roomName = ROOM_FILE_TRANSFER
-        _skylinkConnection.connectToRoom(withAppKey: skylinkApiKey, secret: skylinkApiSecret, roomName: _roomName, userData: USER_NAME, callback: nil)
     }
     
     fileprivate func showAlert() {
@@ -144,8 +139,8 @@ class FileTransferViewController: BaseVC, SKYLINKConnectionLifeCycleDelegate, SK
                 let dropTrans = UIAlertAction(title: "Drop transfer", style: .default, handler: { [weak weakSelf = self] _ in
                     skylinkLog("\(weakSelf?.transfersArray[indexPath.row]["state"] ?? "")")
                     if let state = weakSelf?.transfersArray[indexPath.row]["state"] as? String, state == "In progress" {
-//                        weakSelf?._skylinkConnection.cancelFileTransfer(transferInfos["filename"] as? String ?? "", peerId: transferInfos["peerId"] as? String ?? "")
-                        weakSelf?._skylinkConnection.cancelFileTransfer(withRemotePeerId: transferInfos["peerId"] as? String ?? "", forSending: true)
+//                        weakSelf?.skylinkConnection.cancelFileTransfer(transferInfos["filename"] as? String ?? "", peerId: transferInfos["peerId"] as? String ?? "")
+                        weakSelf?.skylinkConnection.cancelFileTransfer(withRemotePeerId: transferInfos["peerId"] as? String ?? "", forSending: true)
                         weakSelf?.updateFileTranferInfosForFilename(filename: transferInfos["filename"] as? String ?? "", peerId: transferInfos["peerId"] as? String ?? "", withState: "Cancelled", progress: transferInfos["progress"] as? Float ?? 0, isOutgoing: transferInfos["isOutgoing"] as? Bool ?? false)
                     } else {
                         let canNotCancelAlert = UIAlertController(title: "Can not cancel", message: "Transfer already completed", preferredStyle: .alert)
@@ -217,13 +212,13 @@ class FileTransferViewController: BaseVC, SKYLINKConnectionLifeCycleDelegate, SK
     func connection(_ connection: SKYLINKConnection, didReceiveFileTransferRequest fileName: String!, isPublic: Bool, remotePeerId: String!) {
         let alert = UIAlertController(title: "Accept file transfer ?", message: "\nA user wants to send you a file named:\n'\(String(describing: fileName))'", preferredStyle: .alert)
                 let rejectAction=UIAlertAction(title: "Decline", style: .default) { [weak weakSelf = self] _ in
-                    weakSelf?._skylinkConnection.rejectFileTransfer(fromRemotePeerId: remotePeerId, callback: nil)
+                    weakSelf?.skylinkConnection.rejectFileTransfer(fromRemotePeerId: remotePeerId, callback: nil)
                     weakSelf?.alerts.remove(at: weakSelf!.alerts.count - 1)
                     weakSelf?.showAlert()
                 }
                 alert.addAction(rejectAction)
                 let acceptAction = UIAlertAction(title: "Accept", style: .default){ [weak weakSelf = self] _ in
-                    weakSelf?._skylinkConnection.acceptFileTransfer(withFileName: fileName, fromRemotePeerId: remotePeerId, callback: nil)
+                    weakSelf?.skylinkConnection.acceptFileTransfer(withFileName: fileName, fromRemotePeerId: remotePeerId, callback: nil)
                     weakSelf?.alerts.remove(at: weakSelf!.alerts.count - 1)
                     weakSelf?.showAlert()
                 }
@@ -372,7 +367,7 @@ class FileTransferViewController: BaseVC, SKYLINKConnectionLifeCycleDelegate, SK
         if userId != nil && fileURL != nil {
             do {
                 let triggerFileTransfer: () throws -> Void = { [weak weakSelf = self] in
-                    weakSelf?._skylinkConnection.sendFileTransfer(withFileURL: fileURL!, assetType: transferType, fileName: nil, remotePeerId: userId, callback: nil)
+                    weakSelf?.skylinkConnection.sendFileTransfer(withFileURL: fileURL!, assetType: transferType, fileName: nil, remotePeerId: userId, callback: nil)
                 }
                 try triggerFileTransfer()
             } catch {
@@ -380,7 +375,7 @@ class FileTransferViewController: BaseVC, SKYLINKConnectionLifeCycleDelegate, SK
             }
         } else if fileURL != nil {
             // No peer ID provided means transfer to every peer in the room
-            _skylinkConnection.sendFileTransfer(withFileURL: fileURL, assetType: transferType, fileName: nil, remotePeerId: nil) { (error) in
+            skylinkConnection.sendFileTransfer(withFileURL: fileURL, assetType: transferType, fileName: nil, remotePeerId: nil) { (error) in
                 
             }
         } else {

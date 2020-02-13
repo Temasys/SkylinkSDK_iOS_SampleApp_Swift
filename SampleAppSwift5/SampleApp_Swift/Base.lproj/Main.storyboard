@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="QEM-G0-C5G">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="QEM-G0-C5G">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15508"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Skylink Examples-->
         <scene sceneID="gsg-oP-kUU">
             <objects>
-                <viewController id="4aO-7M-Jih" customClass="HomeViewController" customModule="c7a_SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="4aO-7M-Jih" customClass="HomeViewController" customModule="SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="gM9-7b-plH"/>
                         <viewControllerLayoutGuide type="bottom" id="RR5-ZO-AC6"/>
@@ -274,7 +274,7 @@
         <!--Document View Controller-->
         <scene sceneID="ZI7-oX-eRn">
             <objects>
-                <viewController storyboardIdentifier="DocumentViewController" id="aWg-b7-Na1" customClass="DocumentViewController" customModule="c7a_SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DocumentViewController" id="aWg-b7-Na1" customClass="DocumentViewController" customModule="SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="qeR-zD-Op0"/>
                         <viewControllerLayoutGuide type="bottom" id="pnm-fF-gyp"/>
@@ -371,7 +371,7 @@
         <!--Audio Call View Controller-->
         <scene sceneID="0Uw-6M-Et1">
             <objects>
-                <viewController id="g3I-iG-8nt" customClass="AudioCallViewController" customModule="c7a_SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="g3I-iG-8nt" customClass="AudioCallViewController" customModule="SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="w6B-tF-ouC"/>
                         <viewControllerLayoutGuide type="bottom" id="0pL-16-w9E"/>
@@ -486,7 +486,7 @@
         <!--Video Call View Controller-->
         <scene sceneID="SCf-KV-oZ5">
             <objects>
-                <viewController id="tQH-eD-EB2" customClass="VideoCallViewController" customModule="c7a_SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="tQH-eD-EB2" customClass="VideoCallViewController" customModule="SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="sbn-F4-pOV"/>
                         <viewControllerLayoutGuide type="bottom" id="a0c-67-moj"/>
@@ -916,7 +916,7 @@
         <!--File Transfer View Controller-->
         <scene sceneID="vmM-hu-V8n">
             <objects>
-                <viewController id="edT-qj-2dJ" customClass="FileTransferViewController" customModule="c7a_SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="edT-qj-2dJ" customClass="FileTransferViewController" customModule="SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Aod-el-xMW"/>
                         <viewControllerLayoutGuide type="bottom" id="Qfd-nm-Kkl"/>
@@ -1117,7 +1117,7 @@
         <!--Multi Video Call View Controller-->
         <scene sceneID="cvs-de-OTX">
             <objects>
-                <viewController id="ieC-jP-Wwi" customClass="MultiVideoCallViewController" customModule="c7a_SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ieC-jP-Wwi" customClass="MultiVideoCallViewController" customModule="SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="L9S-iu-LuH"/>
                         <viewControllerLayoutGuide type="bottom" id="kih-3D-CBb"/>
@@ -1614,7 +1614,7 @@
         <!--Messages View Controller-->
         <scene sceneID="fxB-gX-MQn">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="FMd-vz-5Pu" customClass="MessagesViewController" customModule="c7a_SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="FMd-vz-5Pu" customClass="MessagesViewController" customModule="SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jc8-6l-Lud"/>
                         <viewControllerLayoutGuide type="bottom" id="3l5-WZ-vdv"/>
@@ -1624,8 +1624,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="emO-NQ-2eO">
-                                <rect key="frame" x="0.0" y="221" width="375" height="446"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <rect key="frame" x="0.0" y="313" width="375" height="354"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="sectionIndexBackgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="messageCell" textLabel="EuF-VT-taw" detailTextLabel="3G5-bi-Xa8" style="IBUITableViewCellStyleSubtitle" id="R41-i5-yVt">
@@ -1635,14 +1635,14 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EuF-VT-taw">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EuF-VT-taw">
                                                     <rect key="frame" x="15" y="4" width="31" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3G5-bi-Xa8">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3G5-bi-Xa8">
                                                     <rect key="frame" x="15" y="26" width="38" height="15.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="11"/>
@@ -1803,8 +1803,8 @@
                                     <outlet property="delegate" destination="FMd-vz-5Pu" id="Ewl-UN-ocv"/>
                                 </connections>
                             </textField>
-                            <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder=" Message" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LSv-xx-G8M">
-                                <rect key="frame" x="16" y="176" width="296" height="34"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder=" Message" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LSv-xx-G8M">
+                                <rect key="frame" x="106" y="219" width="261" height="34"/>
                                 <color key="backgroundColor" red="0.83070659940000002" green="0.83662965020000002" blue="0.85439880280000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="send"/>
@@ -1812,23 +1812,6 @@
                                     <outlet property="delegate" destination="FMd-vz-5Pu" id="pYz-DJ-khw"/>
                                 </connections>
                             </textField>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wRe-Pu-EgA">
-                                <rect key="frame" x="320" y="169" width="39" height="44"/>
-                                <color key="backgroundColor" red="0.26940387230000001" green="0.26940387230000001" blue="0.26940387230000001" alpha="0.75196659480000005" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="w5p-bl-XDv"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="14"/>
-                                <state key="normal" title="SEND"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="8"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="sendTap" destination="FMd-vz-5Pu" eventType="touchUpInside" id="zud-di-O7N"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h6S-6o-EOR" customClass="UIAspectFitButton">
                                 <rect key="frame" x="284" y="52" width="75" height="40"/>
                                 <constraints>
@@ -1853,41 +1836,89 @@
                                     <action selector="peersTapWithSender:" destination="FMd-vz-5Pu" eventType="touchUpInside" id="qF9-n8-Ba6"/>
                                 </connections>
                             </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Encryption Key" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HIW-pF-Eqf">
+                                <rect key="frame" x="106" y="177" width="261" height="34"/>
+                                <color key="backgroundColor" red="0.83070659940000002" green="0.83662965020000002" blue="0.85439880280000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="send"/>
+                                <connections>
+                                    <outlet property="delegate" destination="FMd-vz-5Pu" id="e5n-sK-U1h"/>
+                                </connections>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Encrypt key" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vat-9X-bSc">
+                                <rect key="frame" x="8" y="183.5" width="90" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Message" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d72-Y3-Yh2">
+                                <rect key="frame" x="8" y="225.5" width="69" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wRe-Pu-EgA">
+                                <rect key="frame" x="247" y="261" width="120" height="44"/>
+                                <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="q2u-er-nHS"/>
+                                    <constraint firstAttribute="height" constant="44" id="w5p-bl-XDv"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="14"/>
+                                <state key="normal" title="SEND">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="sendTap" destination="FMd-vz-5Pu" eventType="touchUpInside" id="zud-di-O7N"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="qRX-Ge-dIx" firstAttribute="top" secondItem="jc8-6l-Lud" secondAttribute="bottom" id="0Bw-Nl-nVH"/>
                             <constraint firstItem="3l5-WZ-vdv" firstAttribute="top" secondItem="emO-NQ-2eO" secondAttribute="bottom" id="2mE-Ld-tSd"/>
-                            <constraint firstItem="LSv-xx-G8M" firstAttribute="leading" secondItem="7nw-mz-MhV" secondAttribute="leadingMargin" id="5Fq-dV-gNW"/>
                             <constraint firstItem="o0v-jx-HnR" firstAttribute="top" secondItem="jc8-6l-Lud" secondAttribute="bottom" constant="8" id="5MJ-Zs-DnZ"/>
+                            <constraint firstItem="LSv-xx-G8M" firstAttribute="top" secondItem="HIW-pF-Eqf" secondAttribute="bottom" constant="8" id="6Om-Bg-og9"/>
+                            <constraint firstItem="d72-Y3-Yh2" firstAttribute="centerY" secondItem="LSv-xx-G8M" secondAttribute="centerY" id="6qI-WN-yoX"/>
+                            <constraint firstItem="wRe-Pu-EgA" firstAttribute="top" secondItem="LSv-xx-G8M" secondAttribute="bottom" constant="8" id="7W5-wY-wkL"/>
                             <constraint firstItem="h6S-6o-EOR" firstAttribute="top" secondItem="qRX-Ge-dIx" secondAttribute="bottom" constant="19" id="9D1-Fm-hHf"/>
                             <constraint firstItem="LSv-xx-G8M" firstAttribute="leading" secondItem="h6S-6o-EOR" secondAttribute="trailing" constant="8" id="CEU-Kd-Qa3"/>
                             <constraint firstItem="uLR-ER-zoy" firstAttribute="centerX" secondItem="7nw-mz-MhV" secondAttribute="centerX" id="DDw-aH-Q1p"/>
                             <constraint firstItem="h6S-6o-EOR" firstAttribute="trailing" secondItem="7nw-mz-MhV" secondAttribute="trailingMargin" id="DRv-m1-YSO"/>
                             <constraint firstItem="h6S-6o-EOR" firstAttribute="top" secondItem="jc8-6l-Lud" secondAttribute="bottom" constant="8" id="Daz-Fd-Kpx"/>
+                            <constraint firstItem="Vat-9X-bSc" firstAttribute="leading" secondItem="7nw-mz-MhV" secondAttribute="leading" constant="8" id="DzP-Ds-kwh"/>
                             <constraint firstItem="LSv-xx-G8M" firstAttribute="top" secondItem="qRX-Ge-dIx" secondAttribute="bottom" constant="15" id="Fjp-ut-BJy"/>
                             <constraint firstItem="emO-NQ-2eO" firstAttribute="leading" secondItem="7nw-mz-MhV" secondAttribute="leading" id="Hzh-3G-XtO"/>
+                            <constraint firstItem="LSv-xx-G8M" firstAttribute="leading" secondItem="HIW-pF-Eqf" secondAttribute="leading" id="J8P-VE-3ig"/>
                             <constraint firstItem="qRX-Ge-dIx" firstAttribute="top" secondItem="o0v-jx-HnR" secondAttribute="bottom" constant="8" id="Mxk-fo-bvP"/>
                             <constraint firstItem="h6S-6o-EOR" firstAttribute="top" secondItem="qRX-Ge-dIx" secondAttribute="bottom" constant="10" id="OOQ-XF-SgB"/>
+                            <constraint firstItem="wRe-Pu-EgA" firstAttribute="trailing" secondItem="LSv-xx-G8M" secondAttribute="trailing" id="Ond-Gg-sQM"/>
                             <constraint firstItem="3l5-WZ-vdv" firstAttribute="top" secondItem="emO-NQ-2eO" secondAttribute="bottom" id="PUv-Va-dbw"/>
                             <constraint firstItem="qRX-Ge-dIx" firstAttribute="leading" secondItem="7nw-mz-MhV" secondAttribute="leading" id="SSh-AK-r9s"/>
+                            <constraint firstItem="Vat-9X-bSc" firstAttribute="centerY" secondItem="HIW-pF-Eqf" secondAttribute="centerY" id="UGp-rM-ypN"/>
                             <constraint firstItem="vkg-qt-s5W" firstAttribute="top" secondItem="qRX-Ge-dIx" secondAttribute="bottom" constant="15" id="UUf-PZ-fOR"/>
                             <constraint firstAttribute="trailing" secondItem="qRX-Ge-dIx" secondAttribute="trailing" id="XYK-KF-s39"/>
-                            <constraint firstItem="wRe-Pu-EgA" firstAttribute="leading" secondItem="LSv-xx-G8M" secondAttribute="trailing" constant="8" id="av3-Mf-LI0"/>
                             <constraint firstItem="o0v-jx-HnR" firstAttribute="leading" secondItem="vkg-qt-s5W" secondAttribute="trailing" constant="8" id="axT-wf-l93"/>
                             <constraint firstItem="h6S-6o-EOR" firstAttribute="leading" secondItem="o0v-jx-HnR" secondAttribute="trailing" constant="8" id="bMv-OX-hee"/>
                             <constraint firstItem="emO-NQ-2eO" firstAttribute="top" secondItem="wRe-Pu-EgA" secondAttribute="bottom" constant="8" id="beY-DP-mKJ"/>
                             <constraint firstItem="emO-NQ-2eO" firstAttribute="top" secondItem="wRe-Pu-EgA" secondAttribute="bottom" constant="8" id="c1a-NS-LD6"/>
-                            <constraint firstItem="LSv-xx-G8M" firstAttribute="top" secondItem="o0v-jx-HnR" secondAttribute="bottom" constant="84" id="caq-aK-ZTg"/>
+                            <constraint firstItem="HIW-pF-Eqf" firstAttribute="top" secondItem="qRX-Ge-dIx" secondAttribute="bottom" constant="16" id="f1B-Zg-XRc"/>
+                            <constraint firstItem="d72-Y3-Yh2" firstAttribute="leading" secondItem="Vat-9X-bSc" secondAttribute="leading" id="f1k-OZ-mB2"/>
                             <constraint firstItem="qRX-Ge-dIx" firstAttribute="top" secondItem="emO-NQ-2eO" secondAttribute="bottom" id="fg9-4M-oiE"/>
                             <constraint firstItem="o0v-jx-HnR" firstAttribute="leading" secondItem="vkg-qt-s5W" secondAttribute="trailing" constant="8" id="fkc-jd-hDc"/>
-                            <constraint firstItem="wRe-Pu-EgA" firstAttribute="top" secondItem="h6S-6o-EOR" secondAttribute="bottom" constant="77" id="hAB-xb-NoI"/>
+                            <constraint firstItem="HIW-pF-Eqf" firstAttribute="leading" secondItem="Vat-9X-bSc" secondAttribute="trailing" constant="8" id="hKc-FZ-zex"/>
                             <constraint firstAttribute="trailing" secondItem="emO-NQ-2eO" secondAttribute="trailing" id="hvU-v7-qgb"/>
-                            <constraint firstItem="wRe-Pu-EgA" firstAttribute="trailing" secondItem="7nw-mz-MhV" secondAttribute="trailingMargin" id="kWL-7n-Qlu"/>
                             <constraint firstItem="o0v-jx-HnR" firstAttribute="top" secondItem="qRX-Ge-dIx" secondAttribute="bottom" constant="10" id="lTk-l0-qkX"/>
                             <constraint firstItem="uLR-ER-zoy" firstAttribute="centerY" secondItem="7nw-mz-MhV" secondAttribute="centerY" id="lqM-p4-gjF"/>
+                            <constraint firstAttribute="trailing" secondItem="HIW-pF-Eqf" secondAttribute="trailing" constant="8" id="m0I-YJ-2fY"/>
                             <constraint firstItem="vkg-qt-s5W" firstAttribute="top" secondItem="jc8-6l-Lud" secondAttribute="bottom" constant="13" id="m8d-sn-UBf"/>
                             <constraint firstItem="vkg-qt-s5W" firstAttribute="leading" secondItem="7nw-mz-MhV" secondAttribute="leadingMargin" id="oaR-IR-Coc"/>
+                            <constraint firstItem="LSv-xx-G8M" firstAttribute="trailing" secondItem="HIW-pF-Eqf" secondAttribute="trailing" id="tvl-8N-Ipt"/>
                             <constraint firstItem="3l5-WZ-vdv" firstAttribute="top" secondItem="qRX-Ge-dIx" secondAttribute="bottom" id="uyq-LL-mMS"/>
                             <constraint firstItem="wRe-Pu-EgA" firstAttribute="top" secondItem="qRX-Ge-dIx" secondAttribute="bottom" constant="8" id="yF7-ix-wdQ"/>
                         </constraints>
@@ -1900,9 +1931,9 @@
                                 <exclude reference="lTk-l0-qkX"/>
                                 <exclude reference="CEU-Kd-Qa3"/>
                                 <exclude reference="Fjp-ut-BJy"/>
-                                <exclude reference="c1a-NS-LD6"/>
                                 <exclude reference="9D1-Fm-hHf"/>
                                 <exclude reference="OOQ-XF-SgB"/>
+                                <exclude reference="c1a-NS-LD6"/>
                                 <exclude reference="yF7-ix-wdQ"/>
                                 <exclude reference="PUv-Va-dbw"/>
                                 <exclude reference="uyq-LL-mMS"/>
@@ -1918,21 +1949,19 @@
                                 <exclude reference="axT-wf-l93"/>
                                 <include reference="fkc-jd-hDc"/>
                                 <include reference="lTk-l0-qkX"/>
-                                <exclude reference="5Fq-dV-gNW"/>
                                 <include reference="CEU-Kd-Qa3"/>
                                 <include reference="Fjp-ut-BJy"/>
-                                <exclude reference="caq-aK-ZTg"/>
                                 <exclude reference="9D1-Fm-hHf"/>
                                 <exclude reference="DRv-m1-YSO"/>
                                 <exclude reference="Daz-Fd-Kpx"/>
                                 <include reference="OOQ-XF-SgB"/>
-                                <exclude reference="hAB-xb-NoI"/>
                                 <include reference="yF7-ix-wdQ"/>
                             </mask>
                         </variation>
                     </view>
                     <connections>
                         <outlet property="activityIndicator" destination="uLR-ER-zoy" id="Wma-qM-xNX"/>
+                        <outlet property="encryptKeyTextField" destination="HIW-pF-Eqf" id="gtG-d3-40o"/>
                         <outlet property="isPublicSwitch" destination="QIX-TH-CZu" id="jOY-4m-TKA"/>
                         <outlet property="messageTextField" destination="LSv-xx-G8M" id="EHg-ZC-DAi"/>
                         <outlet property="messageTypeSegmentControl" destination="yeZ-fV-yiX" id="JcN-UG-g1F"/>
@@ -1949,7 +1978,7 @@
         <!--Data Transfer View Controller-->
         <scene sceneID="Atx-2f-7Nq">
             <objects>
-                <viewController id="Cs3-SK-meF" customClass="DataTransferViewController" customModule="c7a_SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Cs3-SK-meF" customClass="DataTransferViewController" customModule="SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="q86-l1-ErH"/>
                         <viewControllerLayoutGuide type="bottom" id="y5j-qs-Cb2"/>
@@ -2191,11 +2220,11 @@
         <!--Settings View Controller-->
         <scene sceneID="5Zy-GF-gkU">
             <objects>
-                <tableViewController id="fCI-RD-qAb" customClass="SettingsViewController" customModule="c7a_SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="fCI-RD-qAb" customClass="SettingsViewController" customModule="SampleApp_Swift" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="9iL-PZ-hGQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingsCell" textLabel="rOe-1F-5Vw" detailTextLabel="UHy-P6-3xT" style="IBUITableViewCellStyleSubtitle" id="4wl-oV-xTn">
                                 <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>

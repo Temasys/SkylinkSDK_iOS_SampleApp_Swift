@@ -8,10 +8,9 @@
 
 import UIKit
 import ReplayKit
-import SKYLINK
 
 @available(iOS 10.0, *)
-class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionMediaDelegate, SKYLINKConnectionRemotePeerDelegate, RPBroadcastControllerDelegate {
+class VideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionMediaDelegate, SKYLINKConnectionRemotePeerDelegate, RPBroadcastControllerDelegate {
 
     @IBOutlet weak var localVideoContainerView: UIView!
     @IBOutlet weak var localVideoContainerView2: UIView!
@@ -33,21 +32,16 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     @IBOutlet weak var bottomView: UIVisualEffectView!
     
     @IBOutlet weak var callButton: UIButton!
+    @IBOutlet weak var screenViewStack: UIStackView!
+    
     var isJoinRoom: Bool = false
     
     weak var statsView: StatsView!
     weak var inAppBtn: UIButton!
     weak var systemBtn: UIButton!
-    @IBOutlet weak var screenViewStack: UIStackView!
-//    @IBOutlet weak var pickerViewContainer: UIView! {
-//        didSet {
-//            pickerViewContainer.backgroundColor = .clear
-//        }
-//    }
     var peerVideoSize: CGSize!
     var peerVideoView: UIView!
     weak var topView: UIView!
-    let ROOM_NAME = ROOM_ONE_TO_ONE_VIDEO
     lazy var receivedFps = 0
     lazy var sentFps = 0
     var cameraMediaID = ""
@@ -60,16 +54,47 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
 
     lazy var stats = Stats(dict: [:])
     var remotePeerId: String?
-    let skylinkApiKey = SKYLINK_APP_KEY
-    let skylinkApiSecret = SKYLINK_SECRET
-    lazy var skylinkConnection: SKYLINKConnection = {
+    var backClosure: (() -> Void)!
+    
+//MARK: - INIT
+    override func initData() {
+        super.initData()
+        roomName = ROOM_ONE_TO_ONE_VIDEO
+    }
+    override func initUI() {
+        super.initUI()
+        title = "Room: \(roomName)"
+        UIApplication.shared.isIdleTimerDisabled = true
+        
+        btnAudioTap.isEnabled = false
+        refreshButton.isEnabled = false
+        btnVideoTap.isEnabled = false
+        btnFlipCamera.isEnabled = true
+        if let statView = UINib(nibName: "StatsView", bundle: nil).instantiate(withOwner: nil, options: nil).first as? StatsView {
+            statView.frame = CGRect(x: 120, y: 100, width: 250, height: 90)
+            view.addSubview(statView)
+            self.statsView = statView
+        }
+        screenViewStack.isHidden = false
+        //Record
+        let startRecButton = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 40))
+        startRecButton.setTitle("StartREC", for: .normal)
+        startRecButton.titleLabel?.font = UIFont.systemFont(ofSize: 11)
+        startRecButton.addTarget(self, action: #selector(startRecording), for: .touchUpInside)
+        let stopRecButton = UIButton(frame: CGRect(x: 60, y: 0, width: 50, height: 40))
+        stopRecButton.setTitle("StopREC", for: .normal)
+        stopRecButton.titleLabel?.font = UIFont.systemFont(ofSize: 11)
+        stopRecButton.addTarget(self, action: #selector(stopRecording), for: .touchUpInside)
+        let recStackView = UIStackView(frame: CGRect(x: 0, y: view.frame.height - bottomView.frame.height - 70, width: 110, height: 40))
+        recStackView.addArrangedSubview(startRecButton)
+        recStackView.addArrangedSubview(stopRecButton)
+        view.addSubview(recStackView)
+    }
+    override func initSkylinkConnection() -> SKYLINKConnection {
         // Creating configuration
         let config = SKYLINKConnectionConfig()
         config.setAudioVideoSend(AudioVideoConfig_AUDIO_AND_VIDEO)
-        //ipad: receive video only, iphone: receive audio only
         config.setAudioVideoReceive(AudioVideoConfig_AUDIO_AND_VIDEO)
-//        config.setAudioVideoReceive(AudioVideoConfig_NO_AUDIO_NO_VIDEO)
-//        config.setAudioVideoReceive((UIDevice.current.userInterfaceIdiom == .phone) ? AudioVideoConfig_NO_AUDIO_NO_VIDEO : AudioVideoConfig_AUDIO_AND_VIDEO)
         config.isMultiTrackCreateEnable = true
         config.roomSize = SKYLINKRoomSizeSmall
         config.isMirrorLocalFrontCameraView = true
@@ -83,15 +108,6 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         } else {
             return SKYLINKConnection()
         }
-    }()
-    var backClosure: (() -> Void)!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        setupUI()
-        setupInfo()
-        UIApplication.shared.isIdleTimerDisabled = true
     }
     
     override func viewWillLayoutSubviews() {
@@ -107,122 +123,6 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         if #available(iOS 11.0, *) {
             backClosure()
         }
-    }
-    
-    fileprivate func setupUI() {
-        skylinkLog("SKYLINKConnection version = \(SKYLINKConnection.getSkylinkVersion())")
-        title = "Room: \(ROOM_NAME)"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Cancel"), style: .plain, target: self, action: #selector(backToMainMenu))
-        let infoButton = UIButton(type: .infoLight)
-        infoButton.addTarget(self, action: #selector(showInfo), for: .touchUpInside)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: infoButton)
-        //Disable Btn
-        btnAudioTap.isEnabled = false
-        refreshButton.isEnabled = false
-        btnVideoTap.isEnabled = false
-        btnFlipCamera.isEnabled = true
-        if let statView = UINib(nibName: "StatsView", bundle: nil).instantiate(withOwner: nil, options: nil).first as? StatsView {
-            statView.frame = CGRect(x: 120, y: 100, width: 250, height: 90)
-            view.addSubview(statView)
-            self.statsView = statView
-        }
-        screenViewStack.isHidden = false
-        
-        let startRecButton = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 40))
-        startRecButton.setTitle("StartREC", for: .normal)
-        startRecButton.titleLabel?.font = UIFont.systemFont(ofSize: 11)
-        startRecButton.addTarget(self, action: #selector(startRecording), for: .touchUpInside)
-        let stopRecButton = UIButton(frame: CGRect(x: 60, y: 0, width: 50, height: 40))
-        stopRecButton.setTitle("StopREC", for: .normal)
-        stopRecButton.titleLabel?.font = UIFont.systemFont(ofSize: 11)
-        stopRecButton.addTarget(self, action: #selector(stopRecording), for: .touchUpInside)
-        let recStackView = UIStackView(frame: CGRect(x: 0, y: view.frame.height - bottomView.frame.height - 70, width: 110, height: 40))
-        recStackView.addArrangedSubview(startRecButton)
-        recStackView.addArrangedSubview(stopRecButton)
-        view.addSubview(recStackView)
-//        let button = UIButton(type: .custom)
-////        button.frame = pickerViewContainer.bounds
-//        button.setTitle("Share", for: .normal)
-//        button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-//        button.setTitleColor(.white, for: .normal)
-//        if #available(iOS 11.0, *) {
-//            button.addTarget(self, action: #selector(shareClicked), for: .touchUpInside)
-//        } else {
-//            // Fallback on earlier versions
-//            skylinkLog("Your system does not support screen sharing")
-//        }
-//        pickerViewContainer.addSubview(button)
-    }
-    
-//    @available(iOS 11.0, *)
-//    @objc fileprivate func shareClicked() {
-//#if !targetEnvironment(simulator)
-//        if #available(iOS 12.0, *) {
-//            let picker = RPSystemBroadcastPickerView(frame: pickerViewContainer.bounds)
-//            picker.preferredExtension = "Temasys.SampleApp-Swift.SampleAppBroadcast"
-//            pickerViewContainer.backgroundColor = .white
-//            pickerViewContainer.addSubview(picker)
-//            userDidFinishSetup()
-//            return
-//        }
-//#endif
-//        // Fallback on earlier versions and not simulator
-//        skylinkLog("Your system does not support screen sharing")
-//    }
-    
-    fileprivate func setupInfo() {
-//        activityIndicator.startAnimating()
-//        startCamera()
-        
-    }
-    
-    @objc fileprivate func startRecording() {
-        if !skylinkConnection.isRecording() {
-            skylinkConnection.startRecording { (error) in
-                if error != nil {
-                    print(error!.localizedDescription)
-                }
-                UIAlertController.showAlertWithAutoDisappear(title: nil, message: "You recording is started", duration: 2, onViewController: self)
-            }
-        }
-    }
-
-    @objc fileprivate func stopRecording() {
-        if skylinkConnection.isRecording() {
-            skylinkConnection.stopRecording { (error) in
-                if error != nil {
-                    print(error!.localizedDescription)
-                }
-                UIAlertController.showAlertWithAutoDisappear(title: nil, message: "You recording is stopped", duration: 2, onViewController: self)
-            }
-        }
-    }
-    
-    @objc fileprivate func backToMainMenu() {
-        activityIndicator.startAnimating()
-        NSObject.cancelPreviousPerformRequests(withTarget: self)
-        skylinkConnection.unlockTheRoom(nil)
-        skylinkConnection.disconnect({ [unowned self] error in
-            guard let _ = error else{
-                self.navigationController?.popViewController(animated: true)
-                self.remotePeerVideoContainerView.removeSubviews()
-                self.remotePeerVideoContainerView2.removeSubviews()
-                return
-            }
-        })
-    }
-    
-    @objc fileprivate func showInfo() {
-        let title = "Infos"
-        let message = "\nRoom name:\n\(ROOM_NAME)\n\nLocal ID:\n\(skylinkConnection.localPeerId ?? "")\n\nKey: •••••" + (skylinkApiKey as NSString).substring(with: NSRange(location: 0, length: skylinkApiKey.count - 7)) + "\n\nSkylink version \(SKYLINKConnection.getSkylinkVersion())"
-        alertMessage(msg_title: title, msg: message)
-    }
-    
-    fileprivate func alertMessage(msg_title: String, msg:String) {
-        let alertController = UIAlertController(title: msg_title , message: msg, preferredStyle: .alert)
-        let OKAction = UIAlertAction(title: "OK", style: .default)
-        alertController.addAction(OKAction)
-        present(alertController, animated: true, completion: nil)
     }
     
     // MARK: - SKYLINKConnectionLifeCycleDelegate
@@ -256,7 +156,13 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(cancelAction)
         present(alert, animated: true) { [unowned self] in
-            self.backToMainMenu()
+            self.activityIndicator.startAnimating()
+            self.skylinkConnection.unlockTheRoom(nil)
+            self.leaveRoom {
+                self.navigationController?.popViewController(animated: true)
+                self.remotePeerVideoContainerView.removeSubviews()
+                self.remotePeerVideoContainerView2.removeSubviews()
+            }
         }
         
         self.remotePeerVideoContainerView.removeSubviews()
@@ -626,25 +532,63 @@ class VideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
             addRenderedVideo(videoView: media.skylinkVideoView() ?? UIView(), insideContainer: (media.skylinkMediaType() == SKYLINKMediaTypeVideoCamera) ? remotePeerVideoContainerView : remotePeerVideoContainerView2, mirror: true)
         })
     }
+    @objc fileprivate func startRecording() {
+        if !skylinkConnection.isRecording() {
+            skylinkConnection.startRecording { (error) in
+                if error != nil {
+                    print(error!.localizedDescription)
+                }
+                UIAlertController.showAlertWithAutoDisappear(title: nil, message: "You recording is started", duration: 2, onViewController: self)
+            }
+        }
+    }
+
+    @objc fileprivate func stopRecording() {
+        if skylinkConnection.isRecording() {
+            skylinkConnection.stopRecording { (error) in
+                if error != nil {
+                    print(error!.localizedDescription)
+                }
+                UIAlertController.showAlertWithAutoDisappear(title: nil, message: "You recording is stopped", duration: 2, onViewController: self)
+            }
+        }
+    }
+    
+    fileprivate func alertMessage(msg_title: String, msg:String) {
+        let alertController = UIAlertController(title: msg_title , message: msg, preferredStyle: .alert)
+        let OKAction = UIAlertAction(title: "OK", style: .default)
+        alertController.addAction(OKAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    @objc fileprivate func backToMainMenu() {
+        activityIndicator.startAnimating()
+        NSObject.cancelPreviousPerformRequests(withTarget: self)
+        skylinkConnection.unlockTheRoom(nil)
+        skylinkConnection.disconnect({ [unowned self] error in
+            guard let _ = error else{
+                self.navigationController?.popViewController(animated: true)
+                self.remotePeerVideoContainerView.removeSubviews()
+                self.remotePeerVideoContainerView2.removeSubviews()
+                return
+            }
+        })
+    }
 // MARK: - ACTIONS
     @IBAction func joinRoom(_ sender: Any) {
         self.activityIndicator.startAnimating()
         if isJoinRoom {
             NSObject.cancelPreviousPerformRequests(withTarget: self)
             skylinkConnection.unlockTheRoom(nil)
-            skylinkConnection.disconnect({[unowned self] error in
-                guard let _ = error else{
-                    self.remotePeerVideoContainerView.removeSubviews()
-                    self.remotePeerVideoContainerView2.removeSubviews()
+            self.leaveRoom {
+                self.remotePeerVideoContainerView.removeSubviews()
+                self.remotePeerVideoContainerView2.removeSubviews()
 //                    self.localVideoContainerView.removeSubviews()
-                    self.destroyLocalMedia()
-                    self.callButton.setBackgroundImage(UIImage(named: "call_on"), for: .normal)
-                    self.activityIndicator.stopAnimating()
-                    return
-                }
-            })
+                self.destroyLocalMedia()
+                self.callButton.setBackgroundImage(UIImage(named: "call_on"), for: .normal)
+                self.activityIndicator.stopAnimating()
+            }
         }else{
-            skylinkConnection.connectToRoom(withAppKey: skylinkApiKey, secret: skylinkApiSecret, roomName: ROOM_NAME, userData: USER_NAME, callback: nil)
+            self.joinRoom()
         }
         isJoinRoom = !isJoinRoom
     }

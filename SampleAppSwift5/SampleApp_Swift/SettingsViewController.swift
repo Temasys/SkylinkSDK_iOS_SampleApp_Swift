@@ -14,6 +14,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     let appkey_secret_keys = ["App Key", "App Secret"]
     let appkey_secret_values = [SKYLINK_APP_KEY, SKYLINK_SECRET]
+    let encryption_secret_keys = ["Secret"]
+    let encryption_secret_values = [ENCRYPTION_SECRET]
     let room_name_keys = ["1-1 video call", "Multi video call", "Audio call", "Messages", "File transfer", "Data transfer"]
     let room_name_values = [ROOM_ONE_TO_ONE_VIDEO, ROOM_MULTI_VIDEO, ROOM_AUDIO, ROOM_MESSAGES, ROOM_FILE_TRANSFER, ROOM_DATA_TRANSFER]
     
@@ -29,13 +31,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return appkey_secret_keys.count
-        } else {
+        } else if section == 1{
+            return encryption_secret_keys.count
+        }else {
             return room_name_keys.count
         }
     }
@@ -44,6 +48,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let cell = tableView.dequeueReusableCell(withIdentifier: CELL_IDENTIFIER) as! SettingCell
         if indexPath.section == 0 {
             cell.setupCell(key: appkey_secret_keys[indexPath.row], value: appkey_secret_values[indexPath.row])
+        }else if indexPath.section == 1{
+            cell.setupCell(key: encryption_secret_keys[indexPath.row], value: encryption_secret_values[indexPath.row])
         } else {
             cell.setupCell(key: room_name_keys[indexPath.row], value: room_name_values[indexPath.row])
         }
@@ -53,6 +59,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 0 {
             return "Skylink developer credentials"
+        }else if section == 1{
+            return "Encryption"
         } else {
             return "Sample room names"
         }
