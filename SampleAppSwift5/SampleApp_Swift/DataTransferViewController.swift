@@ -7,15 +7,9 @@
 //
 
 import UIKit
-import SKYLINK
 
-class DataTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionMessagesDelegate, SKYLINKConnectionRemotePeerDelegate {
+class DataTransferViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionMessagesDelegate, SKYLINKConnectionRemotePeerDelegate {
 
-    let skylinkApiKey = SKYLINK_APP_KEY
-    let skylinkApiSecret = SKYLINK_SECRET
-    
-    let ROOM_NAME = ROOM_DATA_TRANSFER
-    
     @IBOutlet weak var localColorView: UIView!
     @IBOutlet weak var redSlider: UISlider!
     @IBOutlet weak var greenSlider: UISlider!
@@ -25,7 +19,18 @@ class DataTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
     @IBOutlet weak var sendColorButton: UIButton!
     @IBOutlet weak var imageView: UIImageView!
     var timer: Timer?
-    lazy var skylinkConnection: SKYLINKConnection = {
+//MARK: - INIT
+    override func initData() {
+        super.initData()
+        roomName = ROOM_DATA_TRANSFER
+        joinRoom()
+    }
+    override func initUI() {
+        super.initUI()
+        title = "Data Transfer"
+        refreshUI()
+    }
+    override func initSkylinkConnection() -> SKYLINKConnection {
         // Creating configuration
         let config = SKYLINKConnectionConfig()
         config.hasDataTransfer = true
@@ -41,20 +46,13 @@ class DataTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
         } else {
             return SKYLINKConnection()
         }
-    }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        setupUI()
-        setupInfo()
-        refreshUI()
     }
-    
+//MARK: -
     fileprivate func refreshUI() {
         localColorView.backgroundColor = slidersUIColor()
         sendColorButton.isHidden = isContinuousSwitch.isOn
     }
+    
     
     @objc fileprivate func onTick(timer: Timer) {
         let increment: Float = 0.004
@@ -75,37 +73,6 @@ class DataTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
 
     fileprivate func showUIInfo(infoMessage: String) {
         infoTextView.text = String(format: "[%.3f] %@\n%@", CFAbsoluteTimeGetCurrent(), infoMessage, infoTextView.text)
-    }
-    
-    fileprivate func setupUI() {
-        skylinkLog("imat_viewDidLoad")
-        skylinkLog("SKYLINKConnection version = \(SKYLINKConnection.getSkylinkVersion())")
-        title = "Messages"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Cancel"), style: .plain, target: self, action: #selector(disconnect))
-        let infoButton = UIButton(type: .infoLight)
-        infoButton.addTarget(self, action: #selector(showInfo), for: .touchUpInside)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: infoButton)
-    }
-    
-    fileprivate func setupInfo() {
-        // Connecting to a room
-        skylinkConnection.connectToRoom(withAppKey: skylinkApiKey, secret: skylinkApiSecret, roomName: ROOM_NAME, userData: USER_NAME, callback: nil)
-    }
-    
-    @objc fileprivate func disconnect() {
-        skylinkLog("imat_disConnect")
-        skylinkConnection.disconnect { [unowned self] error in
-            guard let _ = error else{
-                self.navigationController?.popViewController(animated: true)
-                return
-            }
-        }
-    }
-    
-    @objc fileprivate func showInfo() {
-        let title = "Infos"
-        let message = "\nRoom name:\n\(ROOM_NAME)\n\nLocal ID:\n\(skylinkConnection.localPeerId ?? "")\n\nKey: •••••" + (skylinkApiKey as NSString).substring(with: NSRange(location: 0, length: skylinkApiKey.count - 7)) + "\n\nSkylink version \(SKYLINKConnection.getSkylinkVersion())"
-        alertMessage(msg_title: title, msg: message)
     }
     
     fileprivate func alertMessage(msg_title: String, msg:String) {
@@ -134,7 +101,7 @@ class DataTransferViewController: UIViewController, SKYLINKConnectionLifeCycleDe
     }
     
     func connection(_ connection: SKYLINKConnection, didReceiveRemotePeerLeaveRoom remotePeerId: String!, userInfo: Any!, skylinkInfo: [AnyHashable : Any]?) {
-        showUIInfo(infoMessage: "✋🏼 DID LEAVE PEER • peerID = " + remotePeerId + ", skylinkInfo = \(skylinkInfo)")
+        showUIInfo(infoMessage: "✋🏼 DID LEAVE PEER • peerID = " + remotePeerId + ", skylinkInfo = \(skylinkInfo ?? ["":""])")
     }
     // MARK: - SKYLINKConnectionMessagesDelegate
     func connection(_ connection: SKYLINKConnection, didReceive data: Data!, remotePeerId: String!) {

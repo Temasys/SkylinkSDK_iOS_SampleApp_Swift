@@ -7,11 +7,8 @@
 //
 
 import UIKit
-import SKYLINK
 
-class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionMediaDelegate, SKYLINKConnectionRemotePeerDelegate, UITableViewDataSource, UITableViewDelegate {
-
-    let ROOM_NAME = ROOM_AUDIO
+class AudioCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionMediaDelegate, SKYLINKConnectionRemotePeerDelegate, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -20,11 +17,25 @@ class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
     var remotePeerArray = [[String : Any]]()
     var remotePeerIdArray = [String]()
     
-    lazy var skylinkConnection: SKYLINKConnection = {
+//MARK: - INIT
+    override func initData() {
+        super.initData()
+        roomName = ROOM_AUDIO
+        let credInfos: [String : Any] = ["startTime": Date(), "duration": 24.0]
+        skylinkLog("This is credInfos \(credInfos.description)")
+        if let _ = credInfos["duration"] as? Double {
+            joinRoom()
+        }
+    }
+    override func initUI() {
+        title = "Audio Call"
+    }
+    override func initSkylinkConnection() -> SKYLINKConnection {
         let config = SKYLINKConnectionConfig()
         config.setAudioVideoSend(AudioVideoConfig_AUDIO_ONLY)
         config.setAudioVideoReceive(AudioVideoConfig_AUDIO_ONLY)
         if let skylinkConnection = SKYLINKConnection(config: config, callback: nil) {
+            
             skylinkConnection.lifeCycleDelegate = self
             skylinkConnection.mediaDelegate = self
             skylinkConnection.remotePeerDelegate = self
@@ -33,50 +44,6 @@ class AudioCallViewController: UIViewController, SKYLINKConnectionLifeCycleDeleg
         } else {
             return SKYLINKConnection()
         }
-    }()
-    
-    let skylinkApiKey = SKYLINK_APP_KEY
-    let skylinkApiSecret = SKYLINK_SECRET
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        setupUI()
-        setupInfo()
-    }
-
-    fileprivate func setupUI() {
-        title = "Audio Call"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Cancel"), style: .plain, target: self, action: #selector(disconnect))
-        let infoButton = UIButton(type: .infoLight)
-        infoButton.addTarget(self, action: #selector(showInfo), for: .touchUpInside)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: infoButton)
-    }
-    
-    fileprivate func setupInfo() {
-        let credInfos: [String : Any] = ["startTime": Date(), "duration": 24.0]
-        skylinkLog("This is credInfos \(credInfos.description)")
-        if let durationString = credInfos["duration"] as? Double {
-            skylinkConnection.connectToRoom(withAppKey: skylinkApiKey, secret: skylinkApiSecret, roomName: ROOM_NAME, userData: USER_NAME, callback: nil)
-        }
-    }
-    
-    @objc fileprivate func disconnect() {
-        skylinkConnection.disconnect { [unowned self] error in
-            guard let _ = error else{
-                self.navigationController?.popViewController(animated: true)
-                return
-            }
-        }
-    }
-    
-    @objc fileprivate func showInfo() {
-        let title = "\(NSStringFromClass(AudioCallViewController.self)) infos"
-        let message = "\nRoom name:\n\(ROOM_NAME)\n\nLocal ID:\n\(skylinkConnection.localPeerId ?? "")\n\nKey: •••••" + (skylinkApiKey as NSString).substring(with: NSRange(location: 0, length: skylinkApiKey.count - 7)) + "\n\nSkylink version \(SKYLINKConnection.getSkylinkVersion())"
-        let infosAlert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-        infosAlert.addAction(cancelAction)
-        present(infosAlert, animated: true, completion: nil)
     }
     
     // MARK: - SKYLINKConnectionLifeCycleDelegate

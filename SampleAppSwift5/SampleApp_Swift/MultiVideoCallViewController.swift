@@ -8,7 +8,6 @@
 
 import UIKit
 import AVFoundation
-import SKYLINK
 
 struct Usesr{
     let username: String?
@@ -16,7 +15,7 @@ struct Usesr{
     let address: String?
     let number: String?
 }
-class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionMediaDelegate, SKYLINKConnectionRemotePeerDelegate, SKYLINKConnectionRecordingDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class MultiVideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionMediaDelegate, SKYLINKConnectionRemotePeerDelegate, SKYLINKConnectionRecordingDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     
     @IBOutlet weak var localVideoContainerView: UIView!
     @IBOutlet weak var firstPeerVideoContainerView: UIView!
@@ -43,59 +42,33 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
     weak var statsView: StatsView!
     var peerObjects: [SAPeerObject] = []
     var isLocalCameraRunning = true
-    
-    lazy var skylinkConnection: SKYLINKConnection = {
-        // Creating configuration
-        let config = SKYLINKConnectionConfig()
-        
-        config.setAudioVideoSend(AudioVideoConfig_AUDIO_AND_VIDEO)
-        config.setAudioVideoReceive(AudioVideoConfig_AUDIO_AND_VIDEO)
-        config.isMultiTrackCreateEnable = true
-        config.isMirrorLocalFrontCameraView = true
-//        config.autoGetStats = true
-//        config.enableMultitrack = false
-        // Creating SKYLINKConnection
-        if let skylinkConnection = SKYLINKConnection(config: config, callback: nil) {
-            skylinkConnection.lifeCycleDelegate = self
-            skylinkConnection.mediaDelegate = self
-            skylinkConnection.remotePeerDelegate = self
-            skylinkConnection.recordingDelegate = self
-            skylinkConnection.enableLogs = true
-            return skylinkConnection
-        } else {
-            return SKYLINKConnection()
-        }
-    }()
     lazy var peerIds = [String]()
     lazy var peersInfos = [String : Any]()
     let skylinkApiKey = SKYLINK_APP_KEY
     let skylinkApiSecret = SKYLINK_SECRET
     
-    let ROOM_NAME = ROOM_MULTI_VIDEO
     var isRoomLocked = false
     var peerToGetStats: String?
     var cameraMediaID = ""
     var audioMediaID = ""
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupUI()
-        setupInfo()
+//MARK: - INIT
+    override func initData() {
+        super.initData()
+        roomName = ROOM_MULTI_VIDEO
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.skylinkConnection.createLocalMedia(with: SKYLINKMediaDeviceCameraFront, mediaMetadata: USER_NAME, callback: nil)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+            self.joinRoom()
+        }
     }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        updatePeersVideosFrames()
-    }
-    
-    fileprivate func setupUI() {
-        skylinkLog("imat_viewDidLoad")
-        skylinkLog("SKYLINKConnection version = \(SKYLINKConnection.getSkylinkVersion())")
-        title = "Room: \(ROOM_NAME)"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Cancel"), style: .plain, target: self, action: #selector(disconnect))
-        let infoBtn = UIBarButtonItem(title: "Info", style: .done, target: self, action: #selector(showInfo))
-        let participantsBtn = UIBarButtonItem(title: "Participants(\(peerObjects.count))", style: .plain, target: self, action: #selector(showParticipants))
-        navigationItem.rightBarButtonItems = [infoBtn, participantsBtn]
+    override func initUI() {
+        super.initUI()
+        title = "Room: \(roomName)"
+        let _participantsBtn = UIBarButtonItem(title: "Participants(\(peerObjects.count))", style: .plain, target: self, action: #selector(showParticipants))
+        var _currentItems = navigationItem.rightBarButtonItems
+        _currentItems?.append(_participantsBtn)
+        navigationItem.rightBarButtonItems = _currentItems
         //Disable Button
         btnFlipCamera.isEnabled = false
         btnAudioTap.isEnabled = false
@@ -119,6 +92,34 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
         recStackView.addArrangedSubview(stopRecButton)
         view.addSubview(recStackView)*/
     }
+    override func initSkylinkConnection() -> SKYLINKConnection {
+        // Creating configuration
+        let config = SKYLINKConnectionConfig()
+        
+        config.setAudioVideoSend(AudioVideoConfig_AUDIO_AND_VIDEO)
+        config.setAudioVideoReceive(AudioVideoConfig_AUDIO_AND_VIDEO)
+        config.isMultiTrackCreateEnable = true
+        config.isMirrorLocalFrontCameraView = true
+        //        config.autoGetStats = true
+        //        config.enableMultitrack = false
+        // Creating SKYLINKConnection
+        if let skylinkConnection = SKYLINKConnection(config: config, callback: nil) {
+            skylinkConnection.lifeCycleDelegate = self
+            skylinkConnection.mediaDelegate = self
+            skylinkConnection.remotePeerDelegate = self
+            skylinkConnection.recordingDelegate = self
+            skylinkConnection.enableLogs = true
+            return skylinkConnection
+        } else {
+            return SKYLINKConnection()
+        }
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        updatePeersVideosFrames()
+    }
+//MARK: -
     private func setupToolBar(){
         let toolBar = UIToolbar()
         toolBar.barStyle = UIBarStyle.default
@@ -136,39 +137,10 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
 //        textField1.inputView = picker
 //        textField1.inputAccessoryView = toolBar
     }
-    fileprivate func setupInfo() {
-        // Connecting to a room
-//        skylinkConnection.createLocalMedia(with: SKYLINKMediaDeviceMicrophone, mediaMetadata: USER_NAME, callback: nil)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.skylinkConnection.createLocalMedia(with: SKYLINKMediaDeviceCameraFront, mediaMetadata: USER_NAME, callback: nil)
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-            self.skylinkConnection.connectToRoom(withAppKey: self.skylinkApiKey, secret: self.skylinkApiSecret, roomName: self.ROOM_NAME, userData: USER_NAME, callback: nil)
-        }
-        
-    }
     
     @objc func showParticipants(){
     }
     
-    @objc fileprivate func disconnect() {
-        skylinkLog("imat_disConnect")
-        activityIndicator.startAnimating()
-        skylinkConnection.disconnect { [unowned self] error in
-            guard let _ = error else{
-                self.activityIndicator.stopAnimating()
-                self.navigationController?.popViewController(animated: true)
-                return
-            }
-        }
-    }
-    
-    @objc fileprivate func showInfo() {
-        let title = "Infos"
-        let message = "\nRoom name:\n\(ROOM_NAME)\n\nLocal ID:\n\(skylinkConnection.localPeerId ?? "")\n\nKey: •••••" + (skylinkApiKey as NSString).substring(with: NSRange(location: 0, length: skylinkApiKey.count - 7)) + "\n\nSkylink version \(SKYLINKConnection.getSkylinkVersion())"
-        alertMessage(msg_title: title, msg: message)
-    }
-
     fileprivate func alertMessage(msg_title: String, msg:String) {
         let alertController = UIAlertController(title: msg_title , message: msg, preferredStyle: .alert)
         let OKAction = UIAlertAction(title: "OK", style: .default)
@@ -374,20 +346,6 @@ class MultiVideoCallViewController: UIViewController, SKYLINKConnectionLifeCycle
     func connection(_ connection: SKYLINKConnection, didLockTheRoom lockStatus: Bool, remotePeerId peerId: String!) {
         isRoomLocked = lockStatus
         lockButton.setImage(UIImage(named: (isRoomLocked ? "LockFilled" : "Unlock.png")), for: .normal)
-    }
-    
-    func connection(_ connection: SKYLINKConnection, didRenderUserVideo userVideoView: UIView!) {
-        addRenderedVideo(videoView: userVideoView, insideContainer: localVideoContainerView)
-        getStats()
-    }
-    
-    func connection(_ connection: SKYLINKConnection, didDisconnectWithMessage errorMessage: String!) {
-        let alert = UIAlertController(title: "Disconnected", message: errorMessage, preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-        alert.addAction(cancelAction)
-        present(alert, animated: true) { [weak weakSelf = self] in
-            weakSelf?.disconnect()
-        }
     }
 // MARK: SKYLINKConnectionRemotePeerDelegate
     func connection(_ connection: SKYLINKConnection, didChangeLocalMedia localMedia: SKYLINKMedia) {
