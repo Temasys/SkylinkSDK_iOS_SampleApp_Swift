@@ -9,10 +9,41 @@
 import UIKit
 import AVFoundation
 
+struct SAMessage {
+    var data: String?
+    var timeStamp: Int64?
+    var sender: String?
+    var target: String?
+    var type: MessageType?
+    
+    
+    enum MessageType {
+        case Signaling
+        case P2P
+        func toString() -> String{
+            switch self {
+            case .Signaling:
+                return "Signaling"
+            default:
+                return "P2P"
+            }
+        }
+    }
+    
+    func isPublic() -> Bool{
+        return (target == nil)
+    }
+    func timeStapmString() -> String?{
+        if let timeStamp = timeStamp {
+            let dateTS = Date.datefrom(timeStamp: timeStamp)
+            return Date.skylinkString(from: dateTS)
+        }
+        return nil
+    }
+}
 class MessagesViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegate, SKYLINKConnectionMessagesDelegate, SKYLINKConnectionRemotePeerDelegate, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
 
     
-    lazy var messages = [[String : Any]]()
     lazy var peers = [String : Any]()
     weak var topView: UIView!
     
@@ -25,34 +56,36 @@ class MessagesViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegat
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var messageTypeSegmentControl: UISegmentedControl!
     @IBOutlet weak var isPublicSwitch: UISwitch!
-    
+    @IBOutlet weak var pickerViewContainer: UIView!
+    @IBOutlet weak var pickerView: UIPickerView!
+    @IBOutlet weak var persistSwitch: UISwitch!
+    var messages: [SAMessage] = []
+    var encryptSecretIds: [String] = ["No Key"]
 //MARK: - INIT
     override func initData() {
         super.initData()
-        roomName = ROOM_MESSAGES
+        if roomName.count==0{
+            roomName = ROOM_MESSAGES
+        }
         nicknameTextField.delegate = self
         messageTextField.delegate = self
         joinRoom()
+        
     }
     override func initUI() {
         super.initUI()
         title = "Messaging"
         updatePeersButtonTitle()
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-//            let historyMessages = self.skylinkConnection.getPublicMessageHistory()
-//            print("history: --->", historyMessages)
-//            if !historyMessages.isEmpty {
-//                for item in historyMessages {
-//                    if let dataStr = item["data"], let dict = convertToDictionary(text: dataStr) {
-//                        self.messages.insert(["message" : (dict["timeStamp"] as? String ?? "") + "~~" + (dict["data"]  as? String ?? ""), "isPublic" : true, "peerId" : dict["senderId"] as? String ?? "", "type" : dict["senderId"] as? String ?? ""], at: 0)
-//                    }
-//                }
-//                self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
-//            }
-//        }
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 70
+        loadStoredMessage()
         messageTypeSegmentControl.selectedSegmentIndex = 1
-//        encryptKeyTextField.text = ENCRYPTION_SECRET
+        encryptSecretIds.append(contentsOf: Array(ENCRYPTION_SECRETS.keys).sorted(by:<))
+        encryptKeyTextField.text = encryptSecretIds.first
+//        skylinkConnection.selectedSecretId = encryptKeyTextField.text
     }
+    
+    
     override func initSkylinkConnection() -> SKYLINKConnection {
         let config = SKYLINKConnectionConfig()
 
@@ -68,19 +101,11 @@ class MessagesViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegat
             skylinkConnection.messagesDelegate = self
             skylinkConnection.remotePeerDelegate = self
             skylinkConnection.enableLogs = true;
-//            skylinkConnection.encryptSecret = ENCRYPTION_SECRET
+            skylinkConnection.encryptSecrets = ENCRYPTION_SECRETS
+            skylinkConnection.messagePersist = true
             return skylinkConnection
         }else{
             return SKYLINKConnection()
-        }
-    }
-//MARK: -
-    fileprivate func alertMessage(msg_title: String, msg:String) {
-        let alertController = UIAlertController(title: msg_title , message: msg, preferredStyle: .alert)
-        let OKAction = UIAlertAction(title: "OK", style: .default)
-        alertController.addAction(OKAction)
-        present(alertController, animated: true) {
-            self.sendMessage(message: msg_title, forPeerId: msg)
         }
     }
     
@@ -113,7 +138,7 @@ class MessagesViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegat
         } else {
             let msgTitle = "Connection failed"
             let msg = errorMessage
-            alertMessage(msg_title: msgTitle, msg:msg!)
+            saAlert(title: msgTitle, msg: msg)
             dismissVC()
         }
         activityIndicator.stopAnimating()
@@ -127,7 +152,11 @@ class MessagesViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegat
             self.dismissVC()
         }
     }
-    
+    func connection(_ connection: SKYLINKConnection, didReceiveError error: Error!) {
+        if let error = error {
+            saAlert(title: "Error: \(error.code)", msg: error.localizedDescription)
+        }
+    }
     // MARK: SKYLINKConnectionRemotePeerDelegate
     func connection(_ connection: SKYLINKConnection, didConnectWithRemotePeer remotePeerId: String!, userInfo: Any!, hasDataChannel: Bool) {
         var displayNickName = "\(String(describing: remotePeerId ?? "No name"))"
@@ -150,19 +179,16 @@ class MessagesViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegat
     // MARK: SKYLINKConnectionMessagesDelegate
 
     func connection(_ connection: SKYLINKConnection, didReceiveServerMessage message: Any!, isPublic: Bool, timeStamp: Int64, remotePeerId: String!) {
-        print("message ---> ", message ?? "nil")
-        print("timeStamp ---> ", timeStamp)
+        print("SIG message ---> ", message ?? "nil")
+        print("SIG timeStamp ---> ", timeStamp)
         
-        if let dict = message as? [String : String], let data = dict["data"] {
-            messages.insert(["message" : data, "isPublic" : isPublic, "peerId" : remotePeerId ?? "nil", "type" : "signaling server", "timeStamp": timeStamp, "senderId": dict["senderId"] ?? ""], at: 0)
-        } else if let jsonStr = message as? String {
-            if let dict = convertToDictionary(text: jsonStr), let data = dict["data"] as? String, let timeStamp = dict["timeStamp"] as? String {
-                messages.insert(["message" : timeStamp + "~~" + data, "isPublic" : isPublic, "peerId" : remotePeerId ?? "nil", "type" : "signaling server", "timeStamp": timeStamp, "senderId": dict["senderId"] ?? ""], at: 0)
-            } else {
-                messages.insert(["message" : message ?? "nil", "isPublic" : isPublic, "peerId" : remotePeerId ?? "nil", "type" : "signaling server", "timeStamp": timeStamp], at: 0)
-            }
-        } else {
-            messages.insert(["message" : message ?? "nil", "isPublic" : isPublic, "peerId" : remotePeerId ?? "nil", "type" : "signaling server", "timeStamp": timeStamp], at: 0)
+        if let message = message as? String{
+            let receivedMessage = SAMessage(data: message,
+                                            timeStamp: timeStamp,
+                                            sender: self.getUserNameFrom(peerId: remotePeerId),
+                                            target: (isPublic ? nil : skylinkConnection.localPeerId),
+                                            type: .Signaling)
+            messages.append(receivedMessage)
         }
         tableView.reloadSections(IndexSet(integer: 0), with: .fade)
     }
@@ -170,10 +196,17 @@ class MessagesViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegat
     func connection(_ connection: SKYLINKConnection, didReceiveP2PMessage message: Any!, isPublic: Bool, timeStamp: Int64, remotePeerId: String!) {
         print("P2P message ---> ", message ?? "nil")
         print("P2P timeStamp ---> ", timeStamp)
-        if skylinkConnection.localPeerId != remotePeerId {
-            messages.insert(["message" : message ?? "nil", "isPublic" : isPublic, "peerId" : remotePeerId ?? "nil", "type" : "P2P", "timeStamp": timeStamp], at: 0)
-            tableView.reloadSections(IndexSet(integer: 0), with: .fade)
+        
+        if let message = message as? String{
+            let receivedMessage = SAMessage(data: message,
+                                            timeStamp: timeStamp,
+                                            sender: self.getUserNameFrom(peerId: remotePeerId),
+                                            target: (isPublic ? nil : skylinkConnection.localPeerId),
+                                            type: .P2P)
+            messages.append(receivedMessage)
         }
+        tableView.reloadSections(IndexSet(integer: 0), with: .fade)
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -182,119 +215,74 @@ class MessagesViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegat
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath)
-        let message = messages[indexPath.row]
-        cell.textLabel?.text = message["message"] as? String
-        let equalStr = skylinkConnection.localPeerId
-        if message["peerId"] as? String == equalStr {
-            cell.detailTextLabel?.text = (message["isPublic"] as? Bool ?? false) ? "Sent to all" : "Sent privately"
-            cell.backgroundColor = .lightText// UIRGBColor(r: 0.71, g: 1, b: 0.5)
-        } else {
-            var userName = message["senderId"]
-            if userName == nil{
-                userName = peers[message["peerId"] as? String ?? ""] ?? ""
-            }
-            cell.detailTextLabel?.text = "From \(userName as! String) via \(message["type"] as? String ?? "") • \(message["isPublic"] as? Bool ?? false ? "Public" : "Private")"
-            cell.backgroundColor = .white
-            var timeStamp = (message["timeStamp"] as? Int64)
-            if timeStamp == nil {
-                cell.detailTextLabel?.text = (cell.detailTextLabel?.text ?? "") + "\n" + (message["timeStamp"] as? String ?? "")
-            }else{
-                timeStamp = (timeStamp ?? 0)/1000
-                let timeStampDate = Date(timeIntervalSince1970: TimeInterval(timeStamp!))
-                let timeStampString = Date.skylinkString(from: timeStampDate) ?? ""
-                cell.detailTextLabel?.text = (cell.detailTextLabel?.text ?? "") + "\n" + timeStampString
-            }
-        }
-        cell.detailTextLabel?.text = (cell.detailTextLabel?.text ?? "")
+        let msg = messages[messages.count - indexPath.row - 1]
+        cell.textLabel?.text = (msg.timeStapmString() ?? "") + "~~~" + (msg.data ?? "")
+        cell.detailTextLabel?.text = "From \(msg.sender ?? "") via \(msg.type?.toString() ?? "") • " + (msg.isPublic() ? "Public" : "Private")
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let message = messages[indexPath.row]
-        let messageDetails = String(format:"Message \n %@ \n\n From: \n %@ \n\n %@", message["message"] as? String ?? "", (message["peerId"] as? String ?? "") == (skylinkConnection.localPeerId as String) ? "me" : (message["peerId"] as? String ?? ""), (message["isPublic"] as? Bool ?? false) ? "Public" : "Private")
+        let message = messages[messages.count - indexPath.row - 1]
+        let msg = String(format:"Message \n %@ \n\n From: \n %@ \n\n %@", message.data ?? "", (message.sender == USER_NAME) ? "me" : (message.sender ?? ""), message.isPublic() ? "Public" : "Private")
         let msgTitle = "Message Details"
-        let msg = messageDetails
-        alertMessage(msg_title: msgTitle, msg: msg)
+        saAlert(title: msgTitle, msg: msg)
     }
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60.0
-    }
+    
     // MARK: - Utils
-    func processMessage() {
-        if isPublicSwitch.isOn && messageTypeSegmentControl.selectedSegmentIndex == 2 {
-            let msgTitle = "Binary data is private."
-            let msg = "\nTo send your message as binary data, uncheck the \"Public\" UISwitch."
-            alertMessage(msg_title: msgTitle, msg: msg)
-            hideKeyboardIfNeeded()
-        } else if messageTextField.hasText {
-            let message = messageTextField.text
-            if !(isPublicSwitch.isOn) {
-                if peers.count != 0 {
-                    let alert = UIAlertController(title: "Choose a private recipient.", message: "\nYou're about to send a private message\nWho do you want to send it to ?", preferredStyle: .alert)
-                    let noAction = UIAlertAction(title: "Cancel", style: .default)
-                    for peerDicKey in peers.keys {
-                        let yesAction = UIAlertAction(title: peers[peerDicKey] as? String, style: .default) { [weak weakSelf = self] _ in
-                            weakSelf?.alertMessage(msg_title: message ?? "", msg: peerDicKey)
-                        }
-                        alert.addAction(yesAction)
+    
+    private func loadStoredMessage(){
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            self.skylinkConnection.getStoredMessages { storedMessages, errorMap in
+                guard let _ = self.view.window else{
+                    return
+                }
+                if let errorMap = errorMap{
+                    saAlert(title: "Error map", msg: errorMap.description)
+                }
+                for item in storedMessages ?? []{
+                    print("storedMessage: \(storedMessages ?? [])")
+                    if let dict = item as? [String: Any] {
+                        let message = SAMessage(data: dict["data"] as? String,
+                                                timeStamp: (dict["timeStamp"] as? Int64),
+                                                sender: self.getUserNameFrom(peerId: dict["peerId"] as? String),
+                                                target: nil,
+                                                type: .Signaling)
+                        self.messages.append(message)
                     }
-                    alert.addAction(noAction)
-                    present(alert, animated: true, completion: nil)
-                } else {
-                    let msgTitle = "No peer connected."
-                    let msg = "\nYou can't define a private recipient since there is no peer connected."
-                    alertMessage(msg_title: msgTitle, msg: msg)
                 }
-            } else {
-                sendMessage(message: message ?? "", forPeerId: nil)
+                self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
             }
-        } else {
-            let msgTitle = "Empty message"
-            let msg = "\nType the message to be sent."
-            alertMessage(msg_title: msgTitle, msg: msg)
         }
     }
-    
     func sendMessage(message: String, forPeerId peerId: String?) {
-        var showSentMessage = true
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone(identifier: "UTC")
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.0'Z'"
-        let dateString = dateFormatter.string(from: Date())
-//        let newMessage = ["timeStamp" : dateString, "senderId" : "iOS-\(UIDevice.current.name)", "data" : message]
-        switch messageTypeSegmentControl.selectedSegmentIndex {
-        case 0:
-            skylinkConnection.sendP2PMessage(message, toRemotePeerId: peerId, callback: nil)
-            skylinkLog("Finish DCMessage")
-        case 1:
-            skylinkConnection.sendServerMessage(message, toRemotePeerId: peerId, callback: nil)
-            break
-        case 2:
-            if peerId != nil {
-                let data = message.data(using: .utf8)
-                if data != nil {
-                    skylinkConnection.send(data, toRemotePeerId: peerId, callback: nil)
-                } else {
-                    let msgTitle = "Exeption when sending binary data"
-                    let msg = "MCU can be enabled/disabled in Key configuration on the developer portal: http://developer.temasys.com.sg/"
-                    alertMessage(msg_title: msgTitle, msg: msg)
-                    showSentMessage = false
-                }
+        //Message as JSON
+//        let message = ["senderId" : USER_NAME,
+//                          "data" : message]
+        
+        if messageTypeSegmentControl.selectedSegmentIndex == 0{
+            //Send P2P Message
+            skylinkConnection.sendP2PMessage(message, toRemotePeerId: peerId) { (error) in
+                processResponse(error: error, type: .P2P)
             }
-        default:
-            break
+        }else{
+            //Send Server Message
+            skylinkConnection.sendServerMessage(message, toRemotePeerId: peerId) { (error) in
+                processResponse(error: error, type: .Signaling)
+            }
         }
-        if showSentMessage {
-            messageTextField.text = ""
-            messages.insert(["message": message, "isPublic": peerId == nil, "peerId": skylinkConnection.localPeerId ?? "nil"], at: 0)
-            tableView.reloadSections(IndexSet(integer: 0), with: .fade)
-        } else {
-            hideKeyboardIfNeeded()
+        func processResponse(error: Error?, type: SAMessage.MessageType){
+            if let error = error{
+                saAlert(title:"ERROR: \(error.code)", msg: error.localizedDescription)
+            }else{
+                let sentMessage = SAMessage(data: message, timeStamp: Date().toTimeStamp(), sender: USER_NAME, target: peerId, type: type)
+                messages.append(sentMessage)
+                self.messageTextField.text = ""
+                self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
+                saAlert(title: message, msg: (peerId != nil) ? peerId : "All")
+            }
         }
     }
-    
     fileprivate func updatePeersButtonTitle() {
         let peersCount = peers.count
         if peersCount == 0 {
@@ -311,7 +299,7 @@ class MessagesViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegat
         } else {
             let msgTitle = "Empty nickname"
             let msg = "\nType the nickname to set."
-            alertMessage(msg_title: msgTitle, msg: msg)
+            saAlert(title: msgTitle, msg: msg)
         }
     }
     
@@ -319,13 +307,16 @@ class MessagesViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegat
         messageTextField.resignFirstResponder()
         nicknameTextField.resignFirstResponder()
     }
-    
+    private func getUserNameFrom(peerId: String?) -> String?{
+        if let userInfo = skylinkConnection.getUserInfo(peerId) as? [String: Any]{
+            return userInfo["userData"] as? String
+        }
+        return peerId
+    }
     // MARK: - UITextField delegate
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == nicknameTextField {
             updateNickname()
-        } else if textField == messageTextField {
-            processMessage()
         }
         hideKeyboardIfNeeded()
         return true
@@ -333,14 +324,44 @@ class MessagesViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegat
     func textFieldDidChangeSelection(_ textField: UITextField) {
         print("change")
         if textField == encryptKeyTextField{
-            ENCRYPTION_SECRET = textField.text!
+//            ENCRYPTION_SECRETS = textField.text!
 //            skylinkConnection.encryptSecret = ENCRYPTION_SECRET
         }
     }
-    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if textField == encryptKeyTextField {
+            hideKeyboardIfNeeded()
+            pickerViewContainer.isHidden = false
+            return false
+        }
+        return true
+    }
     // MARK: IBFuction
     @IBAction func sendTap() {
-        processMessage()
+        skylinkConnection.messagePersist = persistSwitch.isOn
+        guard let message = messageTextField.text else {
+            saAlert(title: "Empty message", msg: "\nType the message to be sent.");
+            return
+        }
+        if peers.count<=0{
+            saAlert(title: "No peer connected.", msg: "nYou can't define a private recipient since there is no peer connected.")
+        }
+        if isPublicSwitch.isOn {
+            //Send to all peer
+            sendMessage(message: message, forPeerId: nil)
+        } else {
+            //Send to a specific peer
+            let alert = UIAlertController(title: "Choose a private recipient.", message: "\nYou're about to send a private message\nWho do you want to send it to ?", preferredStyle: .alert)
+            let noAction = UIAlertAction(title: "Cancel", style: .default)
+            for peerDicKey in peers.keys {
+                let yesAction = UIAlertAction(title: peers[peerDicKey] as? String, style: .default) { [weak weakSelf = self] _ in
+                    weakSelf?.sendMessage(message: message, forPeerId: peerDicKey)
+                }
+                alert.addAction(yesAction)
+            }
+            alert.addAction(noAction)
+            present(alert, animated: true, completion: nil)
+        }
     }
     
     @IBAction func diswmissKeyboardTap() {
@@ -359,5 +380,27 @@ class MessagesViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegat
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         view.endEditing(true)
+    }
+    @IBAction func doneEncryptSecret(sender: UIButton) {
+        pickerViewContainer.isHidden = true
+    }
+}
+extension MessagesViewController: UIPickerViewDataSource, UIPickerViewDelegate{
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return encryptSecretIds.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return encryptSecretIds[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let selectedEncryptSecret: String? = (row == 0) ? nil : encryptSecretIds[row]
+        skylinkConnection.selectedSecretId = selectedEncryptSecret
+        encryptKeyTextField.text = encryptSecretIds[row]
     }
 }

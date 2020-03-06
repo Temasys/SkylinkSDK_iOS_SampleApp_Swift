@@ -59,7 +59,9 @@ class VideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelega
 //MARK: - INIT
     override func initData() {
         super.initData()
-        roomName = ROOM_ONE_TO_ONE_VIDEO
+        if roomName.count==0{
+            roomName = ROOM_ONE_TO_ONE_VIDEO
+        }
     }
     override func initUI() {
         super.initUI()

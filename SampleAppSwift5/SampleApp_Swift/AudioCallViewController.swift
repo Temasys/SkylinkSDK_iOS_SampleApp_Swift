@@ -20,7 +20,9 @@ class AudioCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelega
 //MARK: - INIT
     override func initData() {
         super.initData()
-        roomName = ROOM_AUDIO
+        if roomName.count==0{
+            roomName = ROOM_AUDIO
+        }
         let credInfos: [String : Any] = ["startTime": Date(), "duration": 24.0]
         skylinkLog("This is credInfos \(credInfos.description)")
         if let _ = credInfos["duration"] as? Double {
@@ -28,6 +30,7 @@ class AudioCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelega
         }
     }
     override func initUI() {
+        super.initUI()
         title = "Audio Call"
     }
     override func initSkylinkConnection() -> SKYLINKConnection {
