@@ -85,7 +85,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let alert = UIAlertController(title: "Choose a Secret App", message: nil, preferredStyle: .alert)
         let noAction = UIAlertAction(title: "Cancel", style: .default)
         for appKey in allAppKey {
-//            let index = APP_KEYS.firstIndex(of: secret)
             let yesAction = UIAlertAction(title: appKey, style: .default) { [unowned self] _ in
                 self.selectedAppKey(key: appKey)
             }

@@ -19,7 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #else
         signal(SIGPIPE, SIG_IGN)
         #endif
-        // skylinkLog(NSHomeDirectory())
         print("NSTemporaryDirectory ---> ", NSTemporaryDirectory())
         createFolder()
     }

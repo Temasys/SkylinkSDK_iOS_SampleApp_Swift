@@ -141,7 +141,6 @@ class FileTransferViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDel
                 let dropTrans = UIAlertAction(title: "Drop transfer", style: .default, handler: { [weak weakSelf = self] _ in
                     skylinkLog("\(weakSelf?.transfersArray[indexPath.row]["state"] ?? "")")
                     if let state = weakSelf?.transfersArray[indexPath.row]["state"] as? String, state == "In progress" {
-//                        weakSelf?.skylinkConnection.cancelFileTransfer(transferInfos["filename"] as? String ?? "", peerId: transferInfos["peerId"] as? String ?? "")
                         weakSelf?.skylinkConnection.cancelFileTransfer(withRemotePeerId: transferInfos["peerId"] as? String ?? "", forSending: true)
                         weakSelf?.updateFileTranferInfosForFilename(filename: transferInfos["filename"] as? String ?? "", peerId: transferInfos["peerId"] as? String ?? "", withState: "Cancelled", progress: transferInfos["progress"] as? Float ?? 0, isOutgoing: transferInfos["isOutgoing"] as? Bool ?? false)
                     } else {

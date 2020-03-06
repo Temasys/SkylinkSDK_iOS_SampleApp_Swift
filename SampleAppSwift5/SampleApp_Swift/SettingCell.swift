@@ -40,8 +40,6 @@ class SettingCell: UITableViewCell {
                 APP_KEY = valueField.text!
             case "App Secret":
                 APP_SECRET = valueField.text!
-//            case "Secret":                
-//                ENCRYPTION_SECRET = valueField.text!
             case "1-1 video call":
                 ROOM_ONE_TO_ONE_VIDEO = valueField.text!
             case "Multi video call":

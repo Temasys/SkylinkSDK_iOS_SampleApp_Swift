@@ -95,7 +95,6 @@ class MessagesViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegat
         config.setTimeout(3, skylinkAction: SkylinkAction_CONNECT_TO_ROOM)
 //        config.hasDataTransfer = true
 //        config.dataChannel = true // for data chanel messages
-//        SKYLINKConnection.setVerbose(true)
         if let skylinkConnection = SKYLINKConnection(config: config, callback: nil){
             skylinkConnection.lifeCycleDelegate = self
             skylinkConnection.messagesDelegate = self
@@ -294,7 +293,6 @@ class MessagesViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegat
     
     func updateNickname() {
         if nicknameTextField.hasText {
-//            skylinkConnection.sendUserInfo(["nickname" : nicknameTextField.text])
             skylinkConnection.sendLocalUserData(["nickname" : nicknameTextField.text], callback: nil)
         } else {
             let msgTitle = "Empty nickname"

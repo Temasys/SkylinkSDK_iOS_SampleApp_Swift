@@ -31,8 +31,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, TFRateBarViewDe
     
     func setupOthers() {
         if !APP_KEY.isEmpty && !APP_SECRET.isEmpty, let defaultKey = UserDefaults.standard.object(forKey: USERDEFAULTS_KEY_SKYLINK_APP_KEY) as? String, let defaultSecret = UserDefaults.standard.object(forKey: USERDEFAULTS_KEY_SKYLINK_SECRET) as? String {
-//            keyTextField.text = defaultKey
-//            secretTextField.text = defaultSecret
         }
     }
 
@@ -46,8 +44,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, TFRateBarViewDe
             alertController.addAction(OKAction)
             present(alertController, animated: true, completion: nil)
         } else {
-//            UserDefaults.standard.set(keyTextField.text, forKey: USERDEFAULTS_KEY_SKYLINK_APP_KEY)
-//            UserDefaults.standard.set(secretTextField.text, forKey: USERDEFAULTS_KEY_SKYLINK_SECRET)
             UserDefaults.standard.synchronize()
         }
         return shouldPerform
@@ -55,8 +51,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, TFRateBarViewDe
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.destination.responds(to: Selector(("setSkylinkApiKey:"))) && segue.destination.responds(to: Selector(("setSkylinkApiSecret:"))) {
-//            segue.destination.perform(Selector(("setSkylinkApiKey:")), with: keyTextField.text)
-//            segue.destination.perform(Selector(("setSkylinkApiSecret:")), with: secretTextField.text)
         }
         if #available(iOS 10.0, *) {
             if segue.identifier == "home2videocall", let videocallVc = segue.destination as? VideoCallViewController {
@@ -131,13 +125,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, TFRateBarViewDe
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-//        secretTextField.resignFirstResponder()
         return true
     }
     @IBAction func clicked() {
-        
-//        let vc = BroadcastSetupViewController()
-//        present(vc, animated: true, completion: nil)
     }
     
     func didSelectedRateBarView(_ rateBarView: TFRateBarView, atIndex index: Int) {
