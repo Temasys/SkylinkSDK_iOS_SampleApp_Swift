@@ -35,4 +35,12 @@ extension Date{
         dateFormatter.dateFormat = format
         return dateFormatter.string(from: date)
     }
+    func toTimeStamp() -> Int64! {
+        return Int64(self.timeIntervalSince1970 * 1000)
+    }
+    static func datefrom(timeStamp: Int64?) -> Date?{
+        guard let timeStamp = timeStamp else {return nil}
+        return Date(timeIntervalSince1970: TimeInterval(timeStamp / 1000))
+    }
 }
+

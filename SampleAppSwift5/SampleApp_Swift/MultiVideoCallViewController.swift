@@ -44,8 +44,6 @@ class MultiVideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleD
     var isLocalCameraRunning = true
     lazy var peerIds = [String]()
     lazy var peersInfos = [String : Any]()
-    let skylinkApiKey = SKYLINK_APP_KEY
-    let skylinkApiSecret = SKYLINK_SECRET
     
     var isRoomLocked = false
     var peerToGetStats: String?
@@ -54,9 +52,12 @@ class MultiVideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleD
 //MARK: - INIT
     override func initData() {
         super.initData()
-        roomName = ROOM_MULTI_VIDEO
+        if roomName.count==0{
+            roomName = ROOM_MULTI_VIDEO
+        }
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.skylinkConnection.createLocalMedia(with: SKYLINKMediaDeviceCameraFront, mediaMetadata: USER_NAME, callback: nil)
+            self.skylinkConnection.createLocalMedia(with: SKYLINKMediaDeviceMicrophone, mediaMetadata: USER_NAME, callback: nil)
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
             self.joinRoom()
@@ -428,7 +429,7 @@ class MultiVideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleD
             if let userInfo = userInfo as? [String:Any]{
                 userData = userInfo["userData"] as? String
             }
-            peerObjects.append(SAPeerObject(peerId: remotePeerId, userName: userData ?? USER_NAME, videoView: nil, videoSize: nil))
+            peerObjects.append(SAPeerObject(peerId: remotePeerId, userName: userData ?? "USER_NAME", videoView: nil, videoSize: nil))
             reloadParticipants()
         } else {
             peerObj?.userName = userInfo as? String
@@ -548,68 +549,17 @@ class MultiVideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleD
             return "All"
         }
         print("picker title: \(peerObjects[row-1].peerId ?? "")")
-        return (peerObjects[row-1].userName ?? USER_NAME) + ": " + (peerObjects[row-1].peerId ?? "")
+        return (peerObjects[row-1].userName ?? "") + ": " + (peerObjects[row-1].peerId ?? "")
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-//        if !peerIds.isEmpty {
-//            peerToGetStats = peerIds[row]
-//        }
+
     }
     
     @IBAction func setStats() {
-//        let alertController = UIAlertController(title: "Set stats", message: "Please set params", preferredStyle: .alert)
-//        alertController.addTextField { (textField) in
-//            textField.keyboardType = .numberPad
-//            textField.placeholder = "Put the width"
-//        }
-//        alertController.addTextField { (textField) in
-//            textField.keyboardType = .numberPad
-//            textField.placeholder = "Put the height"
-//        }
-//        alertController.addTextField { (textField) in
-//            textField.keyboardType = .numberPad
-//            textField.placeholder = "Put the frame rate"
-//        }
-//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-//        let okAction = UIAlertAction(title: "OK", style: .default) { [weak weakSelf = self] (action) in
-//            if let width = alertController.textFields?.first?.text, let height = alertController.textFields?[1].text, let fps = alertController.textFields?.last?.text {
-//                weakSelf?.skylinkConnection.setInputVideoResolutionToWidth(UInt(width) ?? 0, height: UInt(height) ?? 0, fps: UInt(fps) ?? 0, callback: {
-//                    print("Set width height fps OK")
-//                    UIAlertController.showAlertWithAutoDisappear(title: nil, message: "Set width height fps OK", duration: 2, onViewController: self)
-//                })
-//                weakSelf?.getStats()
-//            } else {
-//                return
-//            }
-//        }
-//        alertController.addAction(cancelAction)
-//        alertController.addAction(okAction)
-//        present(alertController, animated: true)
     }
     
     @IBAction func getStats() {
-//        skylinkConnection.getInputVideoResolutionCallback { [weak weakSelf = self] (responseObject, width, height, fps) in
-//            if let resultDict = responseObject as? [String : Any] {
-//                print("resultDict ---> ", resultDict, "\n width ---> ", width, "\n height ---> ", height, "\n fps ---> ", fps)
-//                let stats = Stats(dict: resultDict)
-//                weakSelf?.statsView.setupView(stats: stats, status: .input)
-//            }
-//        }
-//        skylinkConnection.getSentVideoResolution(ofPeerID: nil) { [weak weakSelf = self] (responseObject, width, height, fps) in
-//            if let resultDict = responseObject as? [String : Any] {
-//                print("resultDict ---> ", resultDict, "\n width ---> ", width, "\n height ---> ", height, "\n fps ---> ", fps)
-//                let stats = Stats(dict: resultDict)
-//                weakSelf?.statsView.setupView(stats: stats, status: .sent)
-//            }
-//        }
-//        skylinkConnection.getReceivedVideoResolution(ofPeerID: nil) { [weak weakSelf = self] (responseObject, width, height, fps) in
-//            if let resultDict = responseObject as? [String : Any] {
-//                print("resultDict ---> ", resultDict, "\n width ---> ", width, "\n height ---> ", height, "\n fps ---> ", fps)
-//                let stats = Stats(dict: resultDict)
-//                weakSelf?.statsView.setupView(stats: stats, status: .received)
-//            }
-//        }
     }
     /**
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

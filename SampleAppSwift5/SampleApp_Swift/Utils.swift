@@ -7,6 +7,7 @@
 //
 
 import Foundation
+
 func convertToDictionary(text: String) -> [String: Any]? {
     if let data = text.data(using: .utf8) {
         do {
@@ -133,4 +134,18 @@ extension Array where Element: Equatable {
             remove(at: index)
         }
     }
+}
+
+func saAlert(title: String?, msg: String?) {
+    let alertController = UIAlertController(title: title , message: msg, preferredStyle: .alert)
+    let OKAction = UIAlertAction(title: "OK", style: .default)
+    alertController.addAction(OKAction)
+    if var topController = UIApplication.shared.keyWindow?.rootViewController {
+        while let presentedViewController = topController.presentedViewController {
+            topController = presentedViewController
+        }
+        topController.present(alertController, animated: true, completion: nil)
+        // topController should now be your topmost view controller
+    }
+    
 }

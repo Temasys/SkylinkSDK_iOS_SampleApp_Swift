@@ -22,7 +22,9 @@ class DataTransferViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDel
 //MARK: - INIT
     override func initData() {
         super.initData()
-        roomName = ROOM_DATA_TRANSFER
+        if roomName.count==0{
+            roomName = ROOM_DATA_TRANSFER
+        }
         joinRoom()
     }
     override func initUI() {
