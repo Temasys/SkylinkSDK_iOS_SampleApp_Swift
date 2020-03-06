@@ -59,7 +59,9 @@ class VideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelega
 //MARK: - INIT
     override func initData() {
         super.initData()
-        roomName = ROOM_ONE_TO_ONE_VIDEO
+        if roomName.count==0{
+            roomName = ROOM_ONE_TO_ONE_VIDEO
+        }
     }
     override func initUI() {
         super.initUI()
@@ -582,7 +584,6 @@ class VideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelega
             self.leaveRoom {
                 self.remotePeerVideoContainerView.removeSubviews()
                 self.remotePeerVideoContainerView2.removeSubviews()
-//                    self.localVideoContainerView.removeSubviews()
                 self.destroyLocalMedia()
                 self.callButton.setBackgroundImage(UIImage(named: "call_on"), for: .normal)
                 self.activityIndicator.stopAnimating()
@@ -615,22 +616,6 @@ class VideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelega
                 UIAlertController.showAlertWithAutoDisappear(title: "ErrorCode: \(error.code)", message: String(describing: error.localizedDescription), duration: 3, onViewController: self)
             }
         });
-//        get()
-//        if sentFps > 20 {
-////            skylinkConnection.startLocalMedia(with: SKYLINKMediaTypeVideoScreen, label: "", from: self) { (error) in
-////                if error != nil {
-////                    UIAlertController.showAlertWithAutoDisappear(title: nil, message: error!.localizedDescription, duration: 3, onViewController: self)
-////                }
-////            }
-//            skylinkConnection.createLocalMedia(with: SKYLINKMediaDeviceCameraFront, mediaMetadata: "", callback: {error in
-//                if let error = error {
-//                    UIAlertController.showAlertWithAutoDisappear(title: "Error", message: String(describing: error.localizedDescription), duration: 3, onViewController: self)
-//                }
-//            });
-//        } else {
-//            skylinkLog("Your network speed too low, please connect to a better network to do the screen sharing")
-//            UIAlertController.showAlertWithAutoDisappear(title: nil, message: "Please connect to a better network to start sharing", duration: 3, onViewController: self)
-//        }
     }
     
     

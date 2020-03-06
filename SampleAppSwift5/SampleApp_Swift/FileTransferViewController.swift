@@ -30,8 +30,10 @@ class FileTransferViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDel
         title = "File Transfer"
     }
     override func initData() {
-        super.initUI()
-        roomName = ROOM_FILE_TRANSFER
+        super.initData()
+        if roomName.count==0{
+            roomName = ROOM_FILE_TRANSFER
+        }
         joinRoom()
         NotificationCenter.default.addObserver(self, selector: #selector(needPermission), name: NSNotification.Name.SKYLINKRequiresPermission, object: nil)
     }
@@ -139,7 +141,6 @@ class FileTransferViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDel
                 let dropTrans = UIAlertAction(title: "Drop transfer", style: .default, handler: { [weak weakSelf = self] _ in
                     skylinkLog("\(weakSelf?.transfersArray[indexPath.row]["state"] ?? "")")
                     if let state = weakSelf?.transfersArray[indexPath.row]["state"] as? String, state == "In progress" {
-//                        weakSelf?.skylinkConnection.cancelFileTransfer(transferInfos["filename"] as? String ?? "", peerId: transferInfos["peerId"] as? String ?? "")
                         weakSelf?.skylinkConnection.cancelFileTransfer(withRemotePeerId: transferInfos["peerId"] as? String ?? "", forSending: true)
                         weakSelf?.updateFileTranferInfosForFilename(filename: transferInfos["filename"] as? String ?? "", peerId: transferInfos["peerId"] as? String ?? "", withState: "Cancelled", progress: transferInfos["progress"] as? Float ?? 0, isOutgoing: transferInfos["isOutgoing"] as? Bool ?? false)
                     } else {
@@ -297,21 +298,6 @@ class FileTransferViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDel
                         skylinkLog("\(#function) • Error while writing '\(filePath)'->\(wError!.localizedDescription)")
                     } else {
                         if isMovie(exten: fileExtension) && UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(filePath) {
-                            /**
-                             ALAssetsLibrary().writeVideoAtPath(toSavedPhotosAlbum: URL(fileURLWithPath: filePath), completionBlock: { [weak weakSelf = self] (filePathUrl, error) in
-                             if error != nil {
-                             skylinkLog("\(#function) • Error while saving '\(filename1)'->\(error!.localizedDescription)")
-                             } else {
-                             do {
-                             if let filePath = filePathUrl?.absoluteString {
-                             _ = try weakSelf?.removeFileAtPath(filePath: filePath)
-                             }
-                             } catch {
-                             skylinkLog("Some error => \(error.localizedDescription)")
-                             }
-                             }
-                             })
-                             */
                             var placeholder: PHObjectPlaceholder?
                             PHPhotoLibrary.shared().performChanges({
                                 if let createAssetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: URL(fileURLWithPath: filePath)) {
@@ -319,7 +305,7 @@ class FileTransferViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDel
                                 }
                             }, completionHandler: { [weak weakSelf = self] (isSuccess, error) in
                                 if isSuccess {
-                                    skylinkLog("\(#function) • Error while saving '\(filename1)'->\(error?.localizedDescription)")
+                                    skylinkLog("\(#function) • Error while saving '\(filename1)'->\(error?.localizedDescription ?? "")")
                                 } else {
                                     do {
                                         _ = try weakSelf?.removeFileAtPath(filePath: filePath)
@@ -463,7 +449,7 @@ class FileTransferViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDel
         var succeed = false
         var error: Error?
         do {
-            try FileManager.default.removeItem(at: URL(string: filePath)!)
+            try FileManager.default.removeItem(at: URL(fileURLWithPath: filePath))
         } catch let exception {
             error = exception as Error
             skylinkLog("Write to file exception => \(exception)")

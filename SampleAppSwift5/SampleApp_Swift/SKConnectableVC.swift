@@ -37,6 +37,10 @@ class SKConnectableVC: UIViewController {
         roomName = ROOM_NAME
         userName = USER_NAME
     }
+    override func viewWillDisappear(_ animated: Bool) {
+        NSObject.cancelPreviousPerformRequests(withTarget: self)
+        super.viewWillDisappear(animated)
+    }
     
 //MARK: - Navigation action
     @objc fileprivate func showInfo() {
@@ -57,7 +61,7 @@ class SKConnectableVC: UIViewController {
     }
 //MARK: - ROOM
     func joinRoom(){
-        skylinkConnection.connectToRoom(withAppKey: SKYLINK_APP_KEY, secret: SKYLINK_SECRET, roomName: roomName, userData: userName, callback: nil)
+        skylinkConnection.connectToRoom(withAppKey: APP_KEY, secret: APP_SECRET, roomName: roomName, userData: userName, callback: nil)
     }
     func leaveRoom(complete:@escaping ()->()){
         skylinkConnection.disconnect { error in
