@@ -6,9 +6,9 @@ target 'SampleApp_Swift' do
   use_frameworks!
 
 
-pod 'SKYLINK'
+# pod 'SKYLINK'
 # If facing issues with installation, please use:
-# pod 'SKYLINK', :git => 'https://github.com/Temasys/SKYLINK-iOS.git'
+pod 'SKYLINK', :git => 'https://github.com/Temasys/SKYLINK-iOS.git'
 
 end
 
