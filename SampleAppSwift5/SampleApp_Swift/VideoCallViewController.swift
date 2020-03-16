@@ -379,7 +379,6 @@ class VideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelega
  
     
     @IBAction func get() {
-        return;
         skylinkConnection.getInputVideoResolution(withMediaId: cameraMediaID) { [unowned self] (w, h, fps, error) in
             print("getInputVideoResolution ---> ", w, h, fps, error)
             if error != nil {
