@@ -16,8 +16,9 @@ class AudioCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelega
     
     var remotePeerArray = [[String : Any]]()
     var remotePeerIdArray = [String]()
-    
-//MARK: - INIT
+    var mediaId = ""
+
+    //MARK: - INIT
     override func initData() {
         super.initData()
         if roomName.count==0{
@@ -129,16 +130,23 @@ class AudioCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelega
     
     @IBAction func switchAudioTap(sender: AnyObject) {
         sender.setTitle(!skylinkConnection.isAudioMuted() ? "Unmute microphone" : "Mute microphone", for: .normal)
-        skylinkConnection.muteAudio(!skylinkConnection.isAudioMuted())
+        //        skylinkConnection.muteAudio(!skylinkConnection.isAudioMuted())
+        skylinkConnection.changeLocalMediaState(withMediaId: mediaId, mediaState: skylinkConnection.isAudioMuted() ? SKYLINKMediaStateActive  : SKYLINKMediaStateMuted) { (error) in
+            
+        }
     }
     
     fileprivate func startLocalAudio() {
-        skylinkConnection.createLocalMedia(with: SKYLINKMediaDeviceMicrophone, mediaMetadata: USER_NAME, callback: nil);
+        skylinkConnection.createLocalMedia(with: SKYLINKMediaDeviceMicrophone, mediaMetadata: USER_NAME, callback: nil)
     }
     
-    func connection(_ connection: SKYLINKConnection, didChange skylinkMedia: SKYLINKMedia, peerId: String!) {
-        if skylinkMedia.skylinkMediaType() == SKYLINKMediaTypeAudio {
-            
+    func connection(_ connection: SKYLINKConnection, didCreateLocalMedia localMedia: SKYLINKMedia) {
+        mediaId = localMedia.skylinkMediaID()
+    }
+    
+    func connection(_ connection: SKYLINKConnection, didChangeRemoteMedia remoteMedia: SKYLINKMedia, remotePeerId: String!) {
+        if remoteMedia.skylinkMediaType() == SKYLINKMediaTypeAudio {
+            print("remoteMedia.skylinkMediaState --> ", remoteMedia.skylinkMediaState())
         }
     }
 }
