@@ -55,13 +55,13 @@ class MultiVideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleD
         if roomName.count==0{
             roomName = ROOM_MULTI_VIDEO
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.skylinkConnection.createLocalMedia(with: SKYLINKMediaDeviceCameraFront, mediaMetadata: USER_NAME, callback: nil)
             self.skylinkConnection.createLocalMedia(with: SKYLINKMediaDeviceMicrophone, mediaMetadata: USER_NAME, callback: nil)
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+//        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
             self.joinRoom()
-        }
+//        }
     }
     override func initUI() {
         super.initUI()
