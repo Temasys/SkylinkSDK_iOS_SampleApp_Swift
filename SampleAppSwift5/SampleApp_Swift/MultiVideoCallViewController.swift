@@ -174,7 +174,7 @@ class MultiVideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleD
     }
     
     fileprivate func refreshPeerViews() {
-        let peerContainerViews = [firstPeerVideoContainerView ?? UIView(), secondPeerVideoContainerView ?? UIView(), thirdPeerVideoContainerView ?? UIView()]        
+        let peerContainerViews = [firstPeerVideoContainerView ?? UIView(), secondPeerVideoContainerView ?? UIView(), thirdPeerVideoContainerView ?? UIView()]
         let peerLabels = [firstPeerLabel ?? UILabel(), secondPeerLabel ?? UILabel(), thirdPeerLabel ?? UILabel()]
         for i in 0..<peersInfos.count  {
             guard i < peerIds.count, let index = peerIds.firstIndex(of: peerIds[i]), let dict = peersInfos[peerIds[i]] as? [String : Any] else { return }
@@ -183,7 +183,13 @@ class MultiVideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleD
                 if videoView == nil {
                     print("Cannot render the video view. Camera not found")
                 } else {
-                    addRenderedVideo(videoView: videoView!, insideContainer: peerContainerViews[index])
+                  // Add video
+                  addRenderedVideo(videoView: videoView!, insideContainer: peerContainerViews[index])
+                  // Set video size
+                  let videoSize = dict["videoSize"] as! CGSize
+                  if videoSize.height > 0 && videoSize.width > 0 {
+                    videoView!.frame = aspectFillRectForSize(insideSize: videoSize, containedInRect: peerContainerViews[index].bounds)
+                  }
                 }
             }
             // refresh the label
@@ -233,16 +239,18 @@ class MultiVideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleD
             if correspondingContainerView != localVideoContainerView {
                 let i = indexForContainerView(v: correspondingContainerView)
                 guard peerIds.count > 0,
+                    // Keep the orginal values, except for isAudioMuted and isVideoMuted
+                    // TODO: can we just pull the dict, modify it, and add it back ?? rather than create a new one. What if a key is added and not fowarded ?!?
                     let dict = peersInfos[peerIds[i]] as? [String : Any],
-                    let videoSize = dict["videoSize"] as? CGSize,
-                    let videoView = dict["videoView"] as? UIView,
                     let isAudioMuted = dict["isAudioMuted"] as? Bool,
                     let isVideoMuted = dict["isVideoMuted"] as? Bool else { return }
                 if i != NSNotFound {
                     peersInfos[peerIds[i]] = ["videoView" : videoView, "videoSize" : videoSize, "isAudioMuted" : isAudioMuted, "isVideoMuted" : isVideoMuted]
                 }
             }
-            videoView.frame = (videoAspectSegmentControl.selectedSegmentIndex == 0 || correspondingContainerView.isEqual(localVideoContainerView)) ? aspectFillRectForSize(insideSize: videoSize, containedInRect: correspondingContainerView.frame): AVMakeRect(aspectRatio: videoSize, insideRect: correspondingContainerView.bounds)
+            videoView.frame = (videoAspectSegmentControl.selectedSegmentIndex == 0 || correspondingContainerView.isEqual(localVideoContainerView))
+                                ? aspectFillRectForSize(insideSize: videoSize, containedInRect: correspondingContainerView.frame)
+                                : AVMakeRect(aspectRatio: videoSize, insideRect: correspondingContainerView.bounds)
         }
     }
     func connection(_ connection: SKYLINKConnection, didReceiveRemoteMedia remoteMedia: SKYLINKMedia, remotePeerId: String!) {
@@ -324,66 +332,12 @@ class MultiVideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleD
     
     func connection(_ connection: SKYLINKConnection, didChangeRemoteMedia remoteMedia: SKYLINKMedia, remotePeerId: String!) {
         print("CCC == CHANGE MEDIA ROOM peerId: \(String(describing: remotePeerId))")
-        _ = peerObjects.filter { $0.peerId == remotePeerId }.map { $0.videoView = remoteMedia.skylinkVideoView() }
-        reloadVideoViews()
-        
+
         switch remoteMedia.skylinkMediaType() {
         case SKYLINKMediaTypeVideoCamera:
-            if remoteMedia.skylinkMediaState() == SKYLINKMediaStateUnavailable {
-                let index = peerIds.firstIndex(of: remotePeerId)
-                if index == 0 {
-                    firstPeerVideoContainerView.removeSubviews()
-                } else if index == 1 {
-                    secondPeerVideoContainerView.removeSubviews()
-                } else if index == 2 {
-                    thirdPeerVideoContainerView.removeSubviews()
-                } else {
-                    print("No such view")
-                }
-                return
-            }
-            if remoteMedia.skylinkMediaState() == SKYLINKMediaStateStopped {
-                let index = peerIds.firstIndex(of: remotePeerId)
-                if index == 0 {
-                    addRenderedVideo(videoView: UIView(), insideContainer: firstPeerVideoContainerView)
-                } else if index == 1 {
-                    addRenderedVideo(videoView: UIView(), insideContainer: secondPeerVideoContainerView)
-                } else if index == 2 {
-                    addRenderedVideo(videoView: UIView(), insideContainer: thirdPeerVideoContainerView)
-                } else {
-                    print("No such view")
-                }
-            }
-            if remoteMedia.skylinkMediaState() == SKYLINKMediaStateMuted {
-                
-            }
-            if remoteMedia.skylinkMediaState() == SKYLINKMediaStateActive {
-                if let videoView = remoteMedia.skylinkVideoView() {
-                    let index = peerIds.firstIndex(of: remotePeerId)
-                    if index == 0 {
-                        addRenderedVideo(videoView: videoView, insideContainer: firstPeerVideoContainerView)
-                    } else if index == 1 {
-                        addRenderedVideo(videoView: videoView, insideContainer: secondPeerVideoContainerView)
-                    } else if index == 2 {
-                        addRenderedVideo(videoView: videoView, insideContainer: thirdPeerVideoContainerView)
-                    } else {
-                        print("No such view")
-                    }
-                }
-            }
-        case SKYLINKMediaTypeAudio:
-            if let videoView = remoteMedia.skylinkVideoView() {
-                let index = peerIds.firstIndex(of: remotePeerId)
-                if index == 0 {
-                    addRenderedVideo(videoView: videoView, insideContainer: firstPeerVideoContainerView)
-                } else if index == 1 {
-                    addRenderedVideo(videoView: videoView, insideContainer: secondPeerVideoContainerView)
-                } else if index == 2 {
-                    addRenderedVideo(videoView: videoView, insideContainer: thirdPeerVideoContainerView)
-                } else {
-                    print("No such view")
-                }
-            }
+            // clear state
+            _ = peerObjects.filter { $0.peerId == remotePeerId }.map { $0.videoView = remoteMedia.skylinkVideoView() }
+            refreshPeerViews()
         default: break
         }
     }
@@ -560,8 +514,6 @@ class MultiVideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleD
         _ = videoContainers.map{$0.removeSubviews()}
         for peer in peerObjects{
             if let videoView = peer.videoView{
-                let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 20))
-                
                 addRenderRemoteVideoToView(videoView: videoView)
                 if let videoSize = peer.videoSize{
                     _ = videoContainers.filter {videoView.isDescendant(of: $0)}.map{videoView.aspectFitRectForSize(insideSize: videoSize, inContainer: $0)}
