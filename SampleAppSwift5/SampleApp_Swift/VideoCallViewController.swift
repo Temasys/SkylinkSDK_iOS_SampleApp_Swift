@@ -234,7 +234,7 @@ class VideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelega
         }
     }
     
-    func connection(_ connection: SKYLINKConnection, didChangeVideoSize videoSize: CGSize, videoView: UIView!, peerId: String) {
+    func connection(_ connection: SKYLINKConnection, didChangeVideoSize videoSize: CGSize, videoView: UIView!, peerId: String, mediaId: String) {
         if videoSize.height > 0 && videoSize.width > 0 {
             _ = [localVideoContainerView, remotePeerVideoContainerView, remotePeerVideoContainerView2].compactMap { $0 }.filter { videoView.isDescendant(of: $0) }.map { videoView.aspectFitRectForSize(insideSize: videoSize, inContainer: $0) }
         }

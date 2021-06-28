@@ -233,7 +233,7 @@ class MultiVideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleD
         self.activityIndicator.stopAnimating()
         reloadParticipants()
     }
-    func connection(_ connection: SKYLINKConnection, didChangeVideoSize videoSize: CGSize, videoView: UIView!, peerId: String) {
+    func connection(_ connection: SKYLINKConnection, didChangeVideoSize videoSize: CGSize, videoView: UIView!, peerId: String, mediaId: String) {
         if videoSize.height > 0 && videoSize.width > 0 {
             let correspondingContainerView = containerViewForVideoView(videoView: videoView)
             if correspondingContainerView != localVideoContainerView {
@@ -248,9 +248,13 @@ class MultiVideoCallViewController: SKConnectableVC, SKYLINKConnectionLifeCycleD
                     peersInfos[peerIds[i]] = ["videoView" : videoView, "videoSize" : videoSize, "isAudioMuted" : isAudioMuted, "isVideoMuted" : isVideoMuted]
                 }
             }
-            videoView.frame = (videoAspectSegmentControl.selectedSegmentIndex == 0 || correspondingContainerView.isEqual(localVideoContainerView))
-                                ? aspectFillRectForSize(insideSize: videoSize, containedInRect: correspondingContainerView.frame)
-                                : AVMakeRect(aspectRatio: videoSize, insideRect: correspondingContainerView.bounds)
+          
+          if (videoAspectSegmentControl.selectedSegmentIndex == 0 || correspondingContainerView.isEqual(localVideoContainerView)) {
+            // TODO: do we need to update frame here?
+            videoView!.frame = aspectFillRectForSize(insideSize: videoSize, containedInRect: correspondingContainerView.bounds)
+          } else {
+            videoView.frame = AVMakeRect(aspectRatio: videoSize, insideRect: correspondingContainerView.bounds)
+          }
         }
     }
     func connection(_ connection: SKYLINKConnection, didReceiveRemoteMedia remoteMedia: SKYLINKMedia, remotePeerId: String!) {
