@@ -124,7 +124,60 @@ Also checkout our Skylink SDKs for [Web](http://skylink.io/web/) and [Android](h
 
 *This document was edited for Temasys iOS SDK version 2.0.0*
 
+## Persistent Message Caching
 
+How to integrate persistent message cache feature to your application.
 
+### 1. Change `pod 'SKYLINK'` entry in the Podfile.
 
+`Podfile`
 
+```
+pod 'SKYLINK', :git => 'https://github.com/lakinduboteju/SKYLINK-iOS.git', :branch => 'persistent-message-cache'
+```
+
+### 2. Install updated CocoaPods dependency.
+
+```bash
+$ pod install
+```
+
+### 3. Enable message cache feature in `SKYLINKConnectionConfig`.
+
+```swift
+import SKYLINK_MESSAGE_CACHE
+
+let config = SKYLINKConnectionConfig()
+config.hasP2PMessaging = true
+...
+config.isMessageCacheEnabled = true // Enable message cache feature
+
+// Initialize SKYLINKConnection with message cache enabled config
+let skylinkConnection = SKYLINKConnection(config: config, callback: nil)
+```
+
+Example : [SampleAppSwift5/SampleApp_Swift/MessagesViewController : Line#97](SampleAppSwift5/SampleApp_Swift/MessagesViewController.swift#L97)
+
+### 4. Get cached messages.
+
+```swift
+import SKYLINK_MESSAGE_CACHE
+
+// Message cache feature is enabled?
+if (SkylinkMessageCache.instance().isEnabled) {
+    // Get cached messages for the room "my-test-room"
+    let cachedMessages = SkylinkMessageCache.instance().getReadableCacheSession(forRoomName: "my-test-room").cachedMessages()
+
+    if (!cachedMessages.isEmpty) {
+        for m in cachedMessages {
+            if let dict = m as? [String: Any] {
+                // dict["data"] as? String
+                // dict["timeStamp"] as? Int64
+                // dict["peerId"] as? String
+            }
+        }
+    }
+}
+```
+
+Example : [SampleAppSwift5/SampleApp_Swift/MessagesViewController.swift : Line#237](SampleAppSwift5/SampleApp_Swift/MessagesViewController.swift#L237)
