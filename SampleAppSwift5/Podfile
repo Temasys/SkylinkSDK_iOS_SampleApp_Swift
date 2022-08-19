@@ -1,12 +1,8 @@
 project 'SampleApp_Swift.xcodeproj'
 
-platform :ios, '9.0'
+platform :ios, '10.0'
 
 target 'SampleApp_Swift' do
   use_frameworks!
-
-
-pod 'SKYLINK', :git => 'https://github.com/lakinduboteju/SKYLINK-iOS.git', :branch => 'persistent-message-cache'
-
+  pod 'SKYLINK', :git => 'https://github.com/lakinduboteju/SKYLINK-iOS.git', :branch => 'persistent-message-cache'
 end
-

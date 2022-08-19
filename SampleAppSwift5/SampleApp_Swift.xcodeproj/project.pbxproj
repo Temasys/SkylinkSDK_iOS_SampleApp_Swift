@@ -80,6 +80,7 @@
 		CB745C792373BA92009D5EA5 /* Error+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB745C782373BA92009D5EA5 /* Error+Ext.swift */; };
 		CB84D07623F15D7400FD4799 /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB84D07523F15D7400FD4799 /* Date+Ext.swift */; };
 		CB9342EE2411FF890008705E /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9342ED2411FF890008705E /* UIView+Ext.swift */; };
+		E2B96FB77B49D8EF153CB394 /* Pods_SampleApp_Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 159D3B414F88A8C0200A1648 /* Pods_SampleApp_Swift.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -96,6 +97,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		159D3B414F88A8C0200A1648 /* Pods_SampleApp_Swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SampleApp_Swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF397AEDAF1EAD000C21A1AA /* Pods-SampleApp_Swift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleApp_Swift.release.xcconfig"; path = "Target Support Files/Pods-SampleApp_Swift/Pods-SampleApp_Swift.release.xcconfig"; sourceTree = "<group>"; };
 		C21B80D7227D9ED800EEEA68 /* Pages.pages */ = {isa = PBXFileReference; lastKnownFileType = file; path = Pages.pages; sourceTree = "<group>"; };
 		C21B80D8227D9ED800EEEA68 /* Numbers.numbers */ = {isa = PBXFileReference; lastKnownFileType = file; path = Numbers.numbers; sourceTree = "<group>"; };
 		C21B80D9227D9ED800EEEA68 /* PPT.pptx */ = {isa = PBXFileReference; lastKnownFileType = file; path = PPT.pptx; sourceTree = "<group>"; };
@@ -174,6 +177,7 @@
 		CB745C782373BA92009D5EA5 /* Error+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Ext.swift"; sourceTree = "<group>"; };
 		CB84D07523F15D7400FD4799 /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
 		CB9342ED2411FF890008705E /* UIView+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
+		D45696F0FF0D6DB9AF1346B9 /* Pods-SampleApp_Swift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleApp_Swift.debug.xcconfig"; path = "Target Support Files/Pods-SampleApp_Swift/Pods-SampleApp_Swift.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +185,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2B96FB77B49D8EF153CB394 /* Pods_SampleApp_Swift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,6 +278,7 @@
 			children = (
 				C2724054225DE5F700B5365A /* ReplayKit.framework */,
 				C2724060225DE5F700B5365A /* UIKit.framework */,
+				159D3B414F88A8C0200A1648 /* Pods_SampleApp_Swift.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -283,6 +289,7 @@
 				C2FFF6931F6E26F0007A467A /* SampleApp_Swift */,
 				C2FFF6921F6E26F0007A467A /* Products */,
 				C2B8D57C1F6E2A2000337EAF /* Frameworks */,
+				F093CE6B1126DBB35DEA6454 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -351,6 +358,15 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		F093CE6B1126DBB35DEA6454 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D45696F0FF0D6DB9AF1346B9 /* Pods-SampleApp_Swift.debug.xcconfig */,
+				AF397AEDAF1EAD000C21A1AA /* Pods-SampleApp_Swift.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -358,11 +374,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C2FFF6B91F6E26F0007A467A /* Build configuration list for PBXNativeTarget "SampleApp_Swift" */;
 			buildPhases = (
+				9CD1038BAA6159488BE21DCA /* [CP] Check Pods Manifest.lock */,
 				C2FFF68D1F6E26F0007A467A /* Sources */,
 				C2FFF68E1F6E26F0007A467A /* Frameworks */,
 				C2FFF68F1F6E26F0007A467A /* Resources */,
 				CB0E66F822EEB4890001AA00 /* ShellScript */,
 				CB1A0B84236061BF00965A22 /* Embed Frameworks */,
+				CB8ACF91D8201A9224E91A83 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -483,6 +501,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		9CD1038BAA6159488BE21DCA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SampleApp_Swift-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		CB0E66F822EEB4890001AA00 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -495,6 +535,32 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [ \"${CONFIGURATION}\" = \"Release\" ]; then\n\n\nAPP_PATH=\"${TARGET_BUILD_DIR}/${WRAPPER_NAME}\"\n\n# This script loops through the frameworks embedded in the application and\n# removes unused architectures.\nfind \"$APP_PATH\" -name '*.framework' -type d | while read -r FRAMEWORK\ndo\nFRAMEWORK_EXECUTABLE_NAME=$(defaults read \"$FRAMEWORK/Info.plist\" CFBundleExecutable)\nFRAMEWORK_EXECUTABLE_PATH=\"$FRAMEWORK/$FRAMEWORK_EXECUTABLE_NAME\"\necho \"Executable is $FRAMEWORK_EXECUTABLE_PATH\"\n\nEXTRACTED_ARCHS=()\n\nfor ARCH in $ARCHS\ndo\necho \"Extracting $ARCH from $FRAMEWORK_EXECUTABLE_NAME\"\nlipo -extract \"$ARCH\" \"$FRAMEWORK_EXECUTABLE_PATH\" -o \"$FRAMEWORK_EXECUTABLE_PATH-$ARCH\"\nEXTRACTED_ARCHS+=(\"$FRAMEWORK_EXECUTABLE_PATH-$ARCH\")\ndone\n\necho \"Merging extracted architectures: ${ARCHS}\"\nlipo -o \"$FRAMEWORK_EXECUTABLE_PATH-merged\" -create \"${EXTRACTED_ARCHS[@]}\"\nrm \"${EXTRACTED_ARCHS[@]}\"\n\necho \"Replacing original executable with thinned version\"\nrm \"$FRAMEWORK_EXECUTABLE_PATH\"\nmv \"$FRAMEWORK_EXECUTABLE_PATH-merged\" \"$FRAMEWORK_EXECUTABLE_PATH\"\n\ndone\n\nfi\n";
+		};
+		CB8ACF91D8201A9224E91A83 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SampleApp_Swift/Pods-SampleApp_Swift-frameworks.sh",
+				"${PODS_ROOT}/SKYLINK/SKYLINK.framework",
+				"${PODS_ROOT}/SKYLINK/frameworks/WebRTC.framework",
+				"${PODS_ROOT}/SKYLINK_MESSAGE_CACHE/SKYLINK_MESSAGE_CACHE.framework",
+				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
+				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SKYLINK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SKYLINK_MESSAGE_CACHE.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SampleApp_Swift/Pods-SampleApp_Swift-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -675,6 +741,7 @@
 		};
 		C2FFF6BA1F6E26F0007A467A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D45696F0FF0D6DB9AF1346B9 /* Pods-SampleApp_Swift.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -687,7 +754,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = SampleApp_Swift/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = Temasys.SampleApp;
@@ -701,6 +768,7 @@
 		};
 		C2FFF6BB1F6E26F0007A467A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AF397AEDAF1EAD000C21A1AA /* Pods-SampleApp_Swift.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -713,7 +781,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = SampleApp_Swift/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = Temasys.SampleApp;
