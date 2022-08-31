@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import SKYLINK_MESSAGE_CACHE
 
 struct SAMessage {
     var data: String?
@@ -93,6 +94,7 @@ class MessagesViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegat
         config.setAudioVideoReceive(AudioVideoConfig_NO_AUDIO_NO_VIDEO)
         config.hasP2PMessaging = true
         config.setTimeout(3, skylinkAction: SkylinkAction_CONNECT_TO_ROOM)
+        config.isMessageCacheEnabled = true;
 //        config.hasDataTransfer = true
 //        config.dataChannel = true // for data chanel messages
         if let skylinkConnection = SKYLINKConnection(config: config, callback: nil){
@@ -231,6 +233,27 @@ class MessagesViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegat
     // MARK: - Utils
     
     private func loadStoredMessage(){
+        // Message caching is enabled?
+        if (SkylinkMessageCache.instance().isEnabled) {
+            // Display caches messages if available
+            DispatchQueue.main.async {
+                let cachedMessages = SkylinkMessageCache.instance().getReadableCacheSession(forRoomName: self.roomName).cachedMessages()
+                if (!cachedMessages.isEmpty) {
+                    for m in cachedMessages {
+                        if let dict = m as? [String: Any] {
+                            let message = SAMessage(data: dict["data"] as? String,
+                                                    timeStamp: (dict["timeStamp"] as? Int64),
+                                                    sender: self.getUserNameFrom(peerId: dict["peerId"] as? String),
+                                                    target: nil,
+                                                    type: .Signaling)
+                            self.messages.append(message)
+                        }
+                    }
+                    self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
+                }
+            }
+        }
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             self.skylinkConnection.getStoredMessages { storedMessages, errorMap in
                 guard let _ = self.view.window else{
@@ -239,6 +262,10 @@ class MessagesViewController: SKConnectableVC, SKYLINKConnectionLifeCycleDelegat
                 if let errorMap = errorMap{
                     saAlert(title: "Error map", msg: errorMap.description)
                 }
+
+                // Remove messages retrieved from cache before append messages from server
+                self.messages.removeAll()
+
                 for item in storedMessages ?? []{
                     print("storedMessage: \(storedMessages ?? [])")
                     if let dict = item as? [String: Any] {
