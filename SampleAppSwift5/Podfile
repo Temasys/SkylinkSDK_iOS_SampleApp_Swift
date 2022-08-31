@@ -5,8 +5,8 @@ platform :ios, '10.0'
 target 'SampleApp_Swift' do
   use_frameworks!
 
-  pod 'SKYLINK', '~> 2.3.0'
+  pod 'SKYLINK', '~> 2.3.1'
   # If facing issues with installation, please use:
-  # pod 'SKYLINK', :git => 'https://github.com/Temasys/SKYLINK-iOS.git', :tag => '2.3.0'
+  # pod 'SKYLINK', :git => 'https://github.com/Temasys/SKYLINK-iOS.git', :tag => '2.3.1'
 
 end

@@ -136,8 +136,8 @@ How to integrate persistent message cache feature to your application.
 `Podfile`
 
 ``` ruby
-pod 'SKYLINK', '~> 2.3.0'
-# pod 'SKYLINK', :git => 'https://github.com/Temasys/SKYLINK-iOS.git', :tag => '2.3.0'
+pod 'SKYLINK', '~> 2.3.1'
+# pod 'SKYLINK', :git => 'https://github.com/Temasys/SKYLINK-iOS.git', :tag => '2.3.1'
 ```
 
 ### 2. Install updated CocoaPods dependency.
