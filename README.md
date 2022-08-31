@@ -17,26 +17,28 @@ You will then be able to communicate with another peer joining the same room.
 
 ##### Sample Code  
 
-    // SKYLINKConnection creation for video call room
-    lazy var skylinkConnection: SKYLINKConnection = {
-        // Creating configuration
-        let config = SKYLINKConnectionConfig()
-        config.setAudioVideoSend(AudioVideoConfig_AUDIO_AND_VIDEO)
-        config.setAudioVideoReceive(AudioVideoConfig_AUDIO_AND_VIDEO)  
-        
-        // Creating SKYLINKConnection
-        if let skylinkConnection = SKYLINKConnection(config: config, callback: nil) {
-            skylinkConnection.lifeCycleDelegate = self
-            skylinkConnection.mediaDelegate = self
-            skylinkConnection.remotePeerDelegate = self
-            return skylinkConnection
-        } else {
-            return SKYLINKConnection()
-        }
-    }()  
-	
-    // Use SKYLINKConnection(with your key and secret) to connect to a room
-    skylinkConnection.connectToRoom(withAppKey: skylinkApiKey, secret: skylinkApiSecret, roomName: ROOM_NAME, userData: USER_NAME, callback: nil)
+``` swift
+// SKYLINKConnection creation for video call room
+lazy var skylinkConnection: SKYLINKConnection = {
+    // Creating configuration
+    let config = SKYLINKConnectionConfig()
+    config.setAudioVideoSend(AudioVideoConfig_AUDIO_AND_VIDEO)
+    config.setAudioVideoReceive(AudioVideoConfig_AUDIO_AND_VIDEO)  
+    
+    // Creating SKYLINKConnection
+    if let skylinkConnection = SKYLINKConnection(config: config, callback: nil) {
+        skylinkConnection.lifeCycleDelegate = self
+        skylinkConnection.mediaDelegate = self
+        skylinkConnection.remotePeerDelegate = self
+        return skylinkConnection
+    } else {
+        return SKYLINKConnection()
+    }
+}()  
+
+// Use SKYLINKConnection(with your key and secret) to connect to a room
+skylinkConnection.connectToRoom(withAppKey: skylinkApiKey, secret: skylinkApiSecret, roomName: ROOM_NAME, userData: USER_NAME, callback: nil)
+```
 
 You can then control what happens in the room by **sending messages to the `SKYLINKConnection` instance** (like triggering a file transfer request for example), and **respond to events by implementing the delegate methods** from the 6 protocols.
 Always set at least the [lifeCycleDelegate](https://cdn.temasys.io/skylink/skylinksdk/ios/latest/docs/html/Protocols/SKYLINKConnectionLifeCycleDelegate.html). For a list of all protocols, see [here](https://cdn.temasys.io/skylink/skylinksdk/ios/latest/docs/html/index.html)
@@ -55,7 +57,7 @@ Swift 5.1 and Swift 5.1.2
 ### Step-by-step guide
 
 ##### Prerequisites  
-Please use Xcode 11
+Please use Xcode version 11 or above.
 
 ##### STEP 1  
 It is recommended to install the SkylinkSDK for iOS via [cocoapods](http://cocoapods.org). If you do not have it installed, follow the below steps:
@@ -79,15 +81,16 @@ Follow the instructions [here](https://temasys.io/creating-an-account-generating
 ##### STEP 6   
 Set your App Key and secret in Constants.swift. You may also alter the room names here.
 
-    var APP_KEY = "ENTER APP KEY HERE"
-    var APP_SECRET = "ENTER SECRET HERE"
-    var ROOM_ONE_TO_ONE_VIDEO = "VIDEO-CALL-ROOM"
-    var ROOM_MULTI_VIDEO = "MULTI-VIDEO-CALL-ROOM"
-    var ROOM_AUDIO = "AUDIO-CALL-ROOM"
-    var ROOM_MESSAGES = "MESSAGES-ROOM"
-    var ROOM_FILE_TRANSFER = "FILE-TRANSFER-ROOM"
-    var ROOM_DATA_TRANSFER = "ROOMNAME_DATATRANSFER"
-    
+``` swift
+var APP_KEY = "ENTER APP KEY HERE"
+var APP_SECRET = "ENTER SECRET HERE"
+var ROOM_ONE_TO_ONE_VIDEO = "VIDEO-CALL-ROOM"
+var ROOM_MULTI_VIDEO = "MULTI-VIDEO-CALL-ROOM"
+var ROOM_AUDIO = "AUDIO-CALL-ROOM"
+var ROOM_MESSAGES = "MESSAGES-ROOM"
+var ROOM_FILE_TRANSFER = "FILE-TRANSFER-ROOM"
+var ROOM_DATA_TRANSFER = "ROOMNAME_DATATRANSFER"
+```
 
 ##### STEP 7  
 Build and Run. You're good to go!
@@ -132,8 +135,9 @@ How to integrate persistent message cache feature to your application.
 
 `Podfile`
 
-```
-pod 'SKYLINK', :git => 'https://github.com/lakinduboteju/SKYLINK-iOS.git', :branch => 'persistent-message-cache'
+``` ruby
+pod 'SKYLINK', '~> 2.3.0'
+# pod 'SKYLINK', :git => 'https://github.com/Temasys/SKYLINK-iOS.git', :tag => '2.3.0'
 ```
 
 ### 2. Install updated CocoaPods dependency.
@@ -150,7 +154,12 @@ import SKYLINK_MESSAGE_CACHE
 let config = SKYLINKConnectionConfig()
 config.hasP2PMessaging = true
 ...
-config.isMessageCacheEnabled = true // Enable message cache feature
+
+// Enable message cache feature
+config.isMessageCacheEnabled = true
+
+// Set maximum number of messages that will be cached per Skylink Room (default value is 50)
+config.messageCacheLimit = 100
 
 // Initialize SKYLINKConnection with message cache enabled config
 let skylinkConnection = SKYLINKConnection(config: config, callback: nil)
